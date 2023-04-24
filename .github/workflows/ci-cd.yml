@@ -16,11 +16,14 @@ on:
         description: "App(s) to Deploy (dotcom, jpal-frontend)"
         required: false
         default: ""
+        
+concurrency:
+  # Never have two deployments happening at the same time (potential race condition)
+  group: '{{ github.head_ref ||  github.ref }}'
+
 
 jobs:
   pre-deploy:
-
-    
     runs-on: ubuntu-latest
     outputs:
       affected-names : ${{ steps.should-deploy.outputs.names }}
