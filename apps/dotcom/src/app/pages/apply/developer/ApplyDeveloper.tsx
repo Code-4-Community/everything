@@ -128,7 +128,7 @@ const ApplyDeveloper: React.FC = () => {
               </Typography>
               <Typography variant="body1" gutterBottom className={classes.text}>
                 Our application process for Fall 2023 is pending. Stay tuned for
-                an update this Summer.
+                an update this Summer!
               </Typography>
               <Typography variant="body1" gutterBottom className={classes.text}>
                 <i>
