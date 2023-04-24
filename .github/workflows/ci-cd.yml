@@ -39,7 +39,7 @@ jobs:
 
   deploy-c4cneudotcom:
     needs: pre-deploy
-    if: contains(needs.pre-deploy.outputs.affected_names, 'dotcom') && github.event_name == 'push' && github.ref == 'refs/heads/master' && (nx print-affected -t build --select=tasks.target.project | grep dotcom ) == dotcom
+    if: contains(needs.pre-deploy.outputs.affected_names, 'dotcom') && github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     # For "simplicity", deployment settings are configured in the AWS Amplify Console
     # This just posts to a webhook telling Amplify to redeploy the main branch
