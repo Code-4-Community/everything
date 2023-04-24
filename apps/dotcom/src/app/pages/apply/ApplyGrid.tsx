@@ -9,8 +9,7 @@ import ApplyCard from './ApplyCard';
 
 const ApplyGrid: React.FC = () => {
   return (
-    <>
-      <Grid
+    <Grid
         container
         spacing={5}
         direction="row"
@@ -60,7 +59,6 @@ const ApplyGrid: React.FC = () => {
         {/*  network growth*/}
         {/*</ApplyCard>*/}
       </Grid>
-    </>
   );
 };
 

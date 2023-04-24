@@ -19,8 +19,7 @@ import theme from './theme';
 
 const App: React.FC = () => {
   return (
-    <>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
         <Helmet>
           <meta
             name="keywords"
@@ -53,7 +52,6 @@ const App: React.FC = () => {
           <Footer />
         </Router>
       </ThemeProvider>
-    </>
   );
 };
 
