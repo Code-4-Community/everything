@@ -70,7 +70,12 @@ jobs:
         echo "The following projects have been affected: [$(npx nx print-affected -t build --select=tasks.target.project)]";
         echo "names=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
         
-    
+    - name: Debug logs
+      run: |
+        echo "Manual Deploy: ${{github.event.inputs.manual-deploy}}";
+        echo "To Deploy: ${{steps.should-deploy.outputs.names}}";
+        echo "Event: ${{github.event_name}}";
+        echo "Ref: ${{github.ref}}";
     
      
 
