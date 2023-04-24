@@ -78,7 +78,7 @@ jobs:
         echo "Ref: ${{github.ref}}";
         echo "Will deploy?: ${{github.event_name == 'push' && github.ref == 'refs/heads/main'}}";
         echo "Matches dotcom: ${{contains(github.event.inputs.manual-deploy, 'dotcom')}}";
-        echo "Matches affected: ${{contains(needs.pre-deploy.outputs.affected_names, 'dotcom')}}
+        echo "Matches affected: ${{contains(needs.pre-deploy.outputs.affected_names, 'dotcom')}}";
     
      
 
