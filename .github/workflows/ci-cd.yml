@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     outputs:
-      affected-names : ${{ steps.should-deploy.outputs.names }
+      affected-names : ${{ steps.should-deploy.outputs.names }}
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js 16
