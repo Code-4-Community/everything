@@ -30,7 +30,7 @@ jobs:
     - name: Determine who needs to be deployed
       id: should-deploy
       run: |
-        echo "names=$(nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
+        echo "names=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
         
     
     
