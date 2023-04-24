@@ -1,0 +1,48 @@
+name: Everything Monorepo CI/CD
+
+# First runs linter and tests all affected projects
+# Then, for each project that requires deployment, deploy-<project>-<service-type> is added
+# Environment variables are labelled <project-name>_SHORT_DESCRIPTION
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-and-test:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+        cache: 'npm'
+
+    - uses: mansagroup/nrwl-nx-action@v3
+      with:
+        targets: lint,test
+    
+     
+
+
+  deploy-c4cneudotcom:
+    needs: lint-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master' && (nx print-affected -t build --select=tasks.target.project | grep dotcom ) == dotcom
+    runs-on: ubuntu-latest
+    # For "simplicity", deployment settings are configured in the AWS Amplify Console
+    # This just posts to a webhook telling Amplify to redeploy the main branch
+    steps:
+      - name: Tell Amplify to rebuild
+        run: curl -X POST -d {} ${DOTCOM_WEBHOOK_DEPLOY}  -H "Content-Type:application/json"
+        env:
+          DOTCOM_WEBHOOK_DEPLOY: ${{ secrets.DOTCOM_WEBHOOK_DEPLOY }}
+
+# If deploying a new service via actions, use the following template:
+#  deploy:
+#     needs: lint-and-test
+#     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+#     runs-on: ubuntu-latest
+
