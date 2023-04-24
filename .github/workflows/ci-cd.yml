@@ -1,5 +1,7 @@
 name: Everything Monorepo CI/CD
 
+
+
 # First runs linter and tests all affected projects
 # Then, for each project that requires deployment, deploy-<project>-<service-type> is added
 # Environment variables are labelled <project-name>_SHORT_DESCRIPTION
@@ -8,6 +10,12 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      manual-deploy:
+        description: "App(s) to Deploy (dotcom, jpal-frontend)"
+        required: false
+        default: ""
 
 jobs:
   pre-deploy:
@@ -48,7 +56,7 @@ jobs:
 
   deploy-c4cneudotcom:
     needs: pre-deploy
-    if: contains(needs.pre-deploy.outputs.affected_names, 'dotcom') && github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: (contains(github.event.inputs.manual-deploy, 'dotcom') || contains(needs.pre-deploy.outputs.affected_names, 'dotcom')) && github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     # For "simplicity", deployment settings are configured in the AWS Amplify Console
     # This just posts to a webhook telling Amplify to redeploy the main branch
