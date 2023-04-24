@@ -1,0 +1,33 @@
+{
+  "name": "c4cneudotcom-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/c4cneudotcom-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/c4cneudotcom-e2e/cypress.config.ts",
+        "devServerTarget": "c4cneudotcom:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "c4cneudotcom:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "c4cneudotcom:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/c4cneudotcom-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["c4cneudotcom"]
+}

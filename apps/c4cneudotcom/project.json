@@ -1,0 +1,78 @@
+{
+  "name": "c4cneudotcom",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/c4cneudotcom/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/c4cneudotcom"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "c4cneudotcom:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "c4cneudotcom:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "c4cneudotcom:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nrwl/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "c4cneudotcom:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "c4cneudotcom:build:development"
+        },
+        "production": {
+          "buildTarget": "c4cneudotcom:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nrwl/vite:test",
+      "outputs": ["coverage/apps/c4cneudotcom"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/c4cneudotcom"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/c4cneudotcom/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "options": {
+        "buildTarget": "c4cneudotcom:build"
+      }
+    }
+  },
+  "tags": []
+}
