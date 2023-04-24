@@ -38,7 +38,7 @@ jobs:
     - name: Determine who needs to be deployed
       id: should-deploy
       run: |
-        echo "$(npx nx print-affected -t build --select=tasks.target.project)";
+        echo "The following projects have been affected: [$(npx nx print-affected -t build --select=tasks.target.project)]";
         echo "names=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
         
     
