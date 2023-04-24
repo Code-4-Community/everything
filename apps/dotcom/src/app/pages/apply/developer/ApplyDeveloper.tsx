@@ -108,8 +108,7 @@ const ApplyDeveloper: React.FC = () => {
                 through the power of software. In your first few weeks, your
                 code will be running in essential software systems to help
                 children with life threatening illnesses, environmental
-                conservators, educators in the Eastern Carribean, disadvantaged
-                youth, and the elderly.
+                conservators, and disadvantaged youth.
               </Typography>
             </Box>
           </Fade>
