@@ -74,7 +74,7 @@ jobs:
 
   deploy-c4cneudotcom:
     needs: pre-deploy
-    if: (contains(github.event.inputs.manual-deploy, 'dotcom') || contains(needs.pre-deploy.outputs.affected_names, 'dotcom')) && github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: (contains(github.event.inputs.manual-deploy, 'dotcom') || contains(needs.pre-deploy.outputs.affected_names, 'dotcom')) && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # For "simplicity", deployment settings are configured in the AWS Amplify Console
     # This just posts to a webhook telling Amplify to redeploy the main branch
