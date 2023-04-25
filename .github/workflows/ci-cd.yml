@@ -1,10 +1,9 @@
-name: Everything Monorepo CI/CD
-
-
+name: CI/CD
 
 # First runs linter and tests all affected projects
 # Then, for each project that requires deployment, deploy-<project>-<service-type> is added
 # Environment variables are labelled <project-name>_SHORT_DESCRIPTION
+
 on:
   push:
     branches: [ "main" ]
@@ -43,11 +42,7 @@ jobs:
       
       
     # In any subsequent steps within this job (myjob) we can reference the resolved SHAs
-     # using either the step outputs or environment variables:
-
-     # ===========================================================================
-     # OPTION 1) Environment variables
-     # ===========================================================================
+    # using either the step outputs or environment variables:
     - name: Derive appropriate SHAs for base and head for `nx affected` commands
       uses: nrwl/nx-set-shas@v3
 
@@ -94,10 +89,48 @@ jobs:
         run: curl -X POST -d {} ${DOTCOM_WEBHOOK_DEPLOY}  -H "Content-Type:application/json"
         env:
           DOTCOM_WEBHOOK_DEPLOY: ${{ secrets.DOTCOM_WEBHOOK_DEPLOY }}
+          
+  deploy-monarch-frontend:
+    needs: pre-deploy
+    if: (contains(github.event.inputs.manual-deploy, 'monarch-frontend') || contains(needs.pre-deploy.outputs.affected_names, 'monarch-frontend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # For "simplicity", deployment settings are configured in the AWS Amplify Console
+    # This just posts to a webhook telling Amplify to redeploy the main branch
+    steps:
+      - name: Tell Amplify to rebuild
+        run: curl -X POST -d {} ${MONARCH_WEBHOOK_DEPLOY}  -H "Content-Type:application/json"
+        env:
+          MONARCH_WEBHOOK_DEPLOY: ${{ secrets.MONARCH_WEBHOOK_DEPLOY }}
+          
+  deploy-monarch-backend:
+    needs: pre-deploy
+    if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected_names, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+    
+      - name: Install Dependencies
+        run: yarn install
+        
+      - run: npx nx build backend --configuration production
+      - name: default deploy
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: monarch-monolith-lambda
+          source: dist/apps/monarch/monarch-backend/main.js
 
 # If deploying a new service via actions, use the following template:
-#  deploy:
-#     needs: lint-and-test
-#     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-#     runs-on: ubuntu-latest
+#  deploy-<!!!REPLACE-ME!!!>:
+#    needs: pre-deploy
+#    if: (contains(github.event.inputs.manual-deploy, '<!!!REPLACE-ME!!!>') || contains(needs.pre-deploy.outputs.affected_names, <!!!REPLACE-ME!!!>)) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      ...
 
