@@ -117,7 +117,7 @@ jobs:
       - name: Install Dependencies
         run: yarn install
         
-      - run: npx nx build backend --configuration production
+      - run: npx nx build monarch-backend --configuration production
       - name: default deploy
         uses: appleboy/lambda-action@master
         with:
