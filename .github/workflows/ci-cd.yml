@@ -25,7 +25,7 @@ jobs:
   pre-deploy:
     runs-on: ubuntu-latest
     outputs:
-      affected-names : ${{ steps.should-deploy.outputs.names }}
+      affected: ${{ steps.should-deploy.outputs.affected }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -63,7 +63,7 @@ jobs:
       id: should-deploy
       run: |
         echo "The following projects have been affected: [$(npx nx print-affected -t build --select=tasks.target.project)]";
-        echo "names=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
+        echo "affected=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
   
      
   deploy-debug:
@@ -73,14 +73,14 @@ jobs:
       - name: Debug logs
         run: |
           echo "Manual Deploy: ${{github.event.inputs.manual-deploy}}";
-          echo "Affected Names: ${{needs.pre-deploy.outputs.affected_names}}";
+          echo "Affected Names: ${{needs.pre-deploy.outputs.affected}}";
           echo "Event: ${{github.event_name}}";
           echo "Ref: ${{github.ref}}";
           echo "Will deploy?: ${{(github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'}}";
 
   deploy-c4cneudotcom:
     needs: pre-deploy
-    if: (contains(github.event.inputs.manual-deploy, 'dotcom') || contains(needs.pre-deploy.outputs.affected_names, 'dotcom')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    if: (contains(github.event.inputs.manual-deploy, 'dotcom') || contains(needs.pre-deploy.outputs.affected, 'dotcom')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # For "simplicity", deployment settings are configured in the AWS Amplify Console
     # This just posts to a webhook telling Amplify to redeploy the main branch
@@ -92,7 +92,7 @@ jobs:
           
   deploy-monarch-frontend:
     needs: pre-deploy
-    if: (contains(github.event.inputs.manual-deploy, 'monarch-frontend') || contains(needs.pre-deploy.outputs.affected_names, 'monarch-frontend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    if: (contains(github.event.inputs.manual-deploy, 'monarch-frontend') || contains(needs.pre-deploy.outputs.affected, 'monarch-frontend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # For "simplicity", deployment settings are configured in the AWS Amplify Console
     # This just posts to a webhook telling Amplify to redeploy the main branch
@@ -104,7 +104,7 @@ jobs:
           
   deploy-monarch-backend:
     needs: pre-deploy
-    if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected_names, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
