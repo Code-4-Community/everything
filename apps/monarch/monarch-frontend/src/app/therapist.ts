@@ -15,7 +15,7 @@ export interface Therapist {
     long: number;
   };
 
-  minimumAgeServed: number; // nat
+  minimumAgeServed: number; // Nat
   description: string;
   therapyType: string;
   title: string;
