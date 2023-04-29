@@ -8,6 +8,15 @@ Business logic and supporting library for those deployable units exist in `/libs
 
 The purpose of `README.md`s in this repository are to explain the usage of the application. The bare minimum you need to get it running. More detailed developer and public documentation exists on the wiki. `README.md`s will often link to relevant wiki pages.
 
+
 Links to Project `README.md`
 
 - [Monarch](./apps/monarch/README.md)
+
+
+## 🔨 Development
+1. Install Node v16.x
+2. Clone this repo
+3. `yarn install`
+
+When adding new dependencies, use `yarn add` or its dev dependency equivalent. Thanks to Nx, each package will only be installed once, and each app knows how to bundle itself correctly based on its dependencies.
