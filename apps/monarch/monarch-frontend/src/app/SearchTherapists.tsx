@@ -13,6 +13,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  createContext,
 } from 'react';
 import { controller, SearchTherapistsQuery } from './actionsController';
 import { useGeolocated } from 'react-geolocated';
@@ -61,13 +62,15 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
+const defaultSearchQuery: SearchTherapistsQuery = {
+  searchString: '',
+  languages: [],
+  maxDistance: 100,
+}
+
 export const SearchTherapists: React.FC = () => {
   const { coords } = useGeolocated();
-  const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>({
-    searchString: '',
-    languages: [],
-    maxDistance: 100,
-  });
+  const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>(defaultSearchQuery);
 
   const [searchResult, setSearchResult] = useState<
     TherapistDisplayModel[] | null
@@ -156,6 +159,7 @@ export const SearchTherapists: React.FC = () => {
             autoFocus
           />
         </InputGroup>
+        
         <SearchTherapistsFilter
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -168,7 +172,7 @@ export const SearchTherapists: React.FC = () => {
             'French',
           ]}
         />
-
+      
         <div style={{ marginBlock: 12 }}>
           <small>
             {therapists != null &&
