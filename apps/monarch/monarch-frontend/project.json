@@ -24,15 +24,15 @@
       "executor": "@nrwl/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "monarch-monarch-frontend:build"
+        "buildTarget": "monarch-frontend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "monarch-monarch-frontend:build:development",
+          "buildTarget": "monarch-frontend:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "monarch-monarch-frontend:build:production",
+          "buildTarget": "monarch-frontend:build:production",
           "hmr": false
         }
       }
@@ -41,14 +41,14 @@
       "executor": "@nrwl/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "monarch-monarch-frontend:build"
+        "buildTarget": "monarch-frontend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "monarch-monarch-frontend:build:development"
+          "buildTarget": "monarch-frontend:build:development"
         },
         "production": {
-          "buildTarget": "monarch-monarch-frontend:build:production"
+          "buildTarget": "monarch-frontend:build:production"
         }
       }
     },

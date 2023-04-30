@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'monarch-monarch-backend',
+  displayName: 'monarch-backend',
   preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {

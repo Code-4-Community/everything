@@ -29,11 +29,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "monarch-monarch-backend:build"
+        "buildTarget": "monarch-backend:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "monarch-monarch-backend:build:production"
+          "buildTarget": "monarch-backend:build:production"
         }
       }
     },
