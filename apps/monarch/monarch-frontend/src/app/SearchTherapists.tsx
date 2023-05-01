@@ -134,19 +134,6 @@ export const SearchTherapists: React.FC = () => {
     );
   });
   
-  // const therapists = data?.filter(
-  //   (therapist) =>
-  //     therapist.geocode == null ||
-  //     coords == null ||
-  //     (searchQuery.maxDistance ?? Number.MAX_VALUE) >=
-  //       dist(
-  //         therapist.geocode?.lat,
-  //         therapist.geocode?.long,
-  //         coords?.latitude,
-  //         coords?.longitude
-  //       )
-  // )
-
   if (searchQuery.searchString.length === 0) {
     therapists?.sort((a, b) => comparableDistance(a) - comparableDistance(b));
   }
@@ -178,18 +165,7 @@ export const SearchTherapists: React.FC = () => {
           setClientCoordinates: setClientCoordinates,
           setDistanceFilterEnabled: setDistanceFilterEnabled,
         }}>
-          <SearchTherapistsFilter
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            availableLanguages={[
-              'English',
-              'Spanish',
-              'Polish',
-              'Portuguese',
-              'Korean',
-              'French',
-            ]}
-          />
+          <SearchTherapistsFilter />
         </QueryContext.Provider>
       
         <div style={{ marginBlock: 12 }}>
