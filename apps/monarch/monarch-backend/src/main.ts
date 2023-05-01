@@ -7,8 +7,10 @@ import express from 'express';
 import * as path from 'path';
 import cors from 'cors';
 import getAllPractitioners from './workflows/getAllPractitioners';
+import getGeocode from './workflows/getGeocode';
 // Import effectful dependencies (database connections, email clients, etc.)
 import { scanAllPractitioners } from './dynamodb';
+import { extractGeocode } from './location';
 import { zodiosApp } from '@zodios/express';
 import { userApi } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
@@ -26,6 +28,10 @@ const db = [];
 const getAllPractitionersHandler = async () =>
   getAllPractitioners(scanAllPractitioners);
 
+const getGeocodeHandler = async (address: string) => {
+  return getGeocode(address, extractGeocode);
+};
+
 app.use(cors());
 
 app.get('/', (_req, res) => {
@@ -35,6 +41,11 @@ app.get('/', (_req, res) => {
 app.get('/practitioners', async (_req, res) => {
   const practitioners = await getAllPractitionersHandler();
   res.status(200).json(practitioners).end();
+});
+
+app.get('/geocode', async (req, res) => {
+  const geocode = await getGeocodeHandler("02115");
+  res.status(200).json(geocode).end();
 });
 
 //app.use('/assets', express.static(path.join(__dirname, 'assets')));

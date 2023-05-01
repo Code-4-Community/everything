@@ -15,7 +15,7 @@ import {
     SliderFilledTrack,
     Tooltip,
 } from '@chakra-ui/react';
-import { CheckIcon, SmallCloseIcon } from '@chakra-ui/icons';
+import { CheckIcon } from '@chakra-ui/icons';
 import { SearchTherapistsQuery } from '../../actionsController';
 
 interface DistanceFilterProps {
@@ -37,7 +37,9 @@ const DistanceFilter: React.FC<DistanceFilterProps> = ({ searchQuery, setSearchQ
         <Box>
             <FormControl display='flex' alignItems='center' mt='3' columnGap='1rem'>
                 <FormLabel htmlFor='enable-distance-filtering' mb='0' mr='0'>
-                    <Heading size='sm'>Enable Distance Filtering?</Heading>
+                    <Heading size='sm'>
+                        {`${toggleFilter ? 'Disable' : 'Enable'} Distance Filter`}
+                    </Heading>
                 </FormLabel>
                 <Switch id='enable-distance-filtering' colorScheme='teal' onChange={(e) => {
                     setToggleFilter(e.target.checked);
@@ -46,12 +48,13 @@ const DistanceFilter: React.FC<DistanceFilterProps> = ({ searchQuery, setSearchQ
                 {
                     toggleFilter && (
                         <InputGroup size='sm' width='auto'>
-                            
-                            <InputRightElement pointerEvents='none' children={
-                                isValidZipcode(zipcode) ? 
-                                <CheckIcon color='teal' /> :
-                                <SmallCloseIcon color='red' />
-                            }/>
+                            {
+                                isValidZipcode(zipcode) && (
+                                    <InputRightElement pointerEvents='none' children={
+                                        <CheckIcon color='teal' />
+                                    } />
+                                )
+                            }
                             <Input placeholder="Enter your zipcode" onChange={(e) => setZipcode(e.target.value)}/>
                         </InputGroup>
                     )
