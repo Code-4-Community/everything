@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     Box,
     FormControl,
@@ -16,23 +16,42 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
-import { SearchTherapistsQuery } from '../../actionsController';
-
-interface DistanceFilterProps {
-    searchQuery: SearchTherapistsQuery;
-    setSearchQuery:React.Dispatch<React.SetStateAction<SearchTherapistsQuery>>;
-}
+import { controller } from '../../actionsController';
+import { QueryContext } from '../../SearchTherapists';
 
 const isValidZipcode = (zipcode: string): boolean => {
     return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipcode);
 };
 
-const DistanceFilter: React.FC<DistanceFilterProps> = ({ searchQuery, setSearchQuery }) => {
+const defaultMaxDistance = 100;
+const defaultZipcode = "";
+
+const DistanceFilter: React.FC = () => {
     const [toggleFilter, setToggleFilter] = useState(false);
     const [toggleToolTip, setToggleToolTip] = useState(false);
-    const [maxDistance, setMaxDistance] = useState<number>(100);
-    const [zipcode, setZipcode] = useState<string>("");
- 
+    const [maxDistance, setMaxDistance] = useState<number>(defaultMaxDistance);
+    const [zipcode, setZipcode] = useState<string>(defaultZipcode);
+
+    const queryContext = useContext(QueryContext);
+
+    useEffect(() => {
+        if (toggleFilter && isValidZipcode(zipcode)) {
+            queryContext?.setDistanceFilterEnabled(true);
+            controller.extractGeocodeFromZipcode(zipcode).then(queryContext?.setClientCoordinates);
+        } else {
+            queryContext?.setDistanceFilterEnabled(false);
+            queryContext?.setClientCoordinates(undefined);
+        }
+
+        if (!toggleFilter) {
+            setZipcode(defaultZipcode);
+            setMaxDistance(defaultMaxDistance);
+            queryContext?.setClientCoordinates(undefined);
+            queryContext?.setSearchQuery({ ...queryContext.searchQuery, maxDistance: defaultMaxDistance});
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [zipcode, toggleFilter]);
+
     return (
         <Box>
             <FormControl display='flex' alignItems='center' mt='3' columnGap='1rem'>
@@ -63,11 +82,11 @@ const DistanceFilter: React.FC<DistanceFilterProps> = ({ searchQuery, setSearchQ
             {
                     toggleFilter && isValidZipcode(zipcode) && (
                         <Box mt='3'>
-                            <Slider id='distance-slider' defaultValue={100} min={0} max={200} colorScheme='teal'
+                            <Slider id='distance-slider' defaultValue={maxDistance} min={0} max={200} colorScheme='teal'
                                     onChange={(distance: number) => setMaxDistance(distance)}
                                     onMouseEnter={() => setToggleToolTip(true)}
                                     onMouseLeave={() => setToggleToolTip(false)}
-                                    onChangeEnd={(distance: number) => setSearchQuery({ ...searchQuery, maxDistance: distance })}>
+                                    onChangeEnd={(distance: number) => queryContext?.setSearchQuery({ ...queryContext?.searchQuery, maxDistance: distance })}>
                                         <SliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>50 miles</SliderMark>
                                         <SliderMark value={100} mt='1' ml='-2.5' fontSize='sm'>100 miles</SliderMark>
                                         <SliderMark value={150} mt='1' ml='-2.5' fontSize='sm'>150 miles</SliderMark>

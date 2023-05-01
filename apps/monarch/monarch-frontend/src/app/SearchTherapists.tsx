@@ -16,6 +16,7 @@ import React, {
   createContext,
 } from 'react';
 import { controller, SearchTherapistsQuery } from './actionsController';
+import { GeolocationPosition } from '@c4c/monarch/common';
 import { useGeolocated } from 'react-geolocated';
 import { Therapist, TherapistDisplayModel } from './therapist';
 import {
@@ -57,6 +58,15 @@ import {
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
 
+interface QueryContext {
+  searchQuery: SearchTherapistsQuery;
+  setSearchQuery: React.Dispatch<React.SetStateAction<SearchTherapistsQuery>>;
+  setClientCoordinates: React.Dispatch<React.SetStateAction<GeolocationPosition | undefined>>;
+  setDistanceFilterEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const QueryContext = createContext<QueryContext | undefined>(undefined);
+
 const debouncedSearchTherapists = debouncePromise(
   controller.searchTherapists,
   100
@@ -69,7 +79,9 @@ const defaultSearchQuery: SearchTherapistsQuery = {
 }
 
 export const SearchTherapists: React.FC = () => {
-  const { coords } = useGeolocated();
+  // const { coords } = useGeolocated();
+  const [distanceFilterEnabled, setDistanceFilterEnabled] = useState(false);
+  const [clientCoordinates, setClientCoordinates] = useState<GeolocationPosition>();
   const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>(defaultSearchQuery);
 
   const [searchResult, setSearchResult] = useState<
@@ -100,28 +112,28 @@ export const SearchTherapists: React.FC = () => {
   );
 
   function comparableDistance(therapist: Therapist): number {
-    return therapist.geocode != null && coords != null
+    return therapist.geocode != null && clientCoordinates != null
       ? dist(
           therapist.geocode?.lat,
           therapist.geocode?.long,
-          coords?.latitude,
-          coords?.longitude
+          clientCoordinates?.latitude,
+          clientCoordinates?.longitude
         )
       : Number.POSITIVE_INFINITY;
   }
 
-  console.log('data', data);
   const therapists = data?.filter((therapist) => {
     return (
+      !distanceFilterEnabled || clientCoordinates === undefined ||
       dist(
         therapist.geocode.lat,
         therapist.geocode.long,
-        coords?.latitude,
-        coords?.longitude
+        clientCoordinates.latitude,
+        clientCoordinates.longitude
       ) < searchQuery.maxDistance
     );
   });
-
+  
   // const therapists = data?.filter(
   //   (therapist) =>
   //     therapist.geocode == null ||
@@ -160,18 +172,25 @@ export const SearchTherapists: React.FC = () => {
           />
         </InputGroup>
         
-        <SearchTherapistsFilter
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          availableLanguages={[
-            'English',
-            'Spanish',
-            'Polish',
-            'Portuguese',
-            'Korean',
-            'French',
-          ]}
-        />
+        <QueryContext.Provider value={{
+          searchQuery: searchQuery,
+          setSearchQuery: setSearchQuery,
+          setClientCoordinates: setClientCoordinates,
+          setDistanceFilterEnabled: setDistanceFilterEnabled,
+        }}>
+          <SearchTherapistsFilter
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            availableLanguages={[
+              'English',
+              'Spanish',
+              'Polish',
+              'Portuguese',
+              'Korean',
+              'French',
+            ]}
+          />
+        </QueryContext.Provider>
       
         <div style={{ marginBlock: 12 }}>
           <small>
@@ -304,12 +323,12 @@ export const SearchTherapists: React.FC = () => {
                           Estimated Distance
                         </Box>
                         <Text>
-                          {therapist.geocode != null && coords != null
+                          {therapist.geocode != null && clientCoordinates != null
                             ? dist(
                                 therapist.geocode?.lat,
                                 therapist.geocode?.long,
-                                coords?.latitude,
-                                coords?.longitude
+                                clientCoordinates?.latitude,
+                                clientCoordinates?.longitude
                               ).toFixed(2) + ' miles away'
                             : 'Unknown'}
                         </Text>

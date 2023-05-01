@@ -24,5 +24,13 @@ export const userApi = makeApi([
    alias: "getGeocode",
    description: "Get Geocode",
    response: GeolocationPosition,
+   parameters: [
+    {
+      name: "zipcode",
+      description: "Zipcode Query",
+      schema: z.string(),
+      type: "Query",
+    },
+   ]
   },
 ]);

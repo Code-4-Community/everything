@@ -59,7 +59,7 @@ const SearchTherapistsFilter: React.FC<SearchTherapistsFilterProps> = ({
                 </CheckboxGroup>
               </HStack>
             </Box>
-        <DistanceFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+        <DistanceFilter />
         </AccordionPanel>
       </AccordionItem>
     </Accordion>

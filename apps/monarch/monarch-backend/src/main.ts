@@ -44,7 +44,7 @@ app.get('/practitioners', async (_req, res) => {
 });
 
 app.get('/geocode', async (req, res) => {
-  const geocode = await getGeocodeHandler("02115");
+  const geocode = await getGeocodeHandler(req.query.zipcode);
   res.status(200).json(geocode).end();
 });
 
