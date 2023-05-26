@@ -1,56 +1,25 @@
-import { HotkeysProvider } from '@blueprintjs/core';
-import { Column, Table2, Cell, EditableCell2 } from '@blueprintjs/table';
-import React from 'react';
-import { useQuery } from 'react-query';
-import { controller } from './actionsController';
+import React, { useCallback } from 'react';
+import { Amplify, Auth } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import awsmobile from '../aws-exports.js';
+import axios from 'axios';
 
-const ManageTherapists: React.FC = () => {
-  const searchQuery = { searchString: '' };
-  const { data, isLoading } = useQuery(
-    ['therapists', searchQuery],
-    async () => {
-      return await controller.searchTherapists(searchQuery);
-    }
-  );
+Amplify.configure(awsmobile);
 
-  if (data == null) {
-    return <p>Loading...</p>;
-  }
+function ManageTherapists({ any: user }) {
 
-  console.log(data);
-  const fullNameRenderer = (rowIndex: number) => (
-    <EditableCell2 value={data[rowIndex].fullName} />
-  );
-  const therapyTypeRenderer = (rowIndex: number) => (
-    <EditableCell2 value={data[rowIndex].therapyType} />
-  );
-  const titleRenderer = (rowIndex: number) => (
-    <EditableCell2 value={data[rowIndex].title} />
-  );
-  const addressRenderer = (rowIndex: number) => (
-    <EditableCell2 value={data[rowIndex].address} />
-  );
-  const emailRenderer = (rowIndex: number) => (
-    <EditableCell2 value={data[rowIndex].email} />
-  );
-  const phoneRenderer = (rowIndex: number) => (
-    <EditableCell2 value={data[rowIndex].phone} />
-  );
+  const getUserInfo = useCallback(async () => {
+    await Auth.currentUserPoolUser();
+  }, []);
 
+  console.log('access token:' + Auth);
   return (
-    <div style={{ marginBlock: 24 }}>
-      <HotkeysProvider>
-        <Table2 numRows={data.length}>
-          <Column name="Full Name" cellRenderer={fullNameRenderer} />
-          <Column name="Therapy Type" cellRenderer={therapyTypeRenderer} />
-          <Column name="Title" cellRenderer={titleRenderer} />
-          <Column name="Address" cellRenderer={addressRenderer} />
-          <Column name="Email" cellRenderer={emailRenderer} />
-          <Column name="Phone" cellRenderer={phoneRenderer} />
-        </Table2>
-      </HotkeysProvider>
-    </div>
-  );
-};
+  <div>
+    Hello World
+    <div></div>
+    <button onClick={() => axios.get('http://localhost:3333/admin', { headers: { 'Authorization': `Bearer ${user.accessToken}`}}).then(res=> console.log(res))}>Test</button>
+  </div>);
+}
 
-export default ManageTherapists;
+export default withAuthenticator(ManageTherapists);

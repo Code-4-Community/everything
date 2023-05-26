@@ -9,11 +9,18 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
-  },
+    fs: {
+      allow: ["/Users/james/2023/C4C/everything/apps/"]
+    }
+  }, 
 
   preview: {
     port: 4300,
     host: 'localhost',
+  },
+
+  define: {
+    global: {},
   },
 
   plugins: [

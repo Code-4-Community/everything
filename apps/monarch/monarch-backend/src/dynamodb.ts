@@ -10,7 +10,7 @@ if (process.env.AWS_SECRET_ACCESS_KEY == null) {
   throw new Error('AWS Secret Access Key not configured');
 }
 console.log('key', process.env.AWS_ACCESS_KEY_ID);
-console.log('secret', process.env.AWS_SECRET_ACCESS_KEY!);
+console.log('secret', process.env.AWS_SECRET_ACCESS_KEY);
 
 const client = new DynamoDBClient({ region: 'us-east-2' });
 
