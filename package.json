@@ -53,6 +53,8 @@
     "@nrwl/vite": "15.9.2",
     "@nrwl/webpack": "15.9.2",
     "@nrwl/workspace": "15.9.2",
+    "@nx/express": "^16.3.1",
+    "@nx/react": "^16.3.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@svgr/webpack": "^6.1.2",
     "@testing-library/jest-dom": "^5.16.5",
