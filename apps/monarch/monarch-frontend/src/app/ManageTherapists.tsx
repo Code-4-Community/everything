@@ -4,6 +4,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import awsmobile from '../aws-exports.js';
 import axios from 'axios';
+import AddPractitioner from './AddPractitioner';
 
 Amplify.configure(awsmobile);
 
@@ -16,7 +17,7 @@ function ManageTherapists({ any: user }) {
   console.log('access token:' + Auth);
   return (
   <div>
-    Hello World
+    <AddPractitioner />
     <div></div>
     <button onClick={() => axios.get('http://localhost:3333/admin', { headers: { 'Authorization': `Bearer ${user.accessToken}`}}).then(res=> console.log(res))}>Test</button>
   </div>);

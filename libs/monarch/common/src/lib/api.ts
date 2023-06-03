@@ -17,5 +17,12 @@ export const userApi = makeApi([
     alias: "getPractitioners",
     description: "Get Practitioners",
     response: z.array(Practitioner),
+  },
+  {
+    method: "post",
+    path: "/practitioners",
+    alias: "postPractitioner",
+    description: "Post Practitioner",
+    response: Practitioner,
   }
 ]);
