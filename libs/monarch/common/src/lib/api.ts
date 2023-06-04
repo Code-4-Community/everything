@@ -24,5 +24,13 @@ export const userApi = makeApi([
     alias: "postPractitioner",
     description: "Post Practitioner",
     response: Practitioner,
+    parameters: [
+      {
+        name: 'practitioner',
+        description: 'New Practitioner',
+        schema: Practitioner,
+        type: 'Body',
+      }
+    ]
   }
 ]);

@@ -5,7 +5,7 @@ import corpImage from '../assets/Badge_Corp.png';
 import longTimePartnerImage from '../assets/Badge_Heart.png';
 import frequentPartner from '../assets/Badge_Partner.png';
 import raw from './raw.json';
-import { createApiClient } from '@c4c/monarch/common';
+import { Practitioner, createApiClient } from '@c4c/monarch/common';
 import { dist } from './SearchTherapists';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -62,6 +62,7 @@ export interface ActionsController {
     query: SearchTherapistsQuery
   ) => Promise<TherapistDisplayModel[]>;
   fetchTherapist: (id: string) => Therapist;
+  postTherapist: (therapist: Practitioner) => Promise<Practitioner>;
 }
 
 export interface SearchTherapistsQuery {
@@ -285,6 +286,9 @@ export function makeActionsController(): ActionsController {
     fetchTherapist: (id: string) => {
       return {} as Therapist;
     },
+    postTherapist: async (practitioner: Practitioner): Promise<Practitioner> => {
+      return await serverApiClient.postPractitioner(practitioner);
+    }
   };
 }
 

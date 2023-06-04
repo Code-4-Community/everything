@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     useDisclosure,
     Button,
@@ -14,10 +14,11 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { Practitioner } from '@c4c/monarch/common';
+import { controller } from './actionsController';
 
 const AddPractitioner: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [practitioner, setPractitioner] = useState<Practitioner>({
+    const defaultPractitioner: Practitioner = {
         phoneNumber: '',
         website: '',
         languages: '',
@@ -29,14 +30,11 @@ const AddPractitioner: React.FC = () => {
         fullName: '',
         languagesList: [],
         geocode: {
-            lat: Number.NEGATIVE_INFINITY,
-            long: Number.NEGATIVE_INFINITY,
+            lat: 0,
+            long: 0,
         }
-    });
-
-    useEffect(() => {
-        console.log(practitioner);
-    }, [practitioner]);
+    };
+    const [practitioner, setPractitioner] = useState<Practitioner>(defaultPractitioner);
 
     const handlePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
         const phone = {
@@ -119,11 +117,20 @@ const AddPractitioner: React.FC = () => {
         });
     };
 
+    const handleFormSubmission = async () => {
+        const therapist = await controller.postTherapist(practitioner);
+        console.log('Successfully added new therapist');
+        console.log(therapist);
+    }
+
     return (
         <>
             <Button onClick={onOpen} colorScheme='teal' size='sm'>Add Practitioner</Button>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={() => {
+                onClose();
+                setPractitioner(defaultPractitioner);
+            }}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Submit New Practitioner</ModalHeader>
@@ -153,13 +160,15 @@ const AddPractitioner: React.FC = () => {
                         
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={onClose} variant='ghost' mr={2}>Cancel</Button>
-                        <Button colorScheme='teal'>Submit</Button>
+                        <Button onClick={() => {
+                            onClose();
+                            setPractitioner(defaultPractitioner);
+                        }} variant='ghost' mr={2}>Cancel</Button>
+                        <Button onClick={handleFormSubmission} colorScheme='teal'>Submit</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
-        
     );
 };
 

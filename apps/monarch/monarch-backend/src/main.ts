@@ -7,13 +7,15 @@ import express from 'express';
 import * as path from 'path';
 import cors from 'cors';
 import getAllPractitioners from './workflows/getAllPractitioners';
+import postNewPractitioner from './workflows/postNewPractitioner';
 // Import effectful dependencies (database connections, email clients, etc.)
-import { scanAllPractitioners } from './dynamodb';
+import { scanAllPractitioners, postPractitioner } from './dynamodb';
 import { zodiosApp } from '@zodios/express';
 import { userApi } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
 
 import CognitoExpress from "cognito-express";
+import { Request, Response } from 'express';
 // Need to use base Express in order for compat with serverless-express
 // See: https://github.com/ecyrbe/zodios-express/issues/103
 export const baseApp = express();
@@ -27,15 +29,24 @@ const db = [];
 const getAllPractitionersHandler = async () =>
   getAllPractitioners(scanAllPractitioners);
 
+const postPractitionerHandler = async (req: Request) => {
+	return postNewPractitioner(req, postPractitioner);
+}
+
 app.use(cors());
 
-app.get('/', (_req, res) => {
+app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({ ok: Date.now() });
 });
 
-app.get('/practitioners', async (_req, res) => {
+app.get('/practitioners', async (_req: Request, res: Response) => {
   const practitioners = await getAllPractitionersHandler();
   res.status(200).json(practitioners).end();
+});
+
+app.post('/practitioners', async (req: Request, res: Response) => {
+	const practitioner = await postPractitionerHandler(req);
+	res.status(201).json(practitioner).end();
 });
 
 //Initializing CognitoExpress constructor
