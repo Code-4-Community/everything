@@ -6,20 +6,19 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
   workflow_dispatch:
     inputs:
       manual-deploy:
-        description: "App(s) to Deploy (dotcom, jpal-frontend)"
+        description: 'App(s) to Deploy (dotcom, jpal-frontend)'
         required: false
-        default: ""
-        
+        default: ''
+
 concurrency:
   # Never have two deployments happening at the same time (potential race condition)
   group: '{{ github.head_ref ||  github.ref }}'
-
 
 jobs:
   pre-deploy:
@@ -27,45 +26,43 @@ jobs:
     outputs:
       affected: ${{ steps.should-deploy.outputs.affected }}
     steps:
-    - uses: actions/checkout@v3
-      with:
+      - uses: actions/checkout@v3
+        with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-    - name: Use Node.js 16
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16.x
-        cache: 'yarn'
-    
-    - name: Install Dependencies
-      run: yarn install
-      
-      
-    # In any subsequent steps within this job (myjob) we can reference the resolved SHAs
-    # using either the step outputs or environment variables:
-    - name: Derive appropriate SHAs for base and head for `nx affected` commands
-      uses: nrwl/nx-set-shas@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
 
-    - run: |
+      - name: Install Dependencies
+        run: yarn install
+
+      # In any subsequent steps within this job (myjob) we can reference the resolved SHAs
+      # using either the step outputs or environment variables:
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - run: |
           echo "BASE: ${{ env.NX_BASE }}"
           echo "HEAD: ${{ env.NX_HEAD }}"
 
-    - name: Nx Affected Lint
-      run: npx nx affected -t lint
-      
-    - name: Nx Affected Test
-      run: npx nx affected -t test
-      
-    - name: Nx Affected Build
-      run: npx nx affected -t build
-        
-    - name: Determine who needs to be deployed
-      id: should-deploy
-      run: |
-        echo "The following projects have been affected: [$(npx nx print-affected -t build --select=tasks.target.project)]";
-        echo "affected=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
-  
-     
+      - name: Nx Affected Lint
+        run: npx nx affected -t lint
+
+      - name: Nx Affected Test
+        run: npx nx affected -t test
+
+      - name: Nx Affected Build
+        run: npx nx affected -t build
+
+      - name: Determine who needs to be deployed
+        id: should-deploy
+        run: |
+          echo "The following projects have been affected: [$(npx nx print-affected -t build --select=tasks.target.project)]";
+          echo "affected=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
+
   deploy-debug:
     needs: pre-deploy
     runs-on: ubuntu-latest
@@ -89,7 +86,7 @@ jobs:
         run: curl -X POST -d {} ${DOTCOM_WEBHOOK_DEPLOY}  -H "Content-Type:application/json"
         env:
           DOTCOM_WEBHOOK_DEPLOY: ${{ secrets.DOTCOM_WEBHOOK_DEPLOY }}
-          
+
   deploy-monarch-frontend:
     needs: pre-deploy
     if: (contains(github.event.inputs.manual-deploy, 'monarch-frontend') || contains(needs.pre-deploy.outputs.affected, 'monarch-frontend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -101,7 +98,7 @@ jobs:
         run: curl -X POST -d {} ${MONARCH_WEBHOOK_DEPLOY}  -H "Content-Type:application/json"
         env:
           MONARCH_WEBHOOK_DEPLOY: ${{ secrets.MONARCH_WEBHOOK_DEPLOY }}
-          
+
   deploy-monarch-backend:
     needs: pre-deploy
     if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -113,10 +110,10 @@ jobs:
         with:
           node-version: 16.x
           cache: 'yarn'
-    
+
       - name: Install Dependencies
         run: yarn install
-        
+
       - run: npx nx build monarch-backend --configuration production
       - name: default deploy
         uses: appleboy/lambda-action@master
@@ -127,6 +124,17 @@ jobs:
           function_name: monarch-monolith-lambda
           source: dist/apps/monarch/monarch-backend/main.js
 
+  deploy-green-infrastructure-frontend:
+    needs: pre-deploy
+    if: (contains(github.event.inputs.manual-deploy, 'green-infrastructure-frontend') || contains(needs.pre-deploy.outputs.affected, 'green-infrastructure-frontend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # For "simplicity", deployment settings are configured in the AWS Amplify Console
+    # This just posts to a webhook telling Amplify to redeploy the main branch
+    steps:
+      - name: Tell Amplify to rebuild
+        run: curl -X POST -d {} ${GREEN_INFRASTRUCTURE_WEBHOOK_DEPLOY}  -H "Content-Type:application/json"
+        env:
+          GREEN_INFRASTRUCTURE_WEBHOOK_DEPLOY: ${{ secrets.GREEN_INFRASTRUCTURE_WEBHOOK_DEPLOY }}
 # If deploying a new service via actions, use the following template:
 #  deploy-<!!!REPLACE-ME!!!>:
 #    needs: pre-deploy
