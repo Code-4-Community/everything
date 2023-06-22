@@ -1,0 +1,35 @@
+{
+  "name": "green-infrastructure-frontend-e2e",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/green-infrastructure/frontend-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/green-infrastructure/frontend-e2e/cypress.config.ts",
+        "devServerTarget": "green-infrastructure-frontend:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "green-infrastructure-frontend:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "green-infrastructure-frontend:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/green-infrastructure/frontend-e2e/**/*.{js,ts}"
+        ]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["green-infrastructure-frontend"]
+}
