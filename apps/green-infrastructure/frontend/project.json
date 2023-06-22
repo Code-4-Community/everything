@@ -1,7 +1,7 @@
 {
-  "name": "monarch-frontend",
+  "name": "green-infrastructure-frontend",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/monarch/monarch-frontend/src",
+  "sourceRoot": "apps/green-infrastructure/frontend/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/monarch/monarch-frontend"
+        "outputPath": "dist/apps/green-infrastructure/frontend"
       },
       "configurations": {
         "development": {
@@ -24,15 +24,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "monarch-frontend:build"
+        "buildTarget": "green-infrastructure-frontend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "monarch-frontend:build:development",
+          "buildTarget": "green-infrastructure-frontend:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "monarch-frontend:build:production",
+          "buildTarget": "green-infrastructure-frontend:build:production",
           "hmr": false
         }
       }
@@ -41,23 +41,23 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "monarch-frontend:build"
+        "buildTarget": "green-infrastructure-frontend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "monarch-frontend:build:development"
+          "buildTarget": "green-infrastructure-frontend:build:development"
         },
         "production": {
-          "buildTarget": "monarch-frontend:build:production"
+          "buildTarget": "green-infrastructure-frontend:build:production"
         }
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/apps/monarch/monarch-frontend"],
+      "outputs": ["coverage/apps/green-infrastructure/frontend"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../../coverage/apps/monarch/monarch-frontend"
+        "reportsDirectory": "../../../coverage/apps/green-infrastructure/frontend"
       }
     },
     "lint": {
@@ -65,8 +65,14 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/monarch/monarch-frontend/**/*.{ts,tsx,js,jsx}"
+          "apps/green-infrastructure/frontend/**/*.{ts,tsx,js,jsx}"
         ]
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "green-infrastructure-frontend:build"
       }
     }
   },
