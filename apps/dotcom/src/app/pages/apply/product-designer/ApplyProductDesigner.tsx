@@ -149,7 +149,7 @@ const ApplyProductDesigner: React.FC = () => {
         <Grid item sm={5} className={classes.application}>
           <Fade>
             <CTA
-              disabled={false}
+              disabled={true}
               onClick="https://forms.gle/8moSAiM8rchoz2BL6"
             />
           </Fade>

@@ -188,7 +188,7 @@ const ApplyDeveloper: React.FC = () => {
         <Grid item sm={5} className={classes.application}>
           <Fade>
             <CTA
-              disabled={false}
+              disabled={true}
               onClick="https://forms.gle/LHNGNaU91omyChKH7"
             />
           </Fade>

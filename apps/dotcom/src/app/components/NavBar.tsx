@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Hidden,
   IconButton,
   Menu,
   MenuItem,
@@ -16,7 +15,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ReactComponent as C4CSvg } from '../svg/C4C.svg';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   navBarLogo: {
     height: 50,
     margin: 0,
@@ -24,7 +23,16 @@ const useStyles = makeStyles({
   root: {
     flexGrow: 1,
   },
-  menuButton: {},
+  mobileMenu: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  desktopMenu: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
   title: {
     flexGrow: 1,
   },
@@ -50,7 +58,7 @@ const useStyles = makeStyles({
       background: 'transparent',
     },
   },
-});
+}));
 
 const NavBar: React.FC = () => {
   const classes = useStyles();
@@ -91,8 +99,12 @@ const NavBar: React.FC = () => {
           </IconButton>
 
           <div className={classes.navlinks}>
-            {/* <Hidden xsDown> */}
-            <ButtonGroup variant="text" aria-label="text primary button group">
+            {/* Tablet and desktop only */}
+            <ButtonGroup
+              className={classes.desktopMenu}
+              variant="text"
+              aria-label="text primary button group"
+            >
               <Button component={Link} to="/apply">
                 <Typography variant="h6" className={classes.navlink}>
                   Apply
@@ -109,10 +121,11 @@ const NavBar: React.FC = () => {
                 </Typography>
               </Button>
             </ButtonGroup>
-            {/* </Hidden> */}
+
+            {/* Mobile only */}
             <IconButton
               edge="end"
-              className={classes.menuButton}
+              className={classes.mobileMenu}
               color="inherit"
               aria-label="menu"
               aria-controls="simple-menu"
