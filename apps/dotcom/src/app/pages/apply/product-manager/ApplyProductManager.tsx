@@ -153,8 +153,8 @@ const ApplyProductManager: React.FC = () => {
         <Grid item sm={5} className={classes.application}>
           <Fade>
             <CTA
-              disabled={true}
-              onClick="https://forms.gle/7MHkM3iAYAfiHPYD9"
+              disabled={false}
+              onClick="https://forms.gle/3qh2JYaYfue84CQF6"
             />
           </Fade>
         </Grid>
