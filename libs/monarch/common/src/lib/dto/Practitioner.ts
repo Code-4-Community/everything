@@ -14,7 +14,7 @@ export const Practitioner = z.object({
   geocode: z.object({
     lat: z.number(),
     long: z.number(),
-  })
+  }),
 })
 
 export type Practitioner = z.infer<typeof Practitioner>
