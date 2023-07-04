@@ -25,8 +25,8 @@ export function App() {
   );
 
   return (
-    <Container maxWidth="4xl" marginBlock={10} textAlign="center">
-    <Text fontSize="4xl">My URL Shortener</Text>
+    <Container marginBlock={10} textAlign="center" bg='pink.100'>
+    <Text fontFamily = 'montserrat' fontSize="4xl"> My URL Shortener! </Text>
     <ShortenUrlForm requestShortUrl={requestShortUrl} />
     <UrlList urls={urls} />
   </Container>

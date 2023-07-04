@@ -29,8 +29,8 @@ export const ShortenUrlForm: React.FC<ShortenUrlFormProps> = ({
         }}
         placeholder="www.my-super-long-url-here.com/12345"
       />
-      <Button id="submit-btn" type="submit" colorScheme="teal" size="lg">
-        Generate
+      <Button fontFamily = 'montserrat' id="submit-btn" type="submit" colorScheme="pink" size="lg">
+        Generate 
       </Button>
     </form>
   );
