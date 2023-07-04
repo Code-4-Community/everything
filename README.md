@@ -1,23 +1,15 @@
-# Everything
+# URL Shortener
+Organization: Code 4 Commmunity 
 
-This is the C4C monorepo containing all of our active projects.
+Developer: Ananya Radhakrishnan
 
-Deployable units exist in `/apps`, inside each folder there is a README explaining how that unit is tested and deployed.
+## Project Overview
+This is a `React` web application that shortens long URLs into more manageable and shareable links. Users will be able to input any URL they would like, and the app will produce a shorter URL that redirects to the original URL. The back-end for this web application is through `Express` using REST routing and `SQLite` for persistent data storage. Front end and back end components were combined using the `axios` library. `Chakra UI` was used as the library for styling the front end user interface. 
 
-Business logic and supporting library for those deployable units exist in `/libs`. These are composable units of software that are not coupled to a specific deployment framework or strategy, and are meant to be easily reused in future projects.
+## Structure
+- `client`: React app providing the user interface. Contains the components used throughout the application, as well as styling and main pages with features. 
+- `client2e`: Cypress project for end-to-end testing. 
+- `server`: Provides the backend code for the application.
 
-The purpose of `README.md`s in this repository are to explain the usage of the application. The bare minimum you need to get it running. More detailed developer and public documentation exists on the wiki. `README.md`s will often link to relevant wiki pages.
-
-
-Links to Project `README.md`
-
-- [Monarch](./apps/monarch/README.md)
-- [c4cneu.com](./apps/dotcom/README.md)
-
-
-## 🔨 Development
-1. Install Node v16.x
-2. Clone this repo
-3. `yarn install`
-
-When adding new dependencies, use `yarn add` or its dev dependency equivalent. Thanks to Nx, each package will only be installed once, and each app knows how to bundle itself correctly based on its dependencies.
+## Testing 
+The express routes were initally tested using `Postman`, while the front end was tested using `Cypress`, an E2E testing framework. React components were also tested using `Jest` and the `React Testing Library`. Finally, the API was thoroughly tested using `supertest`, emulating HTTP requests to the Express router.
