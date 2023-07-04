@@ -1,4 +1,4 @@
-import { shortenUrl, lookupUrl } from './persist';
+import { shortenUrl, lookupUrl, generateQR } from './persist';
 import { createApp } from './app';
 
 // Composition Root
@@ -6,6 +6,7 @@ async function main() {
   const app = await createApp({
     shortenUrl,
     lookupUrl,
+   // generateQR
   });
 
   const port = process.env.PORT || 3333;

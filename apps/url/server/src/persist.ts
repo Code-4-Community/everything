@@ -9,6 +9,7 @@ const urlmap: Record<number, string> = {};
 // SQL code
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+import qrcode from 'qrcode';
 
 /**
  * Initally undefined, but we will use this mutable reference to cache the connection for future use
@@ -46,6 +47,21 @@ export async function shortenUrl(url: string): Promise<string> {
   const short = `http://localhost:3333/s/${id}`;
 
   return short;
+}
+
+/**
+ * Produces the qr form of a given URL
+ * Effect: updates the db to record the url and its qr.
+ */
+export async function generateQR(url: string): Promise<string> {
+  const db = await getDB();
+
+  const result = await db.run('INSERT INTO url (original) VALUES (?)', url);
+  console.log(result);
+  const id = result.lastID;
+  const qr = qrcode.toDataURL(url); // Generate the QR code
+
+  return qr;
 }
 
 export async function lookupUrl(shortenedId: number) {
