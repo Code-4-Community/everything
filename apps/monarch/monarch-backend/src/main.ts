@@ -51,8 +51,11 @@ app.post('/practitioners', async (req: Request, res: Response) => {
 
 //Initializing CognitoExpress constructor
 const cognitoExpress = new CognitoExpress({
-	region: "us-east-2",
-	cognitoUserPoolId: "us-east-2_jlRWv5ExI",
+	region: "us-east-1",
+	cognitoUserPoolId: "us-east-1_bGBPdcC4V",
+	IdentityPoolId: 'us-east-1:0582dc75-ef6d-4aeb-a1b7-f40d9a2f4c37',
+    RoleArn: 'arn:aws:cognito-identity:us-east-1:489881683177:identitypool/us-east-1:0582dc75-ef6d-4aeb-a1b7-f40d9a2f4c37',
+    AccountId: '489881683177', // your AWS account ID
 	tokenUse: "access", //Possible Values: access | id
 	tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
 });
