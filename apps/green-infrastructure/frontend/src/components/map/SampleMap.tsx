@@ -1,13 +1,8 @@
-import React, {createRef, useCallback, useEffect, useState} from 'react';
+import React, {createRef, useCallback, useEffect, useState, useRef} from 'react';
 import { GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
-import styled from 'styled-components';
 
-
-
-let map: google.maps.Map;
 
 //@ts-ignore
-let featureLayer;
 const markersArray: google.maps.Marker[] = [];
 
 const BOSTON_BOUNDS = {
@@ -17,11 +12,27 @@ const BOSTON_BOUNDS = {
   east: -70.83,
 };
 
-async function initMap(): Promise<void> {
-  const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-  map = new Map(document.getElementById("map") as HTMLElement, {
-    center: { lat: 42.36, lng: -71.06 },
+
+
+interface MapProps {
+  readonly zoom: number;
+  // readonly center: google.maps.LatLngLiteral;
+  // readonly lat: number;
+  // readonly lng: number;
+}
+
+
+const Map: React.FC<MapProps> = ({
+  zoom,
+}) => {
+  let map: google.maps.Map;
+
+  useEffect(() => {
+    const loadMap = async () => {
+      const { Map, Data} = await google.maps.importLibrary('maps') as google.maps.MapsLibrary;
+      // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+      map = new Map(document.getElementById('map') as HTMLElement, {
+        center: { lat: 42.36, lng: -71.06 },
     zoom: 8,
     mapId: '3aa9b524d13192b',
     restriction: {
@@ -30,11 +41,6 @@ async function initMap(): Promise<void> {
     },
   });
 
-  // const marker = new AdvancedMarkerElement({
-  //   map: map,
-  //   position: { lat: -34.397, lng: 150.644 } ,
-  //   title: 'Uluru'
-  // });
 
   const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
 
@@ -66,7 +72,6 @@ async function initMap(): Promise<void> {
 
   const marker = new google.maps.Marker({
     map,
-    anchorPoint: new google.maps.Point(0, -29),
   });
 
 
@@ -80,50 +85,21 @@ async function initMap(): Promise<void> {
     window.alert("No details available for input: '" + place.name + "'");
     return;
   }
-
-  // If the place has a geometry, then present it on a map.
-  if (place.geometry.viewport) {
-    map.fitBounds(place.geometry.viewport);
-  } else {
-    map.setCenter(place.geometry.location);
-    map.setZoom(17);
-  }
   
   marker.setPosition(place.geometry.location);
   marker.setVisible(true);
 });
-
-  
-
-
-
-  }
-
-initMap();
-
-
-
-
-interface MapProps {
-  readonly zoom: number;
-  readonly center: google.maps.LatLngLiteral;
-  // readonly lat: number;
-  // readonly lng: number;
-}
-
-
-const Map: React.FC<MapProps> = ({
-  zoom,
-  center,
-}) => {
-  return (
-    <LoadScript googleMapsApiKey='API_KEY'>
-      <GoogleMap mapContainerStyle={{ width: '80%', height: '400px' }} center={center} zoom={zoom}>
-      </GoogleMap>
-    </LoadScript>
-  );
 };
 
+loadMap();
+}, []);
+
+return (
+<div>
+  <div id="map" style={{ width: '80%', height: '400px' }}></div>
+</div>
+);
+};
 
 
 
