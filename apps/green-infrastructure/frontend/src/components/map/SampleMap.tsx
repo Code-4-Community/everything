@@ -4,7 +4,17 @@ import styled from 'styled-components';
 
 
 let map: google.maps.Map;
+
+//@ts-ignore
+let featureLayer;
 const markersArray: google.maps.Marker[] = [];
+
+const BOSTON_BOUNDS = {
+  north: 42.42,
+  south: 42.2,
+  west: -71.28,
+  east: -70.83,
+};
 
 async function initMap(): Promise<void> {
   const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
@@ -13,6 +23,10 @@ async function initMap(): Promise<void> {
     center: { lat: 42.36, lng: -71.06 },
     zoom: 8,
     mapId: '3aa9b524d13192b',
+    restriction: {
+      latLngBounds: BOSTON_BOUNDS,
+      strictBounds: false,
+    },
   });
 
   const marker = new AdvancedMarkerElement({
@@ -20,6 +34,24 @@ async function initMap(): Promise<void> {
     position: { lat: -34.397, lng: 150.644 } ,
     title: 'Uluru'
   });
+
+  const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
+
+  const featureStyleOptions: google.maps.FeatureStyleOptions = {
+    strokeColor: '#810FCB',
+    strokeOpacity: 1.0,
+    strokeWeight: 3.0,
+    fillColor: '#810FCB',
+    fillOpacity: 0.5
+  };
+
+  //@ts-ignore
+  featureLayer.style = (options: { feature: { placeId: string; }; }) => {
+    if (options.feature.placeId == 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
+      return featureStyleOptions;
+    }
+  };
+
 }
 
 initMap();
@@ -50,7 +82,7 @@ const Map: React.FC<MapProps> = ({
   center,
 }) => {
   return (
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''} >
+    <LoadScript googleMapsApiKey='API_KEY'>
       <GoogleMap mapContainerStyle={{ width: '80%', height: '400px' }} center={center} zoom={zoom}>
       </GoogleMap>
     </LoadScript>
