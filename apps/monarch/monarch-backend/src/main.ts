@@ -44,10 +44,10 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
   res.status(200).json(practitioners).end();
 });
 
-app.post('/practitioners', async (req: Request, res: Response) => {
-	const practitioner = await postPractitionerHandler(req);
-	res.status(201).json(practitioner).end();
-});
+// app.post('/practitioners', async (req: Request, res: Response) => {
+// 	const practitioner = await postPractitionerHandler(req);
+// 	res.status(201).json(practitioner).end();
+// });
 
 //Initializing CognitoExpress constructor
 const cognitoExpress = new CognitoExpress({
@@ -87,6 +87,11 @@ authenticatedRoute.use(function(req, res, next) {
 //Define your routes that need authentication check
 authenticatedRoute.get("/admin", (req, res) => {
 	res.status(200).json({ ok: 47 });
+});
+
+authenticatedRoute.post('/practitioners', async (req: Request, res: Response) => {
+	const practitioner = await postPractitionerHandler(req);
+	res.status(201).json(practitioner).end();
 });
 
 //app.use('/assets', express.static(path.join(__dirname, 'assets')));

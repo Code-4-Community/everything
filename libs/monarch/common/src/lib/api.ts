@@ -2,7 +2,6 @@ import { makeApi } from "@zodios/core";
 import { z } from "zod";
 import { Practitioner } from './dto/Practitioner'
 
-
 export const userApi = makeApi([
   {
     method: "get",
@@ -30,6 +29,12 @@ export const userApi = makeApi([
         description: 'New Practitioner',
         schema: Practitioner,
         type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
       }
     ]
   }

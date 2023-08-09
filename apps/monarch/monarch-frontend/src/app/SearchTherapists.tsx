@@ -1,12 +1,3 @@
-import {
-  Button,
-  Card,
-  ControlGroup,
-  Elevation,
-  Label,
-  NumericInput,
-  Spinner,
-} from '@blueprintjs/core';
 import React, {
   ChangeEvent,
   useCallback,
@@ -20,28 +11,15 @@ import { Therapist, TherapistDisplayModel } from './therapist';
 import {
   Badge,
   Box,
-  Center,
   Divider,
-  Flex,
-  Grid,
-  GridItem,
   Heading,
   HStack,
-  Image,
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Link,
-  SimpleGrid,
   Skeleton,
   Stack,
-  StackItem,
-  Stat,
-  StatArrow,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
   Text,
   VStack,
   Wrap,
@@ -51,7 +29,6 @@ import {
   CheckCircleIcon,
   QuestionIcon,
   Search2Icon,
-  StarIcon,
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
