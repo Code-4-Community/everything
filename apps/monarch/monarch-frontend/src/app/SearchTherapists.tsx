@@ -106,7 +106,7 @@ export const SearchTherapists: React.FC = () => {
         )
       : Number.POSITIVE_INFINITY;
   }
-  console.log(process);
+  
   console.log('data', data);
   const therapists = data?.filter((therapist) => {
     return (

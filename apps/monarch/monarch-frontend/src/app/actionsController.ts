@@ -8,7 +8,7 @@ import raw from './raw.json';
 import { createApiClient } from '@c4c/monarch/common';
 import { dist } from './SearchTherapists';
 
-const baseUrl = "http://localhost:3333";
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 if (baseUrl == null) {
   throw new Error('Base URL is undefined, cannot communicate to the server.');
@@ -20,6 +20,7 @@ faker.seed(123);
 
 const loaded: Therapist[] = raw.map((rawTherapist: any) => {
   const [lat, long] = faker.address.nearbyGPSCoordinate([42, -71], 100);
+  
   return {
     fullName: titleCaseIfPresent(rawTherapist['Full Name']),
     address: rawTherapist.Location,

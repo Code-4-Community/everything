@@ -13,11 +13,10 @@ const ManageTherapists: React.FC = () => {
     }
   );
 
-  // if (data == null) {
-  //   return <p>Loading...</p>;
-  // }
+  if (data == null) {
+    return <p>Loading...</p>;
+  }
 
-  console.log(process);
   console.log(data);
   const fullNameRenderer = (rowIndex: number) => (
     <EditableCell2 value={data[rowIndex].fullName} />
