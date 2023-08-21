@@ -20,7 +20,7 @@ faker.seed(123);
 
 const loaded: Therapist[] = raw.map((rawTherapist: any) => {
   const [lat, long] = faker.address.nearbyGPSCoordinate([42, -71], 100);
-  
+
   return {
     fullName: titleCaseIfPresent(rawTherapist['Full Name']),
     address: rawTherapist.Location,
