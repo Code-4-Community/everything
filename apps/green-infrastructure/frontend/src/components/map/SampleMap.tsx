@@ -50,12 +50,6 @@ async function initMap(): Promise<void> {
     }
   };
 
-  new google.maps.Marker({
-    position: { lat: 42.36, lng: -71 },
-    icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-    map: map,
-  });
-
 }
 
 initMap();
