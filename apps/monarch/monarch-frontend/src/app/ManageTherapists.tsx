@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Amplify, Auth } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+//@ts-ignore
 import awsmobile from '../aws-exports.js';
 import AddPractitioner from './AddPractitioner';
 import React, {
@@ -81,10 +83,30 @@ function ManageTherapists() {
     TherapistDisplayModel[] | null
   >(null);
 
+  const RYAN: Practitioner = {
+    phoneNumber: '1515551515',
+    website: 'test.com',
+    languages: '',
+    modality: 'Software',
+    businessLocation: '123 Huntington Ave, Boston, MA, 02115',
+    businessName: 'Director of Engineering',
+    minAgeServed: 17,
+    email: 'test@test.com',
+    fullName: 'Ryan Jung',
+    languagesList: ['Spanish'],
+    geocode: {
+      lat: 42.339806,
+      long: -71.089172,
+    },
+  };
+
+  const FAKE_THERAPISTS: Practitioner[] = []; // ...Array(1).fill(null).map(createRandomTherapist), RYAN, SOFIE, SOMYA]
+  FAKE_THERAPISTS.push(RYAN);
+
   useEffect(() => {
-    setSearchResult(null);
+    setSearchResult(FAKE_THERAPISTS);
     debouncedSearchTherapists(searchQuery).then(setSearchResult);
-  }, [searchQuery]);
+  }, [FAKE_THERAPISTS, searchQuery]);
 
 
   // const RYAN: Practitioner = {
@@ -106,23 +128,6 @@ function ManageTherapists() {
   //   badges: [],
   //   languages: 'Spanish',
   // };
-
-  const RYAN: Practitioner = {
-    phoneNumber: '1515551515',
-    website: '',
-    languages: '',
-    modality: 'Software',
-    businessLocation: '123 Huntington Ave, Boston, MA, 02115',
-    businessName: 'Director of Engineering',
-    minAgeServed: 17,
-    email: '',
-    fullName: 'Ryan Jung',
-    languagesList: ['Spanish'],
-    geocode: {
-      lat: 42.339806,
-      long: -71.089172,
-    },
-};
   
   // const SOMYA: Therapist = {
   //   fullName: 'Somya Prabhakar',
@@ -170,8 +175,7 @@ function ManageTherapists() {
   //   languages: [],
   // };
   
-  const FAKE_THERAPISTS: Practitioner[] = []; // ...Array(1).fill(null).map(createRandomTherapist), RYAN, SOFIE, SOMYA]
-  FAKE_THERAPISTS.push(RYAN);
+
 
   const data = FAKE_THERAPISTS;
   const isLoading = searchResult == null;
@@ -203,16 +207,7 @@ function ManageTherapists() {
   }
 
   //console.log('data', data);
-  const therapists = data?.filter((therapist) => {
-    return (
-      dist(
-        therapist.geocode.lat,
-        therapist.geocode.long,
-        coords?.latitude,
-        coords?.longitude
-      ) < searchQuery.maxDistance
-    );
-  });
+  const therapists = data;
 
   // const therapists = data?.filter(
   //   (therapist) =>
@@ -227,9 +222,9 @@ function ManageTherapists() {
   //       )
   // )
 
-  if (searchQuery.searchString.length === 0) {
-    therapists?.sort((a, b) => comparableDistance(a) - comparableDistance(b));
-  }
+  // if (searchQuery.searchString.length === 0) {
+  //   therapists?.sort((a, b) => comparableDistance(a) - comparableDistance(b));
+  // }
 
   const [numTherapistsToRender, setNumTherapistsToRender] = useState(10);
 
@@ -408,23 +403,12 @@ function ManageTherapists() {
                     </WrapItem>
                     <WrapItem>
                       <AddPractitioner accessToken={accessToken} practitioner={therapist} 
-                      removeApplication={() => {data.filter((d) => d !== therapist)}}/>
+                      removeApplication={() => {
+                        data.filter((d) => d !== therapist);
+                        console.log(data)}}/>
                     </WrapItem>
                   </Wrap>
                 </Box>
-                {therapist.searchScore != null && (
-                  <Box gap={1} alignItems="end" display="flex" dir="row">
-                    {1.0 - therapist.searchScore >= 0.9 ? (
-                      <CheckCircleIcon w={5} h={5} color="green.400" />
-                    ) : (
-                      <QuestionIcon w={5} h={5} color="orange.300" />
-                    )}
-
-                    <Text size="sm">
-                      {(100 * (1.0 - therapist.searchScore)).toFixed(2)}% match
-                    </Text>
-                  </Box>
-                )}
               </Box>
             ))}
           </VStack>

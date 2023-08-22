@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     useDisclosure,
     Button,
@@ -9,6 +9,9 @@ import {
     ModalCloseButton,
     ModalBody,
     ModalFooter,
+    VStack,
+    HStack,
+    Input
 } from '@chakra-ui/react';
 import { Practitioner } from '@c4c/monarch/common';
 import { controller } from './actionsController';
@@ -171,7 +174,10 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
                             onAcceptClose();
                             //setPractitioner(defaultPractitioner);
                         }} variant='ghost' mr={2}>Cancel</Button>
-                        <Button onClick={handleAcceptFormSubmission} colorScheme='teal'>Submit</Button>
+                        <Button onClick={() => {
+                            onAcceptClose();
+                            handleAcceptFormSubmission();
+                        }} colorScheme='teal'>Submit</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
@@ -188,8 +194,8 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
                     <ModalCloseButton />
                     <ModalBody>
                         Are you sure you want to deny this practitioner?
-                        {/* <VStack alignItems='flex-start'>
-                            <HStack>
+                        <VStack alignItems='flex-start'>
+                            {/* <HStack>
                                 <Input value={practitioner.fullName} onChange={handleFullName} placeholder='Full Name' size='sm' />
                                 <Input value={practitioner.email} onChange={handleEmail} placeholder='Email' size='sm' />
                             </HStack>
@@ -207,8 +213,8 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
                             </HStack>
                             <HStack>
                                 <Input value={practitioner.languagesList[0]} onChange={handleLanguagesList} placeholder='Language' size='sm' flexGrow='1' />
-                            </HStack>
-                        </VStack> */}
+                            </HStack> */}
+                        </VStack>
                         
                     </ModalBody>
                     <ModalFooter>
@@ -216,7 +222,10 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
                             onDenyClose();
                             //setPractitioner(defaultPractitioner);
                         }} variant='ghost' mr={2}>Cancel</Button>
-                        <Button onClick={handleDenyFormSubmission} colorScheme='teal'>Submit</Button>
+                        <Button onClick={() => {
+                            onDenyClose(); 
+                            handleDenyFormSubmission();
+                            }} colorScheme='teal'>Submit</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
