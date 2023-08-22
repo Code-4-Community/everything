@@ -7,6 +7,7 @@ const App: React.FC = () => {
   return (
     <div>
       <h1>Green Infrastructure!</h1>
+      <p>markers</p>
       <MapWithPopup zoom={8} center={mapCenter} />
     </div>
   );
