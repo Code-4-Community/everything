@@ -4,6 +4,7 @@ import { Loader } from "@googlemaps/js-api-loader"
 
 let map: google.maps.Map;
 
+// defines the boundaries for the map
 const BOSTON_BOUNDS = {
   north: 42.42,
   south: 42.2,
@@ -23,6 +24,7 @@ loader.importLibrary("core").then(async () => {
 async function initMap(): Promise<void> {
   const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
  
+  // defines the map object
   map = new Map(document.getElementById("map") as HTMLElement, {
     center: { lat: 42.36, lng: -71.06 },
     zoom: 8,
@@ -33,8 +35,8 @@ async function initMap(): Promise<void> {
     },
   });
 
+  // sets the style for the boundary
   const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
-
   const featureStyleOptions: google.maps.FeatureStyleOptions = {
     strokeColor: '#50B0E6',
     strokeOpacity: 1.0,
@@ -62,14 +64,11 @@ interface MapProps {
   // readonly lng: number;
 }
 
-
+// creates the map object
 const Map: React.FC<MapProps> = ({
   zoom,
   center,
 }) => {
-  console.log("here1")
-  console.log()
-  console.log("here2")
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
   return (
     <LoadScript googleMapsApiKey={apiKey}>
