@@ -9,7 +9,6 @@ export interface MapIcon {
     strokeWeight: number;
     rotation: number;
     scale: number;
-    anchor: google.maps.Point;
   };
 }
 
