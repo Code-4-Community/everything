@@ -14,7 +14,8 @@ const BOSTON_BOUNDS = {
 
 const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  version: "weekly"
+  version: "weekly",
+  libraries: ['places']
 });
 
 loader.importLibrary("core").then(async () => {
@@ -29,6 +30,10 @@ async function initMap(): Promise<void> {
     center: { lat: 42.36, lng: -71.06 },
     zoom: 8,
     mapId: '3aa9b524d13192b',
+    mapTypeControl: false,
+    zoomControlOptions: {
+      position: google.maps.ControlPosition.LEFT_BOTTOM,
+    },
     restriction: {
       latLngBounds: BOSTON_BOUNDS,
       strictBounds: false,
@@ -52,7 +57,38 @@ async function initMap(): Promise<void> {
     }
   };
 
-}
+
+  const input = document.getElementById('pac-input') as HTMLInputElement;
+
+    const autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', map);
+
+    const marker = new google.maps.Marker({
+      map,
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      marker.setVisible(false);
+      const place = autocomplete.getPlace();
+
+      if (!place.geometry || !place.geometry.location) {
+        window.alert(`No details available for input: '${place.name}'`);
+        return;
+      }
+
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(17);
+      }
+
+      marker.setPosition(place.geometry.location);
+      marker.setVisible(true);
+    });
+  };
+
+
 
 initMap();
 
