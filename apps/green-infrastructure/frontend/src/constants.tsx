@@ -4,7 +4,8 @@ import { allSvgMarkers } from './components/mapIcon/MapIconDesigns';
 
 export const loader = new Loader({
     apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    version: "weekly"
+    version: "weekly",
+    libraries: ['places']
   });
 
 // defines the boundaries for the map
