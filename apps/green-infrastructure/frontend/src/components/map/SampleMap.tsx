@@ -1,22 +1,8 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { Loader } from "@googlemaps/js-api-loader"
+import { loader, BOSTON_BOUNDS, markers } from '../../constants';
 
 let map: google.maps.Map;
-
-// defines the boundaries for the map
-const BOSTON_BOUNDS = {
-  north: 42.42,
-  south: 42.2,
-  west: -71.28,
-  east: -70.83,
-};
-
-const loader = new Loader({
-  apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  version: "weekly",
-  libraries: ['places']
-});
 
 loader.importLibrary("core").then(async () => {
   initMap()
@@ -24,7 +10,7 @@ loader.importLibrary("core").then(async () => {
 
 async function initMap(): Promise<void> {
   const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
- 
+
   // defines the map object
   map = new Map(document.getElementById("map") as HTMLElement, {
     center: { lat: 42.36, lng: -71.06 },
@@ -50,13 +36,21 @@ async function initMap(): Promise<void> {
     fillOpacity: 0.3
   };
 
-  //@ts-ignore
-  featureLayer.style = (options: { feature: { placeId: string; }; }) => {
-    if (options.feature.placeId == 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
+  featureLayer.style = (options) => {
+    const feature = options.feature as google.maps.PlaceFeature;
+    if (feature.placeId === 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
       return featureStyleOptions;
     }
   };
 
+
+  markers.forEach(markerInfo => {
+    new google.maps.Marker({
+      position: { lat: markerInfo.lat, lng: markerInfo.lng },
+      map: map,
+      icon: markerInfo.icon,
+    });
+  });
 
   const input = document.getElementById('pac-input') as HTMLInputElement;
 
@@ -88,9 +82,7 @@ async function initMap(): Promise<void> {
     });
   };
 
-
-
-initMap();
+}
 
 
 interface MapProps {
