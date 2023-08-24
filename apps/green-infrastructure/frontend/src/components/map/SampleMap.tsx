@@ -80,9 +80,7 @@ async function initMap(): Promise<void> {
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
     });
-  };
-
-}
+};
 
 
 interface MapProps {
