@@ -10,7 +10,7 @@ loader.importLibrary("core").then(async () => {
 
 async function initMap(): Promise<void> {
   const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
- 
+
   // defines the map object
   map = new Map(document.getElementById("map") as HTMLElement, {
     center: { lat: 42.36, lng: -71.06 },
@@ -32,16 +32,17 @@ async function initMap(): Promise<void> {
     fillOpacity: 0.3
   };
 
-  //@ts-ignore
-  featureLayer.style = (options: { feature: { placeId: string; }; }) => {
-    if (options.feature.placeId == 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
+  featureLayer.style = (options) => {
+    const feature = options.feature as google.maps.PlaceFeature;
+    if (feature.placeId === 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
       return featureStyleOptions;
     }
   };
 
+
   markers.forEach(markerInfo => {
     new google.maps.Marker({
-      position: {lat: markerInfo.lat, lng: markerInfo.lng},
+      position: { lat: markerInfo.lat, lng: markerInfo.lng },
       map: map,
       icon: markerInfo.icon,
     });
