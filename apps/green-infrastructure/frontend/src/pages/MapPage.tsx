@@ -1,4 +1,6 @@
 import Map from '../components/map/SampleMap';
+import Divider from './Divider';
+import About from './About';
 
 export default function MapPage() {
 
@@ -7,13 +9,12 @@ export default function MapPage() {
   return (
     <div>
         {/* <Header />
-        <Welcome />
-        <Divider /> */}
-        <p>Hello</p>
-      <Map zoom={8} center={mapCenter} />
-      <p>Hi</p>
-      {/* <Divider />
-      <About /> */}
+        <Welcome /> */}
+        <Divider />
+      <Map zoom={1} center={mapCenter} />
+      {/* <Divider /> */}
+      <About />
+      <Divider />
     </div>
   );
 };
