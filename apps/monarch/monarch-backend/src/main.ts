@@ -12,7 +12,7 @@ import getGeocode from './workflows/getGeocode';
 import { scanAllPractitioners } from './dynamodb';
 import { extractGeocode } from './location';
 import { zodiosApp } from '@zodios/express';
-import { userApi } from '@c4c/monarch/common';
+import { userApi, isValidZipcode } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
 
 // Need to use base Express in order for compat with serverless-express
@@ -44,6 +44,9 @@ app.get('/practitioners', async (_req, res) => {
 });
 
 app.get('/geocode', async (req, res) => {
+  if (!isValidZipcode(req.query.zipcode)) {
+    res.status(400);
+  };
   const geocode = await getGeocodeHandler(req.query.zipcode);
   res.status(200).json(geocode).end();
 });

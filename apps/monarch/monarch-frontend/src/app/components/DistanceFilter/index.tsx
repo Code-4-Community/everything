@@ -18,10 +18,7 @@ import {
 import { CheckIcon } from '@chakra-ui/icons';
 import { controller } from '../../actionsController';
 import { QueryContext } from '../../SearchTherapists';
-
-const isValidZipcode = (zipcode: string): boolean => {
-    return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipcode);
-};
+import { isValidZipcode } from '@c4c/monarch/common';
 
 const defaultMaxDistance = 100;
 const defaultZipcode = "";
