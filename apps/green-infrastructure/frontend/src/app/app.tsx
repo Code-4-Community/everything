@@ -5,7 +5,7 @@ const App: React.FC = () => {
  
   return (
     <div>
-      <Map zoom={8} center={mapCenter} />
+      <Map />
     </div>
   );
 };

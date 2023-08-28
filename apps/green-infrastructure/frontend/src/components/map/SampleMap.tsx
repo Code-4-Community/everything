@@ -1,6 +1,8 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { loader, BOSTON_BOUNDS, markers } from '../../constants';
+import MapLegend from '../map/MapLegend';
+
 
 let map: google.maps.Map;
 
@@ -83,24 +85,14 @@ async function initMap(): Promise<void> {
 };
 
 
-interface MapProps {
-  readonly zoom: number;
-  readonly center: google.maps.LatLngLiteral;
-  // readonly lat: number;
-  // readonly lng: number;
-}
 
-// creates the map object
-const Map: React.FC<MapProps> = ({
-  zoom,
-  center,
+
+const Map: React.FC = ({
+
 }) => {
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
   return (
-    <LoadScript googleMapsApiKey={apiKey}>
-      <GoogleMap mapContainerStyle={{ width: '80%', height: '400px' }} center={center} zoom={zoom}>
-      </GoogleMap>
-    </LoadScript>
+    
+    <MapLegend></MapLegend>
   );
 };
 
