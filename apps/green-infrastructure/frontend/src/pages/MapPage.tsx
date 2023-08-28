@@ -1,4 +1,4 @@
-import Map from '../components/map/SampleMap';
+import Map from '../components/map/Map';
 import Divider from './Divider';
 import About from './About';
 
@@ -11,7 +11,7 @@ export default function MapPage() {
         {/* <Header />
         <Welcome /> */}
         <Divider />
-      <Map zoom={1} center={mapCenter} />
+      <Map zoom={8} center={mapCenter} />
       {/* <Divider /> */}
       <About />
       <Divider />
