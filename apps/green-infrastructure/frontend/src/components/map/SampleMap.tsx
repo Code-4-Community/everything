@@ -1,32 +1,57 @@
-import React from 'react';
+import React, { createRef, useEffect, useState, useRef } from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { loader, BOSTON_BOUNDS, markers } from '../../constants';
 import MapLegend from '../map/MapLegend';
+import styled from 'styled-components';
 
+
+const MapDiv = styled.div`
+  height: 100%;
+`;
+
+
+interface MapProps {
+  readonly zoom: number;
+}
+
+
+const SampleMap: React.FC<MapProps> = ({
+  zoom,
+}) => {
+
+// const mapRef = createRef<HTMLDivElement>();
+
+const mapRef = useRef<HTMLDivElement | null>(null);
 
 let map: google.maps.Map;
 
-loader.importLibrary("core").then(async () => {
-  initMap()
-});
+// const [mapElement, setMapElement] = useState(mapRef.current);
 
-async function initMap(): Promise<void> {
-  const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
+// useEffect(() => {
+//   setMapElement(mapRef.current);
+// }, [mapRef]);
 
-  // defines the map object
-  map = new Map(document.getElementById("map") as HTMLElement, {
-    center: { lat: 42.36, lng: -71.06 },
-    zoom: 8,
-    mapId: '3aa9b524d13192b',
-    mapTypeControl: false,
-    zoomControlOptions: {
-      position: google.maps.ControlPosition.LEFT_BOTTOM,
-    },
-    restriction: {
-      latLngBounds: BOSTON_BOUNDS,
-      strictBounds: false,
-    },
-  });
+
+useEffect(() => {
+  if (mapRef.current) {
+    loader.load().then(() => {
+      map = new google.maps.Map(mapRef.current as HTMLElement, {
+        center: { lat: 42.36, lng: -71.06 },
+        zoom: 8,
+        mapId: '3aa9b524d13192b',
+        mapTypeControl: false,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_BOTTOM,
+        },
+        restriction: {
+          latLngBounds: BOSTON_BOUNDS,
+          strictBounds: false,
+        },
+      });
+
+  
+
+
 
   // sets the style for the boundary
   const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
@@ -82,18 +107,20 @@ async function initMap(): Promise<void> {
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
     });
-};
+  });
+}
+}, [zoom]);
+
+return (
+  <div>
 
 
-
-
-const Map: React.FC = ({
-
-}) => {
-  return (
+    <MapLegend />
+    <MapDiv id="map" ref={mapRef} style={{ width: '100%', height: '400px' }} />
     
-    <MapLegend></MapLegend>
-  );
+  </div>
+);
 };
 
-export default Map;
+
+export default SampleMap;

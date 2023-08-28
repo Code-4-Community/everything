@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 
 const MapLegendContainer = styled.div`
-  position: absolute;
   background: #BDBDBD;
   width: 435px;
   height: 419px;
@@ -18,7 +17,6 @@ const MapLegend = ({}) => {
         </MapLegendContainer>
       );
     };
-
 
 
 export default MapLegend;

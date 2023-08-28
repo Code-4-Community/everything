@@ -1,4 +1,4 @@
-import Map from '../components/map/SampleMap';
+import SampleMap from '../components/map/SampleMap';
 import Header from '../pages/Header';
 
 
@@ -9,7 +9,10 @@ export default function MapPage() {
         <Header />
         {/* <Welcome />
         <Divider /> */}
-      <Map />
+       
+        <SampleMap zoom={8}/>
+        <div></div>
+
       {/* <Divider />
       <About /> */}
     </div>
