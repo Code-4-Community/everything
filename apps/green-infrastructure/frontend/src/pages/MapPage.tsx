@@ -1,20 +1,29 @@
+import React, { useState } from 'react';
 import SampleMap from '../components/map/SampleMap';
 import Header from '../pages/Header';
+import MapLegend from '../components/map/MapLegend';
+
 
 
 export default function MapPage() {
+  const [legendVisible, setLegendVisible] = useState(true);
+
+  const toggleLegend = () => {
+    setLegendVisible(!legendVisible);
+  };
 
   return (
     <div>
-        <Header />
-        {/* <Welcome />
-        <Divider /> */}
-       
-        <SampleMap zoom={8}/>
-        <div></div>
-
-      {/* <Divider />
-      <About /> */}
+      <Header />
+      <div style={{ position: 'relative' }}>
+        <SampleMap zoom={8} />
+        <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100 }}>
+          <MapLegend />
+        </div>
+        <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 100 }}>
+          <input id="pac-input" type="text" placeholder="Search Box" />
+        </div>
+      </div>
     </div>
   );
 };

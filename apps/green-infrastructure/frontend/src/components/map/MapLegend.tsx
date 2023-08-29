@@ -13,7 +13,7 @@ const MapLegendContainer = styled.div`
 const MapLegend = ({}) => {
     return (
         <MapLegendContainer>
-            <h1>hii</h1>
+            <h1>Feature Type</h1>
         </MapLegendContainer>
       );
     };

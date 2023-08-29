@@ -10,6 +10,15 @@ const MapDiv = styled.div`
 `;
 
 
+const SearchInput = styled.input`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 200px;
+  z-index: 100;
+`;
+
+
 interface MapProps {
   readonly zoom: number;
 }
@@ -19,17 +28,10 @@ const SampleMap: React.FC<MapProps> = ({
   zoom,
 }) => {
 
-// const mapRef = createRef<HTMLDivElement>();
 
 const mapRef = useRef<HTMLDivElement | null>(null);
 
 let map: google.maps.Map;
-
-// const [mapElement, setMapElement] = useState(mapRef.current);
-
-// useEffect(() => {
-//   setMapElement(mapRef.current);
-// }, [mapRef]);
 
 
 useEffect(() => {
@@ -50,8 +52,6 @@ useEffect(() => {
       });
 
   
-
-
 
   // sets the style for the boundary
   const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
@@ -113,11 +113,7 @@ useEffect(() => {
 
 return (
   <div>
-
-
-    <MapLegend />
-    <MapDiv id="map" ref={mapRef} style={{ width: '100%', height: '400px' }} />
-    
+    <MapDiv id="map" ref={mapRef} style={{ width: '100%', height: '495px' }} />
   </div>
 );
 };
