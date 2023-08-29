@@ -1,6 +1,9 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { createMapIcon, MapIcon } from './components/mapIcon/MapIcon';
 import { allSvgMarkers } from './components/mapIcon/MapIconDesigns';
+import availableIcon from './images/siteIcons/availableIcon.svg';
+import adoptedIcon from './images/siteIcons/adoptedIcon.svg';
+import futureIcon from './images/siteIcons/futureIcon.svg';
 
 export const loader = new Loader({
     apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -15,6 +18,36 @@ export const BOSTON_BOUNDS = {
     west: -71.28,
     east: -70.83,
   };
+
+
+export type SiteStatus = 'Available' | 'Adopted' | 'Future' ;
+
+
+interface SiteOption {
+    image: string;
+    label: string;
+    value: SiteStatus;
+  }
+
+  export const SITE_OPTIONS_ROADMAP: SiteOption[] = [
+    {
+      image: availableIcon,
+      label: 'Available Sites',
+      value: 'Available',
+    },
+    {
+      image: adoptedIcon,
+      label: 'Adopted Sites',
+      value: 'Adopted',
+    },
+    {
+      image: futureIcon,
+      label: 'Currently Unavailable Sites',
+      value: 'Future',
+    },
+  ];
+
+
 
 export const markers: MapIcon[] = [
     createMapIcon("Brighton Ave and Harvard Ave Medians", 42.35213048311874, -71.13773538658145, allSvgMarkers.svgMarker1),

@@ -6,11 +6,6 @@ import MapLegend from '../components/map/MapLegend';
 
 
 export default function MapPage() {
-  const [legendVisible, setLegendVisible] = useState(true);
-
-  const toggleLegend = () => {
-    setLegendVisible(!legendVisible);
-  };
 
   return (
     <div>

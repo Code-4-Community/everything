@@ -1,7 +1,5 @@
 import React, { createRef, useEffect, useState, useRef } from 'react';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { loader, BOSTON_BOUNDS, markers } from '../../constants';
-import MapLegend from '../map/MapLegend';
 import styled from 'styled-components';
 
 
