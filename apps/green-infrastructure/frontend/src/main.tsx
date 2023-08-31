@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './app/app';
-import MapPage from './pages/MapPage';
+import MapPage from './pages/mapPage/MapPage';
 
 const queryClient = new QueryClient();
 
