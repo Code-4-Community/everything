@@ -38,4 +38,4 @@ export const markers: MapPoint[] = [
     createMapPoint("USS Constitution", 42.352370004658894, -71.06553846060967, allSvgMarkers.svgMarker4),
     createMapPoint("Boston Tea Party Ships & Museum", 42.360425798954225, -71.05797241828176, allSvgMarkers.svgMarker5),
     createMapPoint("Copley Square", 42.29255811303282, -71.0845962093365, allSvgMarkers.svgMarker6)
-  ];
+];
