@@ -1,22 +1,30 @@
 import Map from '../../components/map/Map';
-// import Divider from '../Divider';
+import React, { useState } from 'react';
+import Divider from '../Divider';
 import About from './About';
+import Header from './Header';
+import MapLegend from '../../components/map/MapLegend';
 import Navbar from '../Navbar';
 
 export default function MapPage() {
 
-  const mapCenter: google.maps.LatLngLiteral = { lat: 42.36, lng: -71.06 };
- 
   return (
     <div>
       <Navbar />
-        {/* <Header />
-        <Welcome /> */}
-        {/* <Divider /> */}
-      <Map zoom={8} center={mapCenter} />
-      {/* <Divider /> */}
+      <Divider />
+      <Header />
+      <Divider />
+      <div style={{ position: 'relative' }}>
+        <Map zoom={8} />
+        <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100 }}>
+          <MapLegend />
+        </div>
+        <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 100 }}>
+          <input id="pac-input" type="text" placeholder="Search Box" />
+        </div>
+      </div>
+      <Divider />
       <About />
-      {/* <Divider /> */}
     </div>
   );
 };
