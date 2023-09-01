@@ -1,4 +1,4 @@
-import SampleMap from '../components/map/SampleMap';
+import SampleMap from '../components/map/Map';
 
 
 const App: React.FC = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SampleMap from '../components/map/SampleMap';
+import SampleMap from '../components/map/Map';
 import Header from '../pages/Header';
 import MapLegend from '../components/map/MapLegend';
 
