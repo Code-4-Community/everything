@@ -1,27 +1,25 @@
 export interface MapIcon {
-  name: string,
-  lat: number,
-  lng: number,
-  icon: {
-    path: string;
-    fillColor: string;
-    fillOpacity: number;
-    strokeWeight: number;
-    rotation: number;
-    scale: number;
-  };
+  path: string;
+  fillColor: string;
+  fillOpacity: number;
+  strokeWeight: number;
+  rotation: number;
+  scale: number;
 }
 
 export function createMapIcon(
-  name: string,
-  lat: number,
-  lng: number,
-  icon: MapIcon["icon"]
-): MapIcon {
+  path: string,
+  fillColor: string,
+  fillOpacity: number,
+  strokeWeight: number,
+  rotation: number,
+  scale: number): MapIcon {
   return {
-    name: name,
-    lat: lat,
-    lng: lng,
-    icon: icon,
+    path: path,
+    fillColor: fillColor,
+    fillOpacity: fillOpacity,
+    strokeWeight: strokeWeight,
+    rotation: rotation,
+    scale: scale
   };
 }
