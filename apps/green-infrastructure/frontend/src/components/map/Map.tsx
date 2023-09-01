@@ -1,6 +1,5 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { createPopupBoxContent } from '../mapIcon/PopupBox';
 import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID, markers } from '../../constants';
 
 let map: google.maps.Map;
@@ -45,31 +44,13 @@ async function initMap(): Promise<void> {
   };
 
 
-  // Declare a variable to keep track of the currently open InfoWindow
-  let currentInfoWindow: google.maps.InfoWindow | null = null;
-
-markers.forEach(markerInfo => {
-  const marker = new google.maps.Marker({
-    position: { lat: markerInfo.lat, lng: markerInfo.lng },
-    map: map,
-    icon: markerInfo.icon,
+  markers.forEach(markerInfo => {
+    new google.maps.Marker({
+      position: { lat: markerInfo.lat, lng: markerInfo.lng },
+      map: map,
+      icon: markerInfo.icon,
+    });
   });
-
-  const infoWindow = new google.maps.InfoWindow({
-    content: createPopupBoxContent(markerInfo.name, 'location', 'status', 'type'),
-  });
-
-  marker.addListener('click', () => {
-    if (currentInfoWindow) {
-      currentInfoWindow.close();
-    }
-
-    infoWindow.open(map, marker);
-    currentInfoWindow = infoWindow;
-  });
-});
-
-  
 
   const input = document.getElementById('pac-input') as HTMLInputElement;
 
