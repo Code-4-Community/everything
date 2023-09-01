@@ -29,10 +29,15 @@ const LegendItem = styled.div`
   align-items: center;
 `;
 
+const LegendImageContainer = styled.div`
+  text-align: center; 
+`;
+
 const LegendImage = styled(Image)`
   height: 20px;
   width: 20px;
-  float: left;
+  justify-content: center;
+  display: inline-block;
 `;
 
 // const ToggleTextButton = styled(Button)`
@@ -80,7 +85,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ canHide, icons }) => {
           />
           <CheckboxLabel>Available</CheckboxLabel>
         </CheckboxContainer>
-        <LegendImage src={availableIcon} preview={false} />
+        <LegendImageContainer>
+          <LegendImage src={availableIcon} alt="Available" style={{width: '20px', height: '20px', justifyContent: 'center' }} />
+        </LegendImageContainer>
       </LegendItem>
       <LegendItem>
         <CheckboxContainer>
@@ -90,7 +97,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ canHide, icons }) => {
           />
           <CheckboxLabel>Adopted</CheckboxLabel>
         </CheckboxContainer>
-        <LegendImage src={adoptedIcon} preview={false} />
+        <LegendImage src={adoptedIcon} alt="Adopted" style={{width: '20px', height: '20px', justifyContent: 'center' }} />
       </LegendItem>
       <LegendItem>
         <CheckboxContainer>
@@ -100,7 +107,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ canHide, icons }) => {
           />
           <CheckboxLabel>Future</CheckboxLabel>
         </CheckboxContainer>
-        <LegendImage src={futureIcon} preview={false} />
+        <LegendImage src={futureIcon} alt="Future" style={{width: '20px', height: '20px', justifyContent: 'center' }} />
       </LegendItem>
 
             {/* {canHide && (
