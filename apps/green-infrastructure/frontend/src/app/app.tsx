@@ -1,4 +1,4 @@
-import Map from '../components/map/SampleMap';
+import Map from '../components/map/Map';
 
 const App: React.FC = () => {
   const mapCenter: google.maps.LatLngLiteral = { lat: 42.36, lng: -71.06 };

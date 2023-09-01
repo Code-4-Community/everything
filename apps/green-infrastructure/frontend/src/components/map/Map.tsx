@@ -1,6 +1,6 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { loader, BOSTON_BOUNDS, markers } from '../../constants';
+import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID, markers } from '../../constants';
 
 let map: google.maps.Map;
 
@@ -38,7 +38,7 @@ async function initMap(): Promise<void> {
 
   featureLayer.style = (options) => {
     const feature = options.feature as google.maps.PlaceFeature;
-    if (feature.placeId === 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
+    if (feature.placeId === BOSTON_PLACE_ID) { // Place ID for Boston
       return featureStyleOptions;
     }
   };
@@ -86,8 +86,6 @@ async function initMap(): Promise<void> {
 interface MapProps {
   readonly zoom: number;
   readonly center: google.maps.LatLngLiteral;
-  // readonly lat: number;
-  // readonly lng: number;
 }
 
 // creates the map object
