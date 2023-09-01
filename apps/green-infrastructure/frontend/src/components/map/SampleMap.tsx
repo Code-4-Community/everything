@@ -56,7 +56,7 @@ markers.forEach(markerInfo => {
   });
 
   const infoWindow = new google.maps.InfoWindow({
-    content: createPopupBoxContent(markerInfo.name, 'here', 'taken', 'tree pit'),
+    content: createPopupBoxContent(markerInfo.name, markerInfo.location, markerInfo.status, markerInfo.type),
   });
 
   marker.addListener('click', () => {
