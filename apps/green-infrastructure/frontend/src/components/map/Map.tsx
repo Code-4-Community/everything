@@ -1,7 +1,7 @@
 import React from 'react';
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { loader, BOSTON_BOUNDS, markers } from '../../constants';
 import { createPopupBoxContent } from '../mapIcon/PopupBox';
+import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID, markers } from '../../constants';
 
 let map: google.maps.Map;
 
@@ -39,7 +39,7 @@ async function initMap(): Promise<void> {
 
   featureLayer.style = (options) => {
     const feature = options.feature as google.maps.PlaceFeature;
-    if (feature.placeId === 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
+    if (feature.placeId === BOSTON_PLACE_ID) { // Place ID for Boston
       return featureStyleOptions;
     }
   };
@@ -56,7 +56,7 @@ markers.forEach(markerInfo => {
   });
 
   const infoWindow = new google.maps.InfoWindow({
-    content: createPopupBoxContent(markerInfo.name, markerInfo.location, markerInfo.status, markerInfo.type),
+    content: createPopupBoxContent(markerInfo.name, 'location', 'status', 'type'),
   });
 
   marker.addListener('click', () => {
@@ -65,7 +65,7 @@ markers.forEach(markerInfo => {
     }
 
     infoWindow.open(map, marker);
-    currentInfoWindow = infoWindow; // Set the currentInfoWindow to the newly opened InfoWindow
+    currentInfoWindow = infoWindow;
   });
 });
 
@@ -105,8 +105,6 @@ markers.forEach(markerInfo => {
 interface MapProps {
   readonly zoom: number;
   readonly center: google.maps.LatLngLiteral;
-  // readonly lat: number;
-  // readonly lng: number;
 }
 
 // creates the map object
