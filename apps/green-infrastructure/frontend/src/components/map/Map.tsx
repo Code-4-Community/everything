@@ -1,30 +1,55 @@
-import React from 'react';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
-import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID, markers } from '../../constants';
+import React, { createRef, useEffect, useState, useRef } from 'react';
+import { loader, BOSTON_BOUNDS, markers, BOSTON_PLACE_ID } from '../../constants';
+import styled from 'styled-components';
+
+
+const MapDiv = styled.div`
+  height: 100%;
+`;
+
+
+const SearchInput = styled.input`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 200px;
+  z-index: 100;
+`;
+
+
+interface MapProps {
+  readonly zoom: number;
+}
+
+
+const Map: React.FC<MapProps> = ({
+  zoom,
+}) => {
+
+
+const mapRef = useRef<HTMLDivElement | null>(null);
 
 let map: google.maps.Map;
 
-loader.importLibrary("core").then(async () => {
-  initMap()
-});
 
-async function initMap(): Promise<void> {
-  const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
+useEffect(() => {
+  if (mapRef.current) {
+    loader.load().then(() => {
+      map = new google.maps.Map(mapRef.current as HTMLElement, {
+        center: { lat: 42.36, lng: -71.06 },
+        zoom: 8,
+        mapId: '3aa9b524d13192b',
+        mapTypeControl: false,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_BOTTOM,
+        },
+        restriction: {
+          latLngBounds: BOSTON_BOUNDS,
+          strictBounds: false,
+        },
+      });
 
-  // defines the map object
-  map = new Map(document.getElementById("map") as HTMLElement, {
-    center: { lat: 42.36, lng: -71.06 },
-    zoom: 8,
-    mapId: '3aa9b524d13192b',
-    mapTypeControl: false,
-    zoomControlOptions: {
-      position: google.maps.ControlPosition.LEFT_BOTTOM,
-    },
-    restriction: {
-      latLngBounds: BOSTON_BOUNDS,
-      strictBounds: false,
-    },
-  });
+  
 
   // sets the style for the boundary
   const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
@@ -80,26 +105,16 @@ async function initMap(): Promise<void> {
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
     });
-};
-
-
-interface MapProps {
-  readonly zoom: number;
-  readonly center: google.maps.LatLngLiteral;
+  });
 }
+}, [zoom]);
 
-// creates the map object
-const Map: React.FC<MapProps> = ({
-  zoom,
-  center,
-}) => {
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
-  return (
-    <LoadScript googleMapsApiKey={apiKey}>
-      <GoogleMap mapContainerStyle={{ width: '80%', height: '400px' }} center={center} zoom={zoom}>
-      </GoogleMap>
-    </LoadScript>
-  );
+return (
+  <div>
+    <MapDiv id="map" ref={mapRef} style={{ width: '100%', height: '495px' }} />
+  </div>
+);
 };
+
 
 export default Map;
