@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useState, useRef } from 'react';
-import { loader, BOSTON_BOUNDS, markers } from '../../constants';
+import { loader, BOSTON_BOUNDS, markers, BOSTON_PLACE_ID } from '../../constants';
 import styled from 'styled-components';
 
 
@@ -22,7 +22,7 @@ interface MapProps {
 }
 
 
-const SampleMap: React.FC<MapProps> = ({
+const Map: React.FC<MapProps> = ({
   zoom,
 }) => {
 
@@ -63,7 +63,7 @@ useEffect(() => {
 
   featureLayer.style = (options) => {
     const feature = options.feature as google.maps.PlaceFeature;
-    if (feature.placeId === 'ChIJGzE9DS1l44kRoOhiASS_fHg') { // Place ID for Boston
+    if (feature.placeId === BOSTON_PLACE_ID) { // Place ID for Boston
       return featureStyleOptions;
     }
   };
@@ -117,4 +117,4 @@ return (
 };
 
 
-export default SampleMap;
+export default Map;
