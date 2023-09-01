@@ -1,4 +1,4 @@
-import Map from '../components/map/Map';
+import Map from '../components/map/SampleMap';
 import Divider from './Divider';
 import About from './About';
 

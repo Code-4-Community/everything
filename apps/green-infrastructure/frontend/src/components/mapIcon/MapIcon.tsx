@@ -9,7 +9,7 @@ export interface MapIcon {
     strokeWeight: number;
     rotation: number;
     scale: number;
-  };
+  }
 }
 
 export function createMapIcon(
