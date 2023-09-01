@@ -12,11 +12,11 @@ export default function MapPage() {
       <Navbar />
         {/* <Header />
         <Welcome /> */}
-        <Divider />
+        {/* <Divider /> */}
       <Map zoom={8} center={mapCenter} />
       {/* <Divider /> */}
       <About />
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 };
