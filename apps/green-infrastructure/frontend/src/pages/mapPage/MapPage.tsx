@@ -11,7 +11,7 @@ export default function MapPage() {
   return (
     <div>
       <Navbar />
-      <Divider />
+      <div style={{ marginTop: '50px'}} />
       <Header />
       <Divider />
       <div style={{ position: 'relative' }}>
