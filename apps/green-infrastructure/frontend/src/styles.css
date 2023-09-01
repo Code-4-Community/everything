@@ -13,4 +13,22 @@
     padding: 0;
   }
   
+  .popup {
+    font-family: 'Lora';
+    width: 411px;
+    height: 123px;
+    top: -639px;
+    left: 846px;
+    display: flex;
+  }
   
+  .infoBox, .typeBox {
+      width: 50%;
+      display: inline-block;
+      text-align: center;
+  }
+  
+  .typeBox {
+    padding-top: 25px;
+    background: rgba(242, 242, 242, 1);
+  }
