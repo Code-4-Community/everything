@@ -1,6 +1,7 @@
-import Map from '../../components/map/Map';
+import Map from '../../components/map/SampleMap';
 import Divider from '../Divider';
 import About from './About';
+import Navbar from '../Navbar';
 
 export default function MapPage() {
 
@@ -8,6 +9,7 @@ export default function MapPage() {
  
   return (
     <div>
+      <Navbar />
         {/* <Header />
         <Welcome /> */}
         <Divider />
