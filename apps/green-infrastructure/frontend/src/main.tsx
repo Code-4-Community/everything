@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './app/app';
+import MapPage from './pages/MapPage';
 
 const queryClient = new QueryClient();
 
@@ -12,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<MapPage />} />
           </Routes>
         </BrowserRouter>
     </QueryClientProvider>
