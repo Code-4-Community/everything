@@ -1,6 +1,7 @@
 import { makeApi } from "@zodios/core";
 import { z } from "zod";
 import { Practitioner } from './dto/Practitioner'
+import { Key } from "./dto/Key";
 
 export const userApi = makeApi([
   {
@@ -28,6 +29,27 @@ export const userApi = makeApi([
         name: 'practitioner',
         description: 'New Practitioner',
         schema: Practitioner,
+        type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
+  },
+  {
+    method: "delete",
+    path: "/practitioners",
+    alias: "deletePractitioner",
+    description: "Delete Practitioner",
+    response: Key,
+    parameters: [
+      {
+        name: 'Key',
+        description: 'Partition key and sort key',
+        schema: Key,
         type: 'Body',
       },
       {

@@ -1,7 +1,7 @@
 import { Therapist, TherapistDisplayModel } from './therapist';
 import { faker } from '@faker-js/faker';
 import Fuse from 'fuse.js';
-import { Practitioner, createApiClient } from '@c4c/monarch/common';
+import { Practitioner, Key, createApiClient } from '@c4c/monarch/common';;
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -19,6 +19,7 @@ export interface ActionsController {
   ) => Promise<TherapistDisplayModel[]>;
   fetchTherapist: (id: string) => Therapist;
   postTherapist: (therapist: Practitioner, accessToken: string) => Promise<Practitioner>;
+  deleteTherapist: (key: Key, accessToken: string) => Promise<Key>;
 }
 
 export interface SearchTherapistsQuery {
@@ -113,6 +114,13 @@ export function makeActionsController(): ActionsController {
     },
     postTherapist: async (practitioner: Practitioner, accessToken: string): Promise<Practitioner> => {
       return await serverApiClient.postPractitioner(practitioner, {
+        headers: {
+          "accessToken": accessToken
+        },
+      });
+    },
+    deleteTherapist: async (key: Key, accessToken: string): Promise<Key> => {
+      return await serverApiClient.deletePractitioner(key, {
         headers: {
           "accessToken": accessToken
         },

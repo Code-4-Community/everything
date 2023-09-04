@@ -1,7 +1,7 @@
-import { DynamoDBClient, ScanCommand, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, ScanCommand, PutItemCommand, GetItemCommand, DeleteItemCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { Practitioner as practitionerSchema } from '@c4c/monarch/common';
-import type { Practitioner } from '@c4c/monarch/common';
+import type { Key, Practitioner } from '@c4c/monarch/common';
 import { Request } from 'express';
 
 if (process.env.AWS_ACCESS_KEY_ID == null) {
@@ -74,4 +74,19 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
   const practitioner = await client.send(getCommand);
 
   return practitionerSchema.parse(unmarshall(practitioner.Item));
+}
+
+export async function deletePractitioner(req: Request): Promise<Key> {
+  const parameters = {
+    TableName: 'Practitioners',
+    Key: {
+      phoneNumber: { S: req.body.phoneNumber },
+      fullName: { S: req.body.fullName },
+    },
+  };
+
+  const command = new DeleteItemCommand(parameters);
+  await client.send(command);
+
+  return { phoneNumber: req.body.phoneNumber, fullName: req.body.fullName };
 }

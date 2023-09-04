@@ -4,12 +4,12 @@
  */
 
 import express from 'express';
-import * as path from 'path';
 import cors from 'cors';
 import getAllPractitioners from './workflows/getAllPractitioners';
 import postNewPractitioner from './workflows/postNewPractitioner';
+import deletePractitionerWF from './workflows/deletePractitioner';
 // Import effectful dependencies (database connections, email clients, etc.)
-import { scanAllPractitioners, postPractitioner } from './dynamodb';
+import { scanAllPractitioners, postPractitioner, deletePractitioner } from './dynamodb';
 import { zodiosApp } from '@zodios/express';
 import { userApi } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
@@ -22,15 +22,16 @@ export const baseApp = express();
 export const app = zodiosApp(userApi, { express: baseApp });
 export const handler = serverlessExpress({ app: baseApp });
 
-//TODO: Use for local testing https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
-const db = [];
-
 // Composition Root
 const getAllPractitionersHandler = async () =>
   getAllPractitioners(scanAllPractitioners);
 
 const postPractitionerHandler = async (req: Request) => {
 	return postNewPractitioner(req, postPractitioner);
+}
+
+const deletePractitionerHandler = async (req: Request) => {
+	return deletePractitionerWF(req, deletePractitioner);
 }
 
 app.use(cors());
@@ -92,6 +93,11 @@ authenticatedRoute.get("/admin", (req, res) => {
 authenticatedRoute.post('/practitioners', async (req: Request, res: Response) => {
 	const practitioner = await postPractitionerHandler(req);
 	res.status(201).json(practitioner).end();
+});
+
+authenticatedRoute.delete('/practitioners', async (req: Request, res: Response) => {
+	const response = await deletePractitionerHandler(req);
+	res.status(200).json(response);
 });
 
 //app.use('/assets', express.static(path.join(__dirname, 'assets')));

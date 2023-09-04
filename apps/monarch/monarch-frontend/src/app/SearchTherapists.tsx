@@ -11,9 +11,11 @@ import { Therapist, TherapistDisplayModel } from './therapist';
 import {
   Badge,
   Box,
+  Button,
   Divider,
   Heading,
   HStack,
+  IconButton,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -21,6 +23,7 @@ import {
   Skeleton,
   Stack,
   Text,
+  useColorModeValue,
   VStack,
   Wrap,
   WrapItem,
@@ -29,6 +32,7 @@ import {
   CheckCircleIcon,
   QuestionIcon,
   Search2Icon,
+  DeleteIcon,
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
@@ -37,6 +41,20 @@ const debouncedSearchTherapists = debouncePromise(
   controller.searchTherapists,
   100
 );
+
+function DeleteButton({ onDelete }) {
+  const buttonColor = useColorModeValue('red.500', 'red.300');
+
+  return (
+    <IconButton
+      icon={<DeleteIcon />}
+      variant="ghost"
+      color={buttonColor}
+      onClick={onDelete}
+      aria-label="Delete Item"
+    />
+  );
+}
 
 export const SearchTherapists: React.FC = () => {
   const { coords } = useGeolocated();
@@ -288,6 +306,7 @@ export const SearchTherapists: React.FC = () => {
                         </Text>
                       </Box>
                     </WrapItem>
+                    <DeleteButton onDelete={() => controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, 'blank')} />
                   </Wrap>
                 </Box>
                 {therapist.searchScore != null && (
