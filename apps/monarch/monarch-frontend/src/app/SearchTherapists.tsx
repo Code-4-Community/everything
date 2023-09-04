@@ -36,6 +36,9 @@ import {
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
+import awsmobile from '../aws-exports.js';
+import { Amplify, Auth } from 'aws-amplify';
+Amplify.configure(awsmobile);
 
 const debouncedSearchTherapists = debouncePromise(
   controller.searchTherapists,
@@ -56,7 +59,7 @@ function DeleteButton({ onDelete }) {
   );
 }
 
-export const SearchTherapists: React.FC = () => {
+export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
   const { coords } = useGeolocated();
   const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>({
     searchString: '',
@@ -78,7 +81,7 @@ export const SearchTherapists: React.FC = () => {
 
   const onInputChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
-      setNumTherapistsToRender(10);
+      setNumTherapistsToRender(50);
       setSearchQuery({ ...searchQuery, searchString: evt.target.value });
     },
     [searchQuery, setSearchQuery]
@@ -102,15 +105,14 @@ export const SearchTherapists: React.FC = () => {
       : Number.POSITIVE_INFINITY;
   }
 
-  console.log('data', data);
   const therapists = data?.filter((therapist) => {
-    return (
-      dist(
-        therapist.geocode.lat,
-        therapist.geocode.long,
-        coords?.latitude,
-        coords?.longitude
-      ) < searchQuery.maxDistance
+    return (true
+      // dist(
+      //   therapist.geocode.lat,
+      //   therapist.geocode.long,
+      //   coords?.latitude,
+      //   coords?.longitude
+      // ) < searchQuery.maxDistance
     );
   });
 
@@ -306,7 +308,7 @@ export const SearchTherapists: React.FC = () => {
                         </Text>
                       </Box>
                     </WrapItem>
-                    <DeleteButton onDelete={() => controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, 'blank')} />
+                    <DeleteButton onDelete={() => controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, accessToken)} />
                   </Wrap>
                 </Box>
                 {therapist.searchScore != null && (

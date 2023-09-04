@@ -29,18 +29,18 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Practitioner } from '@c4c/monarch/common';
 Amplify.configure(awsmobile);
 
-function ManageTherapists() {
-  const [accessToken, setAccessToken] = useState<string>('');
+const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
+
+  //const [accessToken, setAccessToken] = useState<string>('');
   const [applicants, setApplicants] = useState<Practitioner[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-      console.log(location.pathname);
-      const userData = await Auth.currentAuthenticatedUser();
-      const cognitoStorage = userData['pool']['storage'];
-      const accessTokenKey = Object.keys(cognitoStorage).find((key) => key.includes('accessToken'));
-      const accessTokenValue = accessTokenKey ? cognitoStorage[accessTokenKey] : '';
-      setAccessToken(accessTokenValue);
+    //   const userData = await Auth.currentAuthenticatedUser();
+    //   const cognitoStorage = userData['pool']['storage'];
+    //   const accessTokenKey = Object.keys(cognitoStorage).find((key) => key.includes('accessToken'));
+    //   const accessTokenValue = accessTokenKey ? cognitoStorage[accessTokenKey] : '';
+    //   setAccessToken(accessTokenValue);
       const RYAN: Practitioner = {
         phoneNumber: '1515551515',
         website: 'test.com',
