@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
   ChangeEvent,
   useCallback,
@@ -5,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { controller, SearchTherapistsQuery } from './actionsController';
 import { useGeolocated } from 'react-geolocated';
 import { Therapist, TherapistDisplayModel } from './therapist';
@@ -36,8 +39,9 @@ import {
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
+//@ts-ignore
 import awsmobile from '../aws-exports.js';
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 Amplify.configure(awsmobile);
 
 const debouncedSearchTherapists = debouncePromise(
@@ -83,13 +87,6 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     (evt: ChangeEvent<HTMLInputElement>) => {
       setNumTherapistsToRender(50);
       setSearchQuery({ ...searchQuery, searchString: evt.target.value });
-    },
-    [searchQuery, setSearchQuery]
-  );
-
-  const onMaxDistanceChange = useCallback(
-    (value: number) => {
-      setSearchQuery({ ...searchQuery, maxDistance: value });
     },
     [searchQuery, setSearchQuery]
   );
@@ -140,9 +137,20 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     [numTherapistsToRender, therapists]
   );
 
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate('/admin');
+  };
+
   return (
     <div>
-      <div style={{ marginTop: 64 }}>
+      <div style={{ marginTop: 10 }}>
+        {location.pathname !== '/admin' && (
+          <Button colorScheme="teal" onClick={handleLogin}>
+            Login
+          </Button>
+        )}
         <InputGroup size="lg">
           <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
           <Input
@@ -308,7 +316,9 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
                         </Text>
                       </Box>
                     </WrapItem>
-                    <DeleteButton onDelete={() => controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, accessToken)} />
+                    {accessToken.length > 0 && (
+                      <DeleteButton onDelete={() => controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, accessToken)} />
+                    )}
                   </Wrap>
                 </Box>
                 {therapist.searchScore != null && (
