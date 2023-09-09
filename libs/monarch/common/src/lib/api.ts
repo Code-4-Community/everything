@@ -19,6 +19,21 @@ export const userApi = makeApi([
     response: z.array(Practitioner),
   },
   {
+    method: "get",
+    path: "/pendingPractitioners",
+    alias: "getPendingPractitioners",
+    description: "Get Pending Practitioners",
+    response: z.array(Practitioner),
+    parameters: [
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
+  },
+  {
     method: "post",
     path: "/practitioners",
     alias: "postPractitioner",

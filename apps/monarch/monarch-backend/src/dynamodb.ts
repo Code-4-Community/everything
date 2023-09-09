@@ -34,6 +34,22 @@ export async function scanAllPractitioners(): Promise<Practitioner[]> {
   return practitioners;
 }
 
+export async function scanPendingPractitioners(): Promise<Practitioner[]> {
+  const command = new ScanCommand({
+    TableName: 'PendingPractitioners',
+  });
+  const dynamoRawResult = await client.send(command);
+  if (dynamoRawResult == null || dynamoRawResult.Items == null) {
+    throw new Error('Invalid response from DynamoDB, got undefined/null');
+  }
+  const unmarshalledItems = dynamoRawResult.Items.map((i) => unmarshall(i));
+
+  const practitioners = unmarshalledItems.map((i) =>
+    practitionerSchema.parse(i)
+  );
+  return practitioners;
+}
+
 export async function postPractitioner(req: Request): Promise<Practitioner> {
   const parameters = {
     TableName: 'Practitioners',

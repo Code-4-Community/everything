@@ -26,73 +26,21 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { controller } from './actionsController';
 import { Practitioner } from '@c4c/monarch/common';
 Amplify.configure(awsmobile);
 
 const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
 
-  //const [accessToken, setAccessToken] = useState<string>('');
   const [applicants, setApplicants] = useState<Practitioner[]>([]);
 
   useEffect(() => {
     async function fetchData() {
-    //   const userData = await Auth.currentAuthenticatedUser();
-    //   const cognitoStorage = userData['pool']['storage'];
-    //   const accessTokenKey = Object.keys(cognitoStorage).find((key) => key.includes('accessToken'));
-    //   const accessTokenValue = accessTokenKey ? cognitoStorage[accessTokenKey] : '';
-    //   setAccessToken(accessTokenValue);
-      const RYAN: Practitioner = {
-        phoneNumber: '1515551515',
-        website: 'test.com',
-        languages: '',
-        modality: 'Software',
-        businessLocation: '123 Huntington Ave, Boston, MA, 02115',
-        businessName: 'Director of Engineering',
-        minAgeServed: 17,
-        email: 'test@test.com',
-        fullName: 'Ryan Jung',
-        languagesList: ['Spanish'],
-        geocode: {
-          lat: 42.339806,
-          long: -71.089172,
-        },
-      };
-      const RYAN2: Practitioner = {
-        phoneNumber: '1515551515',
-        website: 'test.com',
-        languages: '',
-        modality: 'Software',
-        businessLocation: '123 Huntington Ave, Boston, MA, 02115',
-        businessName: 'Director of Engineering',
-        minAgeServed: 17,
-        email: 'test@test.com',
-        fullName: 'Ryan Jung 2',
-        languagesList: ['Spanish'],
-        geocode: {
-          lat: 42.339806,
-          long: -71.089172,
-        },
-      };
-      const RYAN3: Practitioner = {
-        phoneNumber: '1515551515',
-        website: 'test.com',
-        languages: '',
-        modality: 'Software',
-        businessLocation: '123 Huntington Ave, Boston, MA, 02115',
-        businessName: 'Director of Engineering',
-        minAgeServed: 17,
-        email: 'test@test.com',
-        fullName: 'Ryan Jung 3',
-        languagesList: ['Spanish'],
-        geocode: {
-          lat: 42.339806,
-          long: -71.089172,
-        },
-      };
-      setApplicants([RYAN, RYAN2, RYAN3]);
+      const data = await controller.getApplicants(accessToken);
+      setApplicants(data);
     }
     fetchData();
-  }, []); 
+  }, [accessToken]); 
 
   const { coords } = useGeolocated();
 

@@ -17,7 +17,9 @@ export interface ActionsController {
   searchTherapists: (
     query: SearchTherapistsQuery
   ) => Promise<TherapistDisplayModel[]>;
+  getApplicants: (accessToken: string) => Promise<Practitioner[]>;
   fetchTherapist: (id: string) => Therapist;
+  fetchApplicant: (id: string) => Therapist;
   postTherapist: (therapist: Practitioner, accessToken: string) => Promise<Practitioner>;
   deleteTherapist: (key: Key, accessToken: string) => Promise<Key>;
 }
@@ -50,6 +52,35 @@ async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
     website: d.website,
     badges: [],
     languages: d.languagesList,
+    geocode: {
+      lat: d.geocode.lat,
+      long: d.geocode.long,
+    },
+  }));
+  return therapists;
+}
+
+async function fetchPendingPractitioners(useFake = false, accessToken: string): Promise<Practitioner[]> {
+  const data = await serverApiClient.getPendingPractitioners({
+    headers: {
+      "accessToken": accessToken
+    },
+  });
+  // Transform on the frontend, but really ought to be done on the backend :/
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const therapists: Practitioner[] = data.map((d) => ({
+    phoneNumber: d.phoneNumber,
+    website: d.website,
+    languages: d.languagesList,
+    modality: d.modality,
+    businessLocation: d.businessLocation,
+    businessName: d.businessName,
+    minAgeServed: d.minAgeServed,
+    email: d.email,
+    fullName: d.fullName,
+    languagesList: d.languagesList,
     geocode: {
       lat: d.geocode.lat,
       long: d.geocode.long,
@@ -109,7 +140,14 @@ export function makeActionsController(): ActionsController {
       const result = searchIndex.search(query.searchString);
       return result.map((r) => ({ ...r.item, searchScore: r.score ?? 0 }));
     },
+    getApplicants: async (accessToken: string) => {
+      const applicants = await fetchPendingPractitioners(false, accessToken);
+      return applicants;
+    },
     fetchTherapist: (id: string) => {
+      return {} as Therapist;
+    },
+    fetchApplicant: (id: string) => {
       return {} as Therapist;
     },
     postTherapist: async (practitioner: Practitioner, accessToken: string): Promise<Practitioner> => {

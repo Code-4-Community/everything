@@ -6,10 +6,11 @@
 import express from 'express';
 import cors from 'cors';
 import getAllPractitioners from './workflows/getAllPractitioners';
+import getPendingPractitioners from './workflows/getPendingPractitioners';
 import postNewPractitioner from './workflows/postNewPractitioner';
 import deletePractitionerWF from './workflows/deletePractitioner';
 // Import effectful dependencies (database connections, email clients, etc.)
-import { scanAllPractitioners, postPractitioner, deletePractitioner } from './dynamodb';
+import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, deletePractitioner } from './dynamodb';
 import { zodiosApp } from '@zodios/express';
 import { userApi } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
@@ -26,6 +27,9 @@ export const handler = serverlessExpress({ app: baseApp });
 const getAllPractitionersHandler = async () =>
   getAllPractitioners(scanAllPractitioners);
 
+const getPendingPractitionersHandler = async () =>
+  getPendingPractitioners(scanPendingPractitioners);
+
 const postPractitionerHandler = async (req: Request) => {
 	return postNewPractitioner(req, postPractitioner);
 }
@@ -37,18 +41,13 @@ const deletePractitionerHandler = async (req: Request) => {
 app.use(cors());
 
 app.get('/', (_req: Request, res: Response) => {
-  res.status(200).json({ ok: Date.now() });
+  	res.status(200).json({ ok: Date.now() });
 });
 
 app.get('/practitioners', async (_req: Request, res: Response) => {
-  const practitioners = await getAllPractitionersHandler();
-  res.status(200).json(practitioners).end();
+	const practitioners = await getAllPractitionersHandler();
+	res.status(200).json(practitioners).end();
 });
-
-// app.post('/practitioners', async (req: Request, res: Response) => {
-// 	const practitioner = await postPractitionerHandler(req);
-// 	res.status(201).json(practitioner).end();
-// });
 
 //Initializing CognitoExpress constructor
 const cognitoExpress = new CognitoExpress({
@@ -93,6 +92,11 @@ authenticatedRoute.get("/admin", (req, res) => {
 authenticatedRoute.post('/practitioners', async (req: Request, res: Response) => {
 	const practitioner = await postPractitionerHandler(req);
 	res.status(201).json(practitioner).end();
+});
+
+authenticatedRoute.get('/pendingPractitioners', async (req: Request, res: Response) => {
+	const practitioners = await getPendingPractitionersHandler();
+	res.status(200).json(practitioners).end();
 });
 
 authenticatedRoute.delete('/practitioners', async (req: Request, res: Response) => {
