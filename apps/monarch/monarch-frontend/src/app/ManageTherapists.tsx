@@ -36,8 +36,10 @@ const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await controller.getApplicants(accessToken);
-      setApplicants(data);
+      if (accessToken.length > 0) {
+        const data = await controller.getApplicants(accessToken);
+        setApplicants(data);
+      }
     }
     fetchData();
   }, [accessToken]); 
@@ -181,10 +183,7 @@ const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
                       </Box>
                     </WrapItem>
                     <WrapItem>
-                      <AddPractitioner accessToken={accessToken} practitioner={therapist} 
-                      removeApplication={() => {
-                        applicants.filter((d) => d !== therapist);
-                        console.log(applicants)}}/>
+                      <AddPractitioner accessToken={accessToken} practitioner={therapist}/>
                     </WrapItem>
                   </Wrap>
                 </Box>

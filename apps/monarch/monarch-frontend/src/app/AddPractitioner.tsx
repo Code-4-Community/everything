@@ -13,21 +13,29 @@ import {
 import { Practitioner } from '@c4c/monarch/common';
 import { controller } from './actionsController';
 
-const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitioner, removeApplication: (() => void) }> = ({accessToken, practitioner, removeApplication}) => {
+const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitioner }> = ({ accessToken, practitioner }) => {
     const { isOpen: isAcceptOpen, onOpen: onAcceptOpen, onClose: onAcceptClose } = useDisclosure();
     const { isOpen: isDenyOpen, onOpen: onDenyOpen, onClose: onDenyClose } = useDisclosure();
 
     const handleAcceptFormSubmission = async () => {
         console.log(practitioner);
         const therapist = await controller.postTherapist(practitioner, accessToken);
+        // Remove therapist from PendingPractitioners table
+        const phoneNumber = practitioner.phoneNumber;
+        const fullName = practitioner.fullName;
+        const key = { phoneNumber, fullName };
+        await controller.deleteApplicant(key, accessToken);
         console.log('Successfully added new therapist');
         console.log(therapist);
-        removeApplication();
     }
 
     const handleDenyFormSubmission = async () => {
+        // Remove therapist from PendingPractitioners table
+        const phoneNumber = practitioner.phoneNumber;
+        const fullName = practitioner.fullName;
+        const key = { phoneNumber, fullName };
+        await controller.deleteApplicant(key, accessToken);
         console.log('Successfully denied new therapist');
-        removeApplication();
     }
 
     return (

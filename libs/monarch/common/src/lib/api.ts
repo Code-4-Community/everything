@@ -74,5 +74,26 @@ export const userApi = makeApi([
         type: 'Header',
       }
     ]
+  },
+  {
+    method: "delete",
+    path: "/pendingPractitioners",
+    alias: "deletePendingPractitioner",
+    description: "Delete Pending Practitioner",
+    response: Key,
+    parameters: [
+      {
+        name: 'Key',
+        description: 'Partition key and sort key',
+        schema: Key,
+        type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
   }
 ]);

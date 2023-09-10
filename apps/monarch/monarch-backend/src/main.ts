@@ -27,8 +27,8 @@ export const handler = serverlessExpress({ app: baseApp });
 const getAllPractitionersHandler = async () =>
   getAllPractitioners(scanAllPractitioners);
 
-const getPendingPractitionersHandler = async () =>
-  getPendingPractitioners(scanPendingPractitioners);
+const getPendingPractitionersHandler = async (req: Request) =>
+  getPendingPractitioners(req, scanPendingPractitioners);
 
 const postPractitionerHandler = async (req: Request) => {
 	return postNewPractitioner(req, postPractitioner);
@@ -95,7 +95,7 @@ authenticatedRoute.post('/practitioners', async (req: Request, res: Response) =>
 });
 
 authenticatedRoute.get('/pendingPractitioners', async (req: Request, res: Response) => {
-	const practitioners = await getPendingPractitionersHandler();
+	const practitioners = await getPendingPractitionersHandler(req);
 	res.status(200).json(practitioners).end();
 });
 

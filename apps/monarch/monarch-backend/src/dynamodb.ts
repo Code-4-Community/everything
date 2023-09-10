@@ -10,8 +10,6 @@ if (process.env.AWS_ACCESS_KEY_ID == null) {
 if (process.env.AWS_SECRET_ACCESS_KEY == null) {
   throw new Error('AWS Secret Access Key not configured');
 }
-console.log('key', process.env.AWS_ACCESS_KEY_ID);
-console.log('secret', process.env.AWS_SECRET_ACCESS_KEY);
 
 const client = new DynamoDBClient({ region: 'us-east-2' });
 
@@ -95,6 +93,21 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
 export async function deletePractitioner(req: Request): Promise<Key> {
   const parameters = {
     TableName: 'Practitioners',
+    Key: {
+      phoneNumber: { S: req.body.phoneNumber },
+      fullName: { S: req.body.fullName },
+    },
+  };
+
+  const command = new DeleteItemCommand(parameters);
+  await client.send(command);
+
+  return { phoneNumber: req.body.phoneNumber, fullName: req.body.fullName };
+}
+
+export async function deletePendingPractitioner(req: Request): Promise<Key> {
+  const parameters = {
+    TableName: 'PendingPractitioners',
     Key: {
       phoneNumber: { S: req.body.phoneNumber },
       fullName: { S: req.body.fullName },

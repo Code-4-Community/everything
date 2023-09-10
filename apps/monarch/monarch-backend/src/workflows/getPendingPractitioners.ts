@@ -16,15 +16,17 @@
  */
 
 import { Practitioner } from "@c4c/monarch/common";
+import { Request } from "express";
 
 /**
- * @param scanAllPractitioners {() => Practitioner[]} An effectful function that queries a database and produces all saved practitioners
+ * @param scanPendingPractitioners {() => Practitioner[]} An effectful function that queries a database and produces all saved practitioners
  */
 async function getPendingPractitioners(
-  scanPendingPractitioners: () => Promise<Practitioner[]>
+  req: Request,
+  scanPendingPractitioners: (req: Request) => Promise<Practitioner[]>
 ) {
   try {
-    return scanPendingPractitioners();
+    return scanPendingPractitioners(req);
   } catch (e) {
     console.error(e);
     throw new Error('Could not get practitioners');

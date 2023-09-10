@@ -22,6 +22,7 @@ export interface ActionsController {
   fetchApplicant: (id: string) => Therapist;
   postTherapist: (therapist: Practitioner, accessToken: string) => Promise<Practitioner>;
   deleteTherapist: (key: Key, accessToken: string) => Promise<Key>;
+  deleteApplicant: (key: Key, accessToken: string) => Promise<Key>;
 }
 
 export interface SearchTherapistsQuery {
@@ -159,6 +160,13 @@ export function makeActionsController(): ActionsController {
     },
     deleteTherapist: async (key: Key, accessToken: string): Promise<Key> => {
       return await serverApiClient.deletePractitioner(key, {
+        headers: {
+          "accessToken": accessToken
+        },
+      });
+    },
+    deleteApplicant: async (key: Key, accessToken: string): Promise<Key> => {
+      return await serverApiClient.deletePendingPractitioner(key, {
         headers: {
           "accessToken": accessToken
         },
