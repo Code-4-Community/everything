@@ -9,6 +9,7 @@ import getAllPractitioners from './workflows/getAllPractitioners';
 import getPendingPractitioners from './workflows/getPendingPractitioners';
 import postNewPractitioner from './workflows/postNewPractitioner';
 import deletePractitionerWF from './workflows/deletePractitioner';
+import deletePendingPractitionerWF from './workflows/deletePendingPractitioner';
 // Import effectful dependencies (database connections, email clients, etc.)
 import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, deletePractitioner } from './dynamodb';
 import { zodiosApp } from '@zodios/express';
@@ -36,6 +37,10 @@ const postPractitionerHandler = async (req: Request) => {
 
 const deletePractitionerHandler = async (req: Request) => {
 	return deletePractitionerWF(req, deletePractitioner);
+}
+
+const deletePendingPractitionerHandler = async (req: Request) => {
+	return deletePendingPractitionerWF(req, deletePractitioner);
 }
 
 app.use(cors());
@@ -90,6 +95,7 @@ authenticatedRoute.get("/admin", (req, res) => {
 });
 
 authenticatedRoute.post('/practitioners', async (req: Request, res: Response) => {
+	console.log(req);
 	const practitioner = await postPractitionerHandler(req);
 	res.status(201).json(practitioner).end();
 });
@@ -101,6 +107,11 @@ authenticatedRoute.get('/pendingPractitioners', async (req: Request, res: Respon
 
 authenticatedRoute.delete('/practitioners', async (req: Request, res: Response) => {
 	const response = await deletePractitionerHandler(req);
+	res.status(200).json(response);
+});
+
+authenticatedRoute.delete('/pendingPractitioners', async (req: Request, res: Response) => {
+	const response = await deletePendingPractitionerHandler(req);
 	res.status(200).json(response);
 });
 

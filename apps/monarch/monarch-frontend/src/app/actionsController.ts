@@ -74,7 +74,7 @@ async function fetchPendingPractitioners(useFake = false, accessToken: string): 
   const therapists: Practitioner[] = data.map((d) => ({
     phoneNumber: d.phoneNumber,
     website: d.website,
-    languages: d.languagesList,
+    languages: d.languagesList[0],
     modality: d.modality,
     businessLocation: d.businessLocation,
     businessName: d.businessName,
@@ -143,6 +143,7 @@ export function makeActionsController(): ActionsController {
     },
     getApplicants: async (accessToken: string) => {
       const applicants = await fetchPendingPractitioners(false, accessToken);
+      console.log(applicants);
       return applicants;
     },
     fetchTherapist: (id: string) => {

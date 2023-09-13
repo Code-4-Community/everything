@@ -113,6 +113,10 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     );
   });
 
+  if (therapists) {
+    console.log(therapists[0]);
+  }
+
   // const therapists = data?.filter(
   //   (therapist) =>
   //     therapist.geocode == null ||

@@ -24,6 +24,7 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
         const phoneNumber = practitioner.phoneNumber;
         const fullName = practitioner.fullName;
         const key = { phoneNumber, fullName };
+        console.log(key);
         await controller.deleteApplicant(key, accessToken);
         console.log('Successfully added new therapist');
         console.log(therapist);
@@ -34,6 +35,7 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
         const phoneNumber = practitioner.phoneNumber;
         const fullName = practitioner.fullName;
         const key = { phoneNumber, fullName };
+        console.log(key);
         await controller.deleteApplicant(key, accessToken);
         console.log('Successfully denied new therapist');
     }
