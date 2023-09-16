@@ -51,18 +51,18 @@ const Footer: React.FC = () => {
               <Link to="/apply" className={classes.footerLink}>
                 Apply
               </Link>
-              {' | '}
+              {/* {' | '}
               <Link to="/events" className={classes.footerLink}>
                 Events
-              </Link>
+              </Link> */}
               {' | '}
               <Link to="/people" className={classes.footerLink}>
                 People
               </Link>
-              {' | '}
+              {/* {' | '}
               <Link to="/faq" className={classes.footerLink}>
                 FAQs
-              </Link>
+              </Link> */}
             </Typography>
             <Typography
               gutterBottom
