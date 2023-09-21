@@ -4,13 +4,17 @@ import { useState } from 'react';
 import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 
-const MapLegendContainer = styled.div`
+
+const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   background: #BDBDBD;
   width: 435px;
-  height: 419px;
-  left: 845px;
   gap: 20px;
+  position: relative;
+  transition: height 0.3s ease;
+  min-height: ${(props) => (props.isVisible ? '20px' : 'auto')};
+  height: ${(props) => (props.isVisible ? '419px' : 'auto')};
 `;
+
 
 const LegendItem = styled.div`
   width: 100%;
@@ -37,14 +41,9 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   cursor: pointer;
   font-size: 16px;
   align-items: center;
+  display: flex;
 `;
 
-
-const CollapsibleContainer = styled.div<{ isCollapsed: boolean }>`
-  height: ${(props) => (props.isCollapsed ? '0' : 'auto')};
-  overflow: hidden;
-  transition: height 0.3s ease;
-`;
 
 const ToggleButton = styled.button`
   cursor: pointer;
@@ -68,11 +67,11 @@ interface MapLegendProps {
 }
 
 const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
-    const [showLegend, setShowLegend] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
     const toggleShowLegend = () => {
-        setShowLegend((prevState) => !prevState);
+        setIsVisible((prev) => !prev);
       };
 
     const [availableIcon, adoptedIcon, futureIcon] =
@@ -99,8 +98,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
     
 
     return (
-      <MapLegendContainer>
-        <CollapsibleContainer isCollapsed={showLegend}>
+      <MapLegendContainer isVisible={isVisible}>
       <h1>Feature Type</h1>
       <LegendItem>
   {icons && (
@@ -136,9 +134,8 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
   )}
 </LegendItem>
 <ToggleButton onClick={toggleShowLegend}>
-        {showLegend ? <CaretDownStyled /> : <CaretUpStyled />}
+        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
       </ToggleButton>
-</CollapsibleContainer>
   </MapLegendContainer>
   );
 };
