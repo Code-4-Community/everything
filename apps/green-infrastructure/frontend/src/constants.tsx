@@ -1,5 +1,5 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import { createMapIcon, MapIcon } from './components/mapIcon/MapIcon';
+// import { createMapIcon, MapIcon } from './components/mapIcon/MapIcon';
 import { createMapPoint, MapPoint } from './components/mapIcon/MapPoint';
 import { allSvgMarkers } from './components/mapIcon/MapIconDesigns';
 import availableIcon from './assets/images/siteIcons/availableIcon.jpg';
@@ -75,7 +75,7 @@ interface SiteTypeOption {
       value: 'Swales',
     },
     {
-      image: bioretentionIcon,
+      image: bioretentionIcon,                          
       label: 'Bioretention',
       value: 'Bioretention',
     },
