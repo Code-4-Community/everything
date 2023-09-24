@@ -2,8 +2,8 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import c4cLogo from '../images/c4cLogo.png'
-import cityOfBostonLogo from '../images/cityOfBostonLogo.png'
+import c4cLogo from '../images/logos/c4cLogo.png'
+import cityOfBostonLogo from '../images/logos/cityOfBostonLogo.png'
 
 function Navbar() {
 
@@ -19,10 +19,6 @@ function Navbar() {
               paddingRight: '15px',
             }} />
           <img src={c4cLogo} />
-          
-          <Box sx={{ flexGrow: 0, float: 'right' }}>
-            <p style={{paddingLeft: '650px', fontFamily: 'Lora', fontSize: '20px'}}>Green Infrastructure</p>
-          </Box>
         </Toolbar>
         
       </Container>

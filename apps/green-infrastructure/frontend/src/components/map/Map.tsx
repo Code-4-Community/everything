@@ -2,7 +2,17 @@ import React, { useEffect, useRef } from 'react';
 import { loader, BOSTON_BOUNDS, markers, BOSTON_PLACE_ID } from '../../constants';
 import { createPopupBoxContent } from '../mapIcon/PopupBox';
 import styled from 'styled-components';
-
+import { SITES } from '../../GI-Boston-Sites';
+import circle from '../../images/markers/circle.svg'
+import diamond from '../../images/markers/diamond.svg'
+import square from '../../images/markers/square.svg'
+import star from '../../images/markers/star.svg'
+import triangle from '../../images/markers/triangle.svg'
+import generateCircleSVG from '../../images/markers/circle';
+import generateSquareSVG from '../../images/markers/square';
+import generateDiamondSVG from '../../images/markers/diamond';
+import generateTriangleSVG from '../../images/markers/triangle';
+import generateStarSVG from '../../images/markers/star';
 
 const MapDiv = styled.div`
   height: 100%;
@@ -51,7 +61,6 @@ const Map: React.FC<MapProps> = ({
         });
 
 
-
         // sets the style for the boundary
         const featureLayer = map.getFeatureLayer(google.maps.FeatureType.LOCALITY);
         const featureStyleOptions: google.maps.FeatureStyleOptions = {
@@ -71,25 +80,95 @@ const Map: React.FC<MapProps> = ({
 
         let currentInfoWindow: google.maps.InfoWindow | null = null;
 
-        markers.forEach(markerInfo => {
-          const marker = new google.maps.Marker({
-            position: { lat: markerInfo.lat, lng: markerInfo.lng },
-            map: map,
-            icon: markerInfo.icon,
-          });
+        SITES.forEach(markerInfo => {
 
-          const infoWindow = new google.maps.InfoWindow({
-            content: createPopupBoxContent(markerInfo.name, 'location', 'status', 'type'),
-          });
+          if (markerInfo["Lat"] != null && markerInfo["Long"] != null) {
+            
+            
+            
+            var typeColor = "red";
+            const status = "Available";
 
-          marker.addListener('click', () => {
-            if (currentInfoWindow) {
-              currentInfoWindow.close();
+            if (status == "Available") {
+              typeColor = "green"
+            }
+            else if (status == "Unavailable") {
+              typeColor = "red"
+            }
+            else if (status == "Taken") {
+              typeColor = "blue"
             }
 
-            infoWindow.open(map, marker);
-            currentInfoWindow = infoWindow;
-          });
+            const infoWindow = new google.maps.InfoWindow({
+              content: createPopupBoxContent(markerInfo['Project Location'], markerInfo['Address'], 'Available', markerInfo['Asset Type'][0], typeColor),
+            });
+            
+            var tempIcon = "";
+
+            if (markerInfo['Asset Type'][0] == "Bioretention area" 
+            || markerInfo['Asset Type'][0] == "Vegetated swale"
+            || markerInfo['Asset Type'][0] == "Trench drain"
+            || markerInfo['Asset Type'][0] == "Porous asphalt"
+            || markerInfo['Asset Type'][0] == "Comprehensive park renovation"
+            || markerInfo['Asset Type'][0] == "Permeable pavers") {
+              tempIcon = generateCircleSVG(typeColor);
+            }
+            else if (markerInfo['Asset Type'][0] == "Rain garden" 
+            || markerInfo['Asset Type'][0] == "Plantings/Gardens"
+            || markerInfo['Asset Type'][0] == "Bioswale"
+            || markerInfo['Asset Type'][0] == "Stormwater trench"
+            || markerInfo['Asset Type'][0] == "Tree pit"
+            || markerInfo['Asset Type'][0] == "Porous pavers") {
+              tempIcon = generateDiamondSVG(typeColor);
+            }
+            else if (markerInfo['Asset Type'][0] == "Planter" 
+            || markerInfo['Asset Type'][0] == "Permeable pavement - resin-bound stone"
+            || markerInfo['Asset Type'][0] == "Tree infiltration trench"
+            || markerInfo['Asset Type'][0] == "Porous concrete slabs"
+            || markerInfo['Asset Type'][0] == "Enhanced tree trench") {
+              tempIcon = generateSquareSVG(typeColor);
+            }
+            else if (markerInfo['Asset Type'][0] == "Stormwater planter" 
+            || markerInfo['Asset Type'][0] == "Green roof"
+            || markerInfo['Asset Type'][0] == "Planter boxes"
+            || markerInfo['Asset Type'][0] == "Tree planter"
+            || markerInfo['Asset Type'][0] == "Porous paving") {
+              tempIcon = generateStarSVG(typeColor);
+            }
+            else if (markerInfo['Asset Type'][0] == "Stormwater chambers" 
+            || markerInfo['Asset Type'][0] == "Subsurface gravel filter"
+            || markerInfo['Asset Type'][0] == "Forebay"
+            || markerInfo['Asset Type'][0] == "Enhanced tree pit"
+            || markerInfo['Asset Type'][0] == "Porous pavers") {
+              tempIcon = generateTriangleSVG(typeColor);
+            }
+
+            const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
+
+            const customIcon = {
+              url: typeIcon,
+              size: new google.maps.Size(21, 20),
+              scaledSize: new google.maps.Size(21, 20),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(10, 10),
+            };
+
+            const marker = new google.maps.Marker({
+              position: { lat: markerInfo["Lat"], lng: markerInfo["Long"] },
+              map: map,
+              icon: customIcon
+            });
+  
+            marker.addListener('click', () => {
+              if (currentInfoWindow) {
+                currentInfoWindow.close();
+              }
+  
+              infoWindow.open(map, marker);
+              currentInfoWindow = infoWindow;
+            });
+          }
+          
         })
 
         const input = document.getElementById('pac-input') as HTMLInputElement;
