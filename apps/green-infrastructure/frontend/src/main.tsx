@@ -1,16 +1,19 @@
-import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MapPage from './pages/mapPage/MapPage';
 
-import App from './app/app';
+const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MapPage />} />
+          </Routes>
+        </BrowserRouter>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
