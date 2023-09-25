@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { Button, Typography, Image, Checkbox } from 'antd';
+import styled from 'styled-components';
+import { Image } from 'antd';
 import { useState } from 'react';
 import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
@@ -7,7 +7,7 @@ import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 
 const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   background: #BDBDBD;
-  width: 435px;
+  width: 435px;             
   gap: 20px;
   position: relative;
   transition: height 0.3s ease;
@@ -77,7 +77,8 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
     const [availableIcon, adoptedIcon, futureIcon] =
       icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
 
-    console.log(icons)
+      const [rainIcon, swaleIcon, bioretentionIcon, porousIcon, treeIcon] =
+      icons ?? SITE_TYPE_ROADMAP.map((option) => option.image);
 
 
     const handleFeatureClick = (icon: string) => {
@@ -102,6 +103,69 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
     return (
       <MapLegendContainer isVisible={isVisible}>
       <h1>Feature Type</h1>
+
+      <LegendItem>
+  {icons && (
+    <StyledButton
+      onClick={() => handleFeatureClick('rainIcon')} 
+      isSelected={selectedFeatures.includes('rainIcon')} 
+    >
+      <LegendImage src={rainIcon} alt="Rain" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
+      Rain
+    </StyledButton>
+  )}
+</LegendItem>
+
+<LegendItem>
+  {icons && (
+    <StyledButton
+      onClick={() => handleFeatureClick('swaleIcon')} 
+      isSelected={selectedFeatures.includes('swaleIcon')} 
+    >
+      <LegendImage src={rainIcon} alt="Swale" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
+      Swale
+    </StyledButton>
+  )}
+</LegendItem>
+
+<LegendItem>
+  {icons && (
+    <StyledButton
+      onClick={() => handleFeatureClick('bioretentionIcon')} 
+      isSelected={selectedFeatures.includes('bioretentionIcon')} 
+    >
+      <LegendImage src={bioretentionIcon} alt="Bioretention" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
+      Bioretention
+    </StyledButton>
+  )}
+</LegendItem>
+
+
+<LegendItem>
+  {icons && (
+    <StyledButton
+      onClick={() => handleFeatureClick('porousIcon')} 
+      isSelected={selectedFeatures.includes('porousIcon')} 
+    >
+      <LegendImage src={rainIcon} alt="Porous" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
+      Porous
+    </StyledButton>
+  )}
+</LegendItem>
+
+
+<LegendItem>
+  {icons && (
+    <StyledButton
+      onClick={() => handleFeatureClick('treeIcon')} 
+      isSelected={selectedFeatures.includes('treeIcon')} 
+    >
+      <LegendImage src={rainIcon} alt="Tree" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
+      Tree
+    </StyledButton>
+  )}
+</LegendItem>
+
       <LegendItem>
   {icons && (
     <StyledButton
