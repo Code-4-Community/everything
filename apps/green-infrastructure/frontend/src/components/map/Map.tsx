@@ -1,13 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { loader, BOSTON_BOUNDS, markers, BOSTON_PLACE_ID } from '../../constants';
+import React, { useEffect, useRef, useState } from 'react';
+import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID } from '../../constants';
 import { createPopupBoxContent } from '../mapIcon/PopupBox';
 import styled from 'styled-components';
 import { SITES } from '../../GI-Boston-Sites';
-import circle from '../../images/markers/circle.svg'
-import diamond from '../../images/markers/diamond.svg'
-import square from '../../images/markers/square.svg'
-import star from '../../images/markers/star.svg'
-import triangle from '../../images/markers/triangle.svg'
 import generateCircleSVG from '../../images/markers/circle';
 import generateSquareSVG from '../../images/markers/square';
 import generateDiamondSVG from '../../images/markers/diamond';
@@ -32,6 +27,10 @@ interface MapProps {
   readonly zoom: number;
 }
 
+function randomizeStatus(): string {
+  const statuses = ["Available", "Adopted", "Future"];
+  return statuses[Math.floor(Math.random() * statuses.length)];
+}
 
 const Map: React.FC<MapProps> = ({
   zoom,
@@ -39,6 +38,10 @@ const Map: React.FC<MapProps> = ({
 
 
   const mapRef = useRef<HTMLDivElement | null>(null);
+
+  const [showAvailable, setShowAvailable] = useState(true);
+  const [showAdopted, setShowAdopted] = useState(true);
+  const [showFuture, setShowFuture] = useState(true);
 
   let map: google.maps.Map;
 
@@ -80,30 +83,28 @@ const Map: React.FC<MapProps> = ({
 
         let currentInfoWindow: google.maps.InfoWindow | null = null;
 
+        const markers = [];
+
         SITES.forEach(markerInfo => {
 
           if (markerInfo["Lat"] != null && markerInfo["Long"] != null) {
+
+            const status = randomizeStatus();
             
-            
-            
-            var typeColor = "red";
-            const status = "Available";
+            let typeColor = "red";
 
             if (status == "Available") {
               typeColor = "green"
             }
-            else if (status == "Unavailable") {
+            else if (status == "Adopted") {
               typeColor = "red"
             }
-            else if (status == "Taken") {
+            else if (status == "Future") {
               typeColor = "blue"
             }
 
-            const infoWindow = new google.maps.InfoWindow({
-              content: createPopupBoxContent(markerInfo['Project Location'], markerInfo['Address'], 'Available', markerInfo['Asset Type'][0], typeColor),
-            });
-            
-            var tempIcon = "";
+            let tempIcon = "";
+            let iconFunc = null;
 
             if (markerInfo['Asset Type'][0] == "Bioretention area" 
             || markerInfo['Asset Type'][0] == "Vegetated swale"
@@ -112,6 +113,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Comprehensive park renovation"
             || markerInfo['Asset Type'][0] == "Permeable pavers") {
               tempIcon = generateCircleSVG(typeColor);
+              iconFunc = generateCircleSVG;
             }
             else if (markerInfo['Asset Type'][0] == "Rain garden" 
             || markerInfo['Asset Type'][0] == "Plantings/Gardens"
@@ -120,6 +122,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Tree pit"
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateDiamondSVG(typeColor);
+              iconFunc = generateDiamondSVG;
             }
             else if (markerInfo['Asset Type'][0] == "Planter" 
             || markerInfo['Asset Type'][0] == "Permeable pavement - resin-bound stone"
@@ -127,6 +130,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous concrete slabs"
             || markerInfo['Asset Type'][0] == "Enhanced tree trench") {
               tempIcon = generateSquareSVG(typeColor);
+              iconFunc = generateSquareSVG;
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater planter" 
             || markerInfo['Asset Type'][0] == "Green roof"
@@ -134,6 +138,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Tree planter"
             || markerInfo['Asset Type'][0] == "Porous paving") {
               tempIcon = generateStarSVG(typeColor);
+              iconFunc = generateStarSVG;
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater chambers" 
             || markerInfo['Asset Type'][0] == "Subsurface gravel filter"
@@ -141,9 +146,14 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Enhanced tree pit"
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateTriangleSVG(typeColor);
+              iconFunc = generateTriangleSVG;
             }
 
             const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
+
+            const infoWindow = new google.maps.InfoWindow({
+              content: createPopupBoxContent(markerInfo['Project Location'], markerInfo['Address'], 'Available', markerInfo['Asset Type'][0], typeColor, iconFunc as (color: string) => string),
+            });
 
             const customIcon = {
               url: typeIcon,
@@ -167,6 +177,9 @@ const Map: React.FC<MapProps> = ({
               infoWindow.open(map, marker);
               currentInfoWindow = infoWindow;
             });
+
+            markers.push(marker);
+
           }
           
         })

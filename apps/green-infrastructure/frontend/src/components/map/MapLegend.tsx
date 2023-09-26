@@ -93,7 +93,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
       } else {
         // Select the icon
         setSelectedFeatures((prevSelectedFeatures) => [...prevSelectedFeatures, icon]);
+        
       }
+      console.log(selectedFeatures)
     };
 
     
