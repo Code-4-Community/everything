@@ -1,44 +1,50 @@
-import React, { useEffect, useRef } from 'react';
-import { loader, BOSTON_BOUNDS, markers, BOSTON_PLACE_ID } from '../../constants';
+import React, { useEffect, useRef, useState } from 'react';
+import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID } from '../../constants';
 import { createPopupBoxContent } from '../mapIcon/PopupBox';
 import styled from 'styled-components';
 import { SITES } from '../../GI-Boston-Sites';
-import circle from '../../images/markers/circle.svg'
-import diamond from '../../images/markers/diamond.svg'
-import square from '../../images/markers/square.svg'
-import star from '../../images/markers/star.svg'
-import triangle from '../../images/markers/triangle.svg'
 import generateCircleSVG from '../../images/markers/circle';
 import generateSquareSVG from '../../images/markers/square';
 import generateDiamondSVG from '../../images/markers/diamond';
 import generateTriangleSVG from '../../images/markers/triangle';
 import generateStarSVG from '../../images/markers/star';
 
+
 const MapDiv = styled.div`
   height: 100%;
 `;
 
 
-const SearchInput = styled.input`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 200px;
-  z-index: 100;
-`;
+function filterMarkers(selectedFeatures: string[], markers: google.maps.Marker[], map: google.maps.Map) {
+  // removes all current markers
+  markers.forEach((marker: google.maps.Marker) => marker.setMap(null));
+  //resets markers if selected
+  markers.forEach((marker: google.maps.Marker) => {
+    const featureType = marker.get("featureType"); 
+    // if (assetType === 'Trench drain') {
+    if (selectedFeatures.includes(featureType)) {
+      marker.setMap(map);
+    }
+  });
+}
 
 
 interface MapProps {
   readonly zoom: number;
+  selectedFeatures: string [];
 }
+
 
 
 const Map: React.FC<MapProps> = ({
   zoom,
+  selectedFeatures,
 }) => {
 
 
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+
 
   let map: google.maps.Map;
 
@@ -80,22 +86,28 @@ const Map: React.FC<MapProps> = ({
 
         let currentInfoWindow: google.maps.InfoWindow | null = null;
 
+
+        const markersArray: google.maps.Marker[] = [];
+
+
+
+
         SITES.forEach(markerInfo => {
 
           if (markerInfo["Lat"] != null && markerInfo["Long"] != null) {
             
             
             
-            var typeColor = "red";
+            let typeColor = "red";
             const status = "Available";
 
-            if (status == "Available") {
+            if (status === "Available") {
               typeColor = "green"
             }
-            else if (status == "Unavailable") {
+            else if (status === "Unavailable") {
               typeColor = "red"
             }
-            else if (status == "Taken") {
+            else if (status === "Taken") {
               typeColor = "blue"
             }
 
@@ -103,7 +115,8 @@ const Map: React.FC<MapProps> = ({
               content: createPopupBoxContent(markerInfo['Project Location'], markerInfo['Address'], 'Available', markerInfo['Asset Type'][0], typeColor),
             });
             
-            var tempIcon = "";
+            let tempIcon = "";
+            let featureType = "";
 
             if (markerInfo['Asset Type'][0] == "Bioretention area" 
             || markerInfo['Asset Type'][0] == "Vegetated swale"
@@ -112,6 +125,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Comprehensive park renovation"
             || markerInfo['Asset Type'][0] == "Permeable pavers") {
               tempIcon = generateCircleSVG(typeColor);
+              featureType = "rainIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Rain garden" 
             || markerInfo['Asset Type'][0] == "Plantings/Gardens"
@@ -120,6 +134,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Tree pit"
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateDiamondSVG(typeColor);
+              featureType = "swaleIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Planter" 
             || markerInfo['Asset Type'][0] == "Permeable pavement - resin-bound stone"
@@ -127,6 +142,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous concrete slabs"
             || markerInfo['Asset Type'][0] == "Enhanced tree trench") {
               tempIcon = generateSquareSVG(typeColor);
+              featureType = "bioretentionIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater planter" 
             || markerInfo['Asset Type'][0] == "Green roof"
@@ -134,6 +150,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Tree planter"
             || markerInfo['Asset Type'][0] == "Porous paving") {
               tempIcon = generateStarSVG(typeColor);
+              featureType = "porousIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater chambers" 
             || markerInfo['Asset Type'][0] == "Subsurface gravel filter"
@@ -141,6 +158,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Enhanced tree pit"
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateTriangleSVG(typeColor);
+              featureType = "treeIcon";
             }
 
             const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
@@ -153,11 +171,14 @@ const Map: React.FC<MapProps> = ({
               anchor: new google.maps.Point(10, 10),
             };
 
-            const marker = new google.maps.Marker({
+            const marker: google.maps.Marker = new google.maps.Marker({
               position: { lat: markerInfo["Lat"], lng: markerInfo["Long"] },
               map: map,
               icon: customIcon
             });
+
+            marker.set("featureType", featureType);
+
   
             marker.addListener('click', () => {
               if (currentInfoWindow) {
@@ -167,18 +188,31 @@ const Map: React.FC<MapProps> = ({
               infoWindow.open(map, marker);
               currentInfoWindow = infoWindow;
             });
+
+            
+
+            markersArray.push(marker);
+            
+
           }
-          
+
+
+
         })
+        setMarkers(markersArray);
+        console.log(selectedFeatures)
+        filterMarkers(selectedFeatures, markersArray, map);
+        
+
 
         const input = document.getElementById('pac-input') as HTMLInputElement;
 
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
 
-        const marker = new google.maps.Marker({
-          map,
-        });
+        // const marker = new google.maps.Marker({
+        //   map,
+        // });
 
         autocomplete.addListener('place_changed', () => {
           marker.setVisible(false);
@@ -201,7 +235,12 @@ const Map: React.FC<MapProps> = ({
         });
       });
     }
-  }, [zoom]);
+
+    
+
+  }, [zoom, selectedFeatures]);
+
+
 
   return (
     <div>
