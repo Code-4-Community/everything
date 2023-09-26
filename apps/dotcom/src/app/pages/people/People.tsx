@@ -31,13 +31,20 @@ const useStyles = makeStyles({
     fontSize: '40px',
     margin: '30px 0px',
   },
+  grid: {
+    justifyContent: 'center',
+    alignItems: 'start',
+    gap: 10,
+  },
 });
 
 const People: React.FC = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   const classes = useStyles();
+
   return (
     <div>
       <Container maxWidth="md" className={classes.hero}>
@@ -52,9 +59,9 @@ const People: React.FC = () => {
         />
       </Container>
       <Fade>
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
           <div className={classes.root}>
-            <Grid container justify="center" alignItems="center" spacing={3}>
+            <Grid container className={classes.grid}>
               {people.map((person, i) => (
                 <Member {...person} key={i} />
               ))}
