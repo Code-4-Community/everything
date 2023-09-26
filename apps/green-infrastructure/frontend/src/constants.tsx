@@ -92,5 +92,4 @@ interface SiteTypeOption {
 
   ];
 
-export const BOSTON_PLACE_ID = 'ChIJGzE9DS1l44kRoOhiASS_fHg'
-
+export const BOSTON_PLACE_ID = 'ChIJGzE9DS1l44kRoOhiASS_fHg';

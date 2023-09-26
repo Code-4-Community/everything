@@ -1,18 +1,12 @@
-import generateCircleSVG from '../../images/markers/circle';
-import generateSquareSVG from '../../images/markers/square';
-import generateDiamondSVG from '../../images/markers/diamond';
-import generateTriangleSVG from '../../images/markers/triangle';
-import generateStarSVG from '../../images/markers/star';
-
-export function createPopupBoxContent(name?: string, location?: string, status?: string, type?: string, color?: string) {
+export function createPopupBoxContent(name: string, location: string, status: string, type: string, color: string, svgFunction: (color: string) => string) {
 
   return `
-  <head><link rel='stylesheet' href='style.css'/></head>
+  <head><link rel='stylesheet'/></head>
   <body>
     <div class='popup'>
       <div class='typeBox'>
         ${type ? 
-          `${generateCircleSVG("green")}
+          `${svgFunction(color)}
           <p>Feature Type: </p><p><b>${type.toUpperCase()}</b></p>` 
           : ''}
       </div>
