@@ -154,7 +154,7 @@ const ApplyProductManager: React.FC = () => {
           <Fade>
             <CTA
               disabled={false}
-              onClick="https://forms.gle/7MHkM3iAYAfiHPYD9"
+              onClick="https://forms.gle/3qh2JYaYfue84CQF6"
             />
           </Fade>
         </Grid>
