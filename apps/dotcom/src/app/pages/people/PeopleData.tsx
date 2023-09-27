@@ -147,7 +147,7 @@ export const people: Person[] = [
   // Shreya
   {
     name: 'Fanny Zheng',
-    position: 'Developer',
+    position: 'Developer; Co-Director of Events',
     image:
       'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2022/fanny_zheng.webp',
     altImage:
@@ -232,7 +232,7 @@ export const people: Person[] = [
   /* Core Infrastructure */
   {
     name: 'Harrison Kim',
-    position: 'Tech Lead',
+    position: 'Tech Lead; Co-Director of Events',
     image:
       'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2022/harrison_kim.webp',
     altImage:
