@@ -5,6 +5,8 @@ import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 
 
+
+
 const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   background: #BDBDBD;
   width: 435px;             
@@ -63,12 +65,14 @@ const CaretUpStyled = styled(CaretUpOutlined)`
 `;
 
 interface MapLegendProps {
+  selectedFeatures: string[];
+  setSelectedFeatures: any;
   icons: string[] | null; 
 }
 
-const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
+const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeatures, icons }) => {
     const [isVisible, setIsVisible] = useState(true);
-    const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+
 
     const toggleShowLegend = () => {
         setIsVisible((prev) => !prev);
@@ -77,26 +81,25 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
     const [availableIcon, adoptedIcon, futureIcon] =
       icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
 
-      const [rainIcon, swaleIcon, bioretentionIcon, porousIcon, treeIcon] =
+    const [rainIcon, swaleIcon, bioretentionIcon, porousIcon, treeIcon] =
       icons ?? SITE_TYPE_ROADMAP.map((option) => option.image);
 
 
-    const handleFeatureClick = (icon: string) => {
-      // Check if the icon is already selected
-      const isAlreadySelected = selectedFeatures.includes(icon);
-  
-      if (isAlreadySelected) {
-        // Deselect the icon
-        setSelectedFeatures((prevSelectedFeatures) =>
-          prevSelectedFeatures.filter((selected) => selected !== icon)
-        );
-      } else {
-        // Select the icon
-        setSelectedFeatures((prevSelectedFeatures) => [...prevSelectedFeatures, icon]);
-        
-      }
-      console.log(selectedFeatures)
-    };
+
+      const handleFeatureClick = (icon: string) => {
+        // Check if the icon is already selected
+        const isAlreadySelected = selectedFeatures.includes(icon);
+    
+        if (isAlreadySelected) {
+          // Deselect the icon
+          setSelectedFeatures((prevSelectedFeatures: string []) =>
+            prevSelectedFeatures.filter((selected) => selected !== icon)
+          );
+        } else {
+          // Select the icon
+          setSelectedFeatures((prevSelectedFeatures: string []) => [...prevSelectedFeatures, icon]);
+        }
+      };
 
     
 
@@ -207,4 +210,6 @@ const MapLegend: React.FC<MapLegendProps> = ({ icons }) => {
 };
 
 
+
 export default MapLegend;
+

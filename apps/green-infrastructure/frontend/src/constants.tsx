@@ -1,7 +1,7 @@
 import { Loader } from "@googlemaps/js-api-loader";
 // import { createMapIcon, MapIcon } from './components/mapIcon/MapIcon';
-import { createMapPoint, MapPoint } from './components/mapIcon/MapPoint';
-import { allSvgMarkers } from './components/mapIcon/MapIconDesigns';
+// import { createMapPoint, MapPoint } from './components/mapIcon/MapPoint';
+// import { allSvgMarkers } from './components/mapIcon/MapIconDesigns';
 import availableIcon from './assets/images/siteIcons/availableIcon.jpg';
 import adoptedIcon from './assets/images/siteIcons/adoptedIcon.png';
 import futureIcon from './assets/images/siteIcons/futureIcon.png';

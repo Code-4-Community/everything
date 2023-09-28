@@ -11,6 +11,9 @@ const icons: string[] = SITE_STATUS_ROADMAP.map((option) => option.image);
 
 
 export default function MapPage() {
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+
+
 
   return (
     <div>
@@ -19,9 +22,9 @@ export default function MapPage() {
       <Header />
       <Divider />
       <div style={{ position: 'relative' }}>
-        <Map zoom={8} />
+        <Map selectedFeatures={selectedFeatures} zoom={8} />
         <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100 }}>
-          <MapLegend icons={icons} />
+          <MapLegend selectedFeatures={selectedFeatures} setSelectedFeatures={setSelectedFeatures} icons={icons} />
         </div>
         <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 100 }}>
           <input 
@@ -41,4 +44,4 @@ export default function MapPage() {
       <About />
     </div>
   );
-};
+}

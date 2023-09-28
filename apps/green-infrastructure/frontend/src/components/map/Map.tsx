@@ -9,23 +9,31 @@ import generateDiamondSVG from '../../images/markers/diamond';
 import generateTriangleSVG from '../../images/markers/triangle';
 import generateStarSVG from '../../images/markers/star';
 
+
 const MapDiv = styled.div`
   height: 100%;
 `;
 
 
-const SearchInput = styled.input`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 200px;
-  z-index: 100;
-`;
+function filterMarkers(selectedFeatures: string[], markers: google.maps.Marker[], map: google.maps.Map) {
+  // removes all current markers
+  markers.forEach((marker: google.maps.Marker) => marker.setMap(null));
+  //resets markers if selected
+  markers.forEach((marker: google.maps.Marker) => {
+    const featureType = marker.get("featureType"); 
+    // if (assetType === 'Trench drain') {
+    if (selectedFeatures.includes(featureType)) {
+      marker.setMap(map);
+    }
+  });
+}
 
 
 interface MapProps {
   readonly zoom: number;
+  selectedFeatures: string [];
 }
+
 
 function randomizeStatus(): string {
   const statuses = ["Available", "Adopted", "Future"];
@@ -34,6 +42,7 @@ function randomizeStatus(): string {
 
 const Map: React.FC<MapProps> = ({
   zoom,
+  selectedFeatures,
 }) => {
 
 
@@ -42,6 +51,8 @@ const Map: React.FC<MapProps> = ({
   const [showAvailable, setShowAvailable] = useState(true);
   const [showAdopted, setShowAdopted] = useState(true);
   const [showFuture, setShowFuture] = useState(true);
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+
 
   let map: google.maps.Map;
 
@@ -83,7 +94,11 @@ const Map: React.FC<MapProps> = ({
 
         let currentInfoWindow: google.maps.InfoWindow | null = null;
 
-        const markers = [];
+
+        const markersArray: google.maps.Marker[] = [];
+
+
+
 
         SITES.forEach(markerInfo => {
 
@@ -91,19 +106,24 @@ const Map: React.FC<MapProps> = ({
 
             const status = randomizeStatus();
             
+            
             let typeColor = "red";
 
-            if (status == "Available") {
+
+            if (status === "Available") {
               typeColor = "green"
             }
-            else if (status == "Adopted") {
+            else if (status === "Unavailable") {
               typeColor = "red"
             }
-            else if (status == "Future") {
+            else if (status === "Future") {
               typeColor = "blue"
             }
 
+        
+            
             let tempIcon = "";
+            let featureType = "";
             let iconFunc = null;
 
             if (markerInfo['Asset Type'][0] == "Bioretention area" 
@@ -114,6 +134,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Permeable pavers") {
               tempIcon = generateCircleSVG(typeColor);
               iconFunc = generateCircleSVG;
+              featureType = "rainIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Rain garden" 
             || markerInfo['Asset Type'][0] == "Plantings/Gardens"
@@ -123,6 +144,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateDiamondSVG(typeColor);
               iconFunc = generateDiamondSVG;
+              featureType = "swaleIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Planter" 
             || markerInfo['Asset Type'][0] == "Permeable pavement - resin-bound stone"
@@ -131,6 +153,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Enhanced tree trench") {
               tempIcon = generateSquareSVG(typeColor);
               iconFunc = generateSquareSVG;
+              featureType = "bioretentionIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater planter" 
             || markerInfo['Asset Type'][0] == "Green roof"
@@ -139,6 +162,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous paving") {
               tempIcon = generateStarSVG(typeColor);
               iconFunc = generateStarSVG;
+              featureType = "porousIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater chambers" 
             || markerInfo['Asset Type'][0] == "Subsurface gravel filter"
@@ -147,6 +171,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateTriangleSVG(typeColor);
               iconFunc = generateTriangleSVG;
+              featureType = "treeIcon";
             }
 
             const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
@@ -163,11 +188,14 @@ const Map: React.FC<MapProps> = ({
               anchor: new google.maps.Point(10, 10),
             };
 
-            const marker = new google.maps.Marker({
+            const marker: google.maps.Marker = new google.maps.Marker({
               position: { lat: markerInfo["Lat"], lng: markerInfo["Long"] },
               map: map,
               icon: customIcon
             });
+
+            marker.set("featureType", featureType);
+
   
             marker.addListener('click', () => {
               if (currentInfoWindow) {
@@ -178,23 +206,31 @@ const Map: React.FC<MapProps> = ({
               currentInfoWindow = infoWindow;
             });
 
-            markers.push(marker);
+            
+
+            markersArray.push(marker);
+            
 
           }
-          
+
+
+
         })
+        setMarkers(markersArray);
+        console.log(selectedFeatures)
+        filterMarkers(selectedFeatures, markersArray, map);
+        
+
 
         const input = document.getElementById('pac-input') as HTMLInputElement;
 
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
 
-        const marker = new google.maps.Marker({
-          map,
-        });
-
+  
         autocomplete.addListener('place_changed', () => {
-          marker.setVisible(false);
+          
+          // marker.setVisible(false);
           const place = autocomplete.getPlace();
 
           if (!place.geometry || !place.geometry.location) {
@@ -209,12 +245,17 @@ const Map: React.FC<MapProps> = ({
             map.setZoom(17);
           }
 
-          marker.setPosition(place.geometry.location);
-          marker.setVisible(true);
+          // marker.setPosition(place.geometry.location);
+          // marker.setVisible(true);
         });
       });
     }
-  }, [zoom]);
+
+    
+
+  }, [zoom, selectedFeatures]);
+
+
 
   return (
     <div>
