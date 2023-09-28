@@ -32,6 +32,7 @@ export default function MapPage() {
               width: '300px', 
               height: '40px',
               borderRadius: '10px',
+              fontFamily: "Open Sans"
             }}
           />
         </div>
