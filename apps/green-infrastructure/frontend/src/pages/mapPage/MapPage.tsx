@@ -24,7 +24,16 @@ export default function MapPage() {
           <MapLegend icons={icons} />
         </div>
         <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 100 }}>
-          <input id="pac-input" type="text" placeholder="Search Box" />
+          <input 
+            id="pac-input"
+            type="text"
+            placeholder="Search Box"
+            style={{
+              width: '300px', 
+              height: '40px',
+              borderRadius: '10px',
+            }}
+          />
         </div>
       </div>
       <Divider />
