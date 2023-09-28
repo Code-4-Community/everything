@@ -106,7 +106,6 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
     
 
     return (
-      <>
       <Collapse collapsedSize={28} in={isVisible}>
       <ToggleButton onClick={toggleShowLegend}>
         {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
@@ -211,7 +210,6 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 </LegendItem>
   </MapLegendContainer>
   </Collapse>
-  </>
   );
 };
 
