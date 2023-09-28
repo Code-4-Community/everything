@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Image } from 'antd';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
@@ -15,15 +15,8 @@ const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   position: relative;
   transition: height 0.3s ease;
   min-height: ${(props) => (props.isVisible ? '20px' : 'auto')};
-  height: 419px;
+  height: ${(props) => (props.isVisible ? '419px' : 'auto')};
   overflow: hidden;
-`;
-
-const MapLegendToggleContainer = styled.div<{ isVisible: boolean }>`
-  background: #BDBDBD;
-  width: 435px;
-  height: ${(props) => (props.isVisible ? 'auto' : '35px')};
-  gap: 20px;
 `;
 
 const LegendItem = styled.div`
@@ -58,9 +51,10 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
 const ToggleButton = styled.button`
   cursor: pointer;
   font-size: 18px;
-  position: absolute;
-  bottom: 5px;
+  bottom: 1px;
   left: 200px;
+  position: absolute;
+  z-index: 1;
 `;
 
 
@@ -113,7 +107,10 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 
     return (
       <>
-      <Collapse in={isVisible}>
+      <Collapse collapsedSize={28} in={isVisible}>
+      <ToggleButton onClick={toggleShowLegend}>
+        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
+      </ToggleButton>
       <MapLegendContainer isVisible={isVisible}>
       <h1>Feature Type</h1>
 
@@ -214,11 +211,6 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 </LegendItem>
   </MapLegendContainer>
   </Collapse>
- <MapLegendToggleContainer>
-  <ToggleButton onClick={toggleShowLegend}>
-        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
-      </ToggleButton>
-  </MapLegendToggleContainer>
   </>
   );
 };
