@@ -10,12 +10,12 @@ import { Collapse } from '@mui/material';
 
 const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   background: #BDBDBD;
-  width: 435px;             
+  width: 370px;           
   gap: 20px;
   position: relative;
   transition: height 0.3s ease;
   min-height: ${(props) => (props.isVisible ? '20px' : 'auto')};
-  height: ${(props) => (props.isVisible ? '419px' : 'auto')};
+  height: ${(props) => (props.isVisible ? '380px' : 'auto')};
   overflow: hidden;
 `;
 
@@ -52,7 +52,6 @@ const ToggleButton = styled.button`
   cursor: pointer;
   font-size: 18px;
   bottom: 1px;
-  left: 200px;
   position: absolute;
   z-index: 1;
 `;
@@ -106,7 +105,11 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
     
 
     return (
-      <Collapse collapsedSize={28} in={isVisible}>
+      <Collapse sx={
+        {
+          textAlign: 'center'
+        }
+      } collapsedSize={28} in={isVisible}>
       <ToggleButton onClick={toggleShowLegend}>
         {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
       </ToggleButton>
