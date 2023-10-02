@@ -6,6 +6,7 @@ import longTimePartnerImage from '../assets/Badge_Heart.png';
 import frequentPartner from '../assets/Badge_Partner.png';
 import raw from './raw.json';
 import { createApiClient } from '@c4c/monarch/common';
+import { GeolocationPosition } from '@c4c/monarch/common';
 import { dist } from './SearchTherapists';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -61,6 +62,9 @@ export interface ActionsController {
   searchTherapists: (
     query: SearchTherapistsQuery
   ) => Promise<TherapistDisplayModel[]>;
+  extractGeocodeFromZipcode: (
+    zipcode: string
+  ) => Promise<GeolocationPosition>;
   fetchTherapist: (id: string) => Therapist;
 }
 
@@ -197,6 +201,10 @@ function createRandomTherapist(): Therapist {
   };
 }
 
+async function extractGeocodeFromZipcode(zipcode: string): Promise<GeolocationPosition> {
+  return await serverApiClient.getGeocode({ queries: { zipcode: zipcode }});
+}
+
 async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
   if (useFake) {
     return FAKE_THERAPISTS;
@@ -285,6 +293,9 @@ export function makeActionsController(): ActionsController {
     fetchTherapist: (id: string) => {
       return {} as Therapist;
     },
+    extractGeocodeFromZipcode: async (zipcode: string) => {
+      return await extractGeocodeFromZipcode(zipcode);
+    }
   };
 }
 
