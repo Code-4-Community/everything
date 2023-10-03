@@ -3,11 +3,10 @@ import { Image } from 'antd';
 import { useState } from 'react';
 import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import generateCircleSVG from '../../images/markers/circle';
-import generateDiamondSVG from '../../images/markers/diamond';
-import generateSquareSVG from '../../images/markers/square';
-import generateStarSVG from '../../images/markers/star';
-import generateTriangleSVG from '../../images/markers/triangle';
+import { Collapse } from '@mui/material';
+
+
+
 
 const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   background: #BDBDBD;
@@ -17,8 +16,8 @@ const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   transition: height 0.3s ease;
   min-height: ${(props) => (props.isVisible ? '20px' : 'auto')};
   height: ${(props) => (props.isVisible ? '419px' : 'auto')};
+  overflow: hidden;
 `;
-
 
 const LegendItem = styled.div`
   width: 100%;
@@ -52,9 +51,10 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
 const ToggleButton = styled.button`
   cursor: pointer;
   font-size: 18px;
-  position: absolute;
-  bottom: 5px;
+  bottom: 1px;
   left: 200px;
+  position: absolute;
+  z-index: 1;
 `;
 
 
@@ -106,6 +106,10 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
     
 
     return (
+      <Collapse collapsedSize={28} in={isVisible}>
+      <ToggleButton onClick={toggleShowLegend}>
+        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
+      </ToggleButton>
       <MapLegendContainer isVisible={isVisible}>
       <h1>Feature Type</h1>
 
@@ -204,10 +208,8 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
     </StyledButton>
   )}
 </LegendItem>
-{/* <ToggleButton onClick={toggleShowLegend}>
-        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
-      </ToggleButton> */}
   </MapLegendContainer>
+  </Collapse>
   );
 };
 
