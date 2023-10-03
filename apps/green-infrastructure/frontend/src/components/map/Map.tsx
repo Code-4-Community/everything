@@ -87,9 +87,14 @@ const Map: React.FC<MapProps> = ({
           zoom: 8,
           mapId: '3aa9b524d13192b',
           mapTypeControl: false,
+          fullscreenControl: true,
+          fullscreenControlOptions: {
+            position: google.maps.ControlPosition.LEFT_BOTTOM,
+          },
           zoomControlOptions: {
             position: google.maps.ControlPosition.LEFT_BOTTOM,
           },
+          streetViewControl: false,
           restriction: {
             latLngBounds: BOSTON_BOUNDS,
             strictBounds: false,
