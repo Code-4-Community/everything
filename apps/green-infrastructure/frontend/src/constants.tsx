@@ -11,7 +11,6 @@ import bioretentionIcon from './assets/images/siteIcons/bioretentionIcon.svg';
 import porousIcon from './assets/images/siteIcons/porousIcon.svg';
 import treeIcon from './assets/images/siteIcons/treeIcon.svg';
 
-
 export const loader = new Loader({
     apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     version: "weekly",

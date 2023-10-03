@@ -21,6 +21,7 @@ function filterMarkers(selectedFeatures: string[], markers: google.maps.Marker[]
   //resets markers if selected
   markers.forEach((marker: google.maps.Marker) => {
     const featureType = marker.get("featureType"); 
+    console.log(featureType)
     // if (assetType === 'Trench drain') {
     if (selectedFeatures.includes(featureType)) {
       marker.setMap(map);
@@ -134,7 +135,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Permeable pavers") {
               tempIcon = generateCircleSVG(typeColor);
               iconFunc = generateCircleSVG;
-              featureType = "rainIcon";
+              featureType = "circleIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Rain garden" 
             || markerInfo['Asset Type'][0] == "Plantings/Gardens"
@@ -144,7 +145,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateDiamondSVG(typeColor);
               iconFunc = generateDiamondSVG;
-              featureType = "swaleIcon";
+              featureType = "diamondIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Planter" 
             || markerInfo['Asset Type'][0] == "Permeable pavement - resin-bound stone"
@@ -153,7 +154,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Enhanced tree trench") {
               tempIcon = generateSquareSVG(typeColor);
               iconFunc = generateSquareSVG;
-              featureType = "bioretentionIcon";
+              featureType = "squareIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater planter" 
             || markerInfo['Asset Type'][0] == "Green roof"
@@ -162,7 +163,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous paving") {
               tempIcon = generateStarSVG(typeColor);
               iconFunc = generateStarSVG;
-              featureType = "porousIcon";
+              featureType = "starIcon";
             }
             else if (markerInfo['Asset Type'][0] == "Stormwater chambers" 
             || markerInfo['Asset Type'][0] == "Subsurface gravel filter"
@@ -171,7 +172,7 @@ const Map: React.FC<MapProps> = ({
             || markerInfo['Asset Type'][0] == "Porous pavers") {
               tempIcon = generateTriangleSVG(typeColor);
               iconFunc = generateTriangleSVG;
-              featureType = "treeIcon";
+              featureType = "triangleIcon";
             }
 
             const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
