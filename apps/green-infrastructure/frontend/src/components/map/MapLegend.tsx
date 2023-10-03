@@ -10,22 +10,44 @@ import generateSquareSVG from '../../images/markers/square';
 import generateStarSVG from '../../images/markers/star';
 import generateTriangleSVG from '../../images/markers/triangle';
 
+
+const Title = styled.h1`
+font-size: 15px;
+font-weight: bold; 
+color: #091F2F;
+text-align: center;
+`;
+
+
+const Heading = styled.h2`
+color: rgba(88, 88, 91, 1);
+text-align: center;
+font-family: Lora;
+font-size: 15px;
+font-weight: 400;
+line-height: 19px;
+letter-spacing: 0em;
+text-align: center;
+`;
+
+
 const MapLegendContainer = styled.div<{ isVisible: boolean }>`
-  background: #BDBDBD;
-  width: 435px;             
+  background: rgba(255, 253, 253, 1);
+  width: 247px;             
   gap: 20px;
   position: relative;
   transition: height 0.3s ease;
   min-height: ${(props) => (props.isVisible ? '20px' : 'auto')};
-  height: ${(props) => (props.isVisible ? '419px' : 'auto')};
+  height: ${(props) => (props.isVisible ? '475px' : 'auto')};
   overflow: hidden;
 `;
 
 const LegendItem = styled.div`
   width: 100%;
   display: flex;
-  gap: 0 40px;
+  gap: 10px;
   align-items: center;
+  margin: 10px;
 `;
 
 
@@ -36,16 +58,60 @@ const LegendImage = styled(Image)`
   display: inline-block;
 `;
 
+const FeatureContainer = styled.div`
+width: 206px;
+height: 284px;
+margin: 10px;
+background: rgba(242, 242, 242, 1);
+`;
+
+
+const StatusContainer = styled.div`
+width: 206px;
+height: 79px;
+margin: 10px;
+background: rgba(242, 242, 242, 1);
+`;
+
+
 const StyledButton = styled.button<{ isSelected: boolean }>`
-  background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#3498db')};
-  height: 38px;
-  width: 370px;
+  background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#fff')};
+  height: 36px;
+  width: 187px;
   color: #fff;
   border: line;
   padding: 10px 20px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  font-family: Montserrat;
+  font-weight: 600;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
   align-items: center;
+  color: rgba(24, 112, 188, 1);
+  display: flex;
+`;
+
+
+
+const StatusButton = styled.button<{ isSelected: boolean }>`
+  // background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#fff')};
+  height: 28px;
+  width: 187px;
+  // color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: center;
+  align-items: center;
+  color: rgba(40, 139, 228, 1);
   display: flex;
 `;
 
@@ -129,8 +195,10 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
         {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
       </ToggleButton>
       <MapLegendContainer isVisible={isVisible}>
-      <h1>Feature Type</h1>
+      <Title>FEATURE TYPE</Title>
+      <Heading>Legend and Description</Heading>
 
+<FeatureContainer>
       <LegendItem>
   {icons && (
     <StyledButton
@@ -138,7 +206,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Bioretention')} 
     >
       <LegendImage src={generateCircleSVG('grey')} alt="Circle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Bioretention
+      BIORETENTION
     </StyledButton>
   )}
 </LegendItem>
@@ -150,7 +218,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Bioswale')} 
     >
       <LegendImage src={generateDiamondSVG('grey')} alt="Diamond" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Bioswale
+      BIOSWALE
     </StyledButton>
   )}
 </LegendItem>
@@ -162,7 +230,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Porous Paving')} 
     >
       <LegendImage src={generateSquareSVG('grey')} alt="Square" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Porous Paving
+      POROUS PAVING
     </StyledButton>
   )}
 </LegendItem>
@@ -175,7 +243,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Tree Trench/Pit')} 
     >
       <LegendImage src={starIcon} alt="Star" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Tree Trench/Pit
+      TREE TRENCH/PIT
     </StyledButton>
   )}
 </LegendItem>
@@ -188,7 +256,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Rain Garden')} 
     >
       <LegendImage src={generateTriangleSVG('grey')} alt="Triangle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Rain Garden
+      RAIN GARDEN
     </StyledButton>
   )}
 </LegendItem>
@@ -200,33 +268,37 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Green Roof/Planter')} 
     >
       <LegendImage src={generateTriangleSVG('grey')} alt="Triangle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Green Roof/Planter
+      GREEN ROOF/PLANTER
     </StyledButton>
   )}
 </LegendItem>
+</FeatureContainer>
+
+<StatusContainer>
 
       <LegendItem>
   {icons && (
-    <StyledButton
+    <StatusButton
       onClick={() => handleStatusClick('Available')} 
       isSelected={selectedStatuses.includes('Available')} 
     >
       <LegendImage src={availableIcon} alt="Available" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Available
-    </StyledButton>
+      AVAILABLE
+    </StatusButton>
   )}
 </LegendItem>
 <LegendItem>
   {icons && (
-    <StyledButton
+    <StatusButton
       onClick={() => handleStatusClick('Adopted')} 
       isSelected={selectedStatuses.includes('Adopted')} 
     >
       <LegendImage src={adoptedIcon} alt="Adopted" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      Adopted
-    </StyledButton>
+      ADOPTED
+    </StatusButton>
   )}
 </LegendItem>
+</StatusContainer>
   </MapLegendContainer>
   </Collapse>
   );
