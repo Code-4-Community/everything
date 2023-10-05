@@ -6,11 +6,8 @@ import c4cLogo from '../images/logos/c4cLogo.png';
 import cityOfBostonLogo from '../images/logos/cityOfBostonLogo.png';
 import profileIcon from '../images/logos/profileIcon.png';
 import { Link } from '@mui/material';
-import { makeStyles } from '@material-ui/core/styles';
 
 function Navbar() {
-  //const classes = useStyles();
-
   return (
     <AppBar
       position="sticky"
