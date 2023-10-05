@@ -1,32 +1,43 @@
 export default function Header() {
+  
+  
 
   return (
     <div
       style={{
         padding: '20px 0px 20px',
         textAlign: "center",
-        fontFamily: "Helvetica",
-        background: "var(--gray-5, #D9D9D9)"
+        background: "rgba(45, 106, 79, 0.88)"
       }}
     >
       <p
         style={{
-          fontSize: '35px',
-          margin: 15
+          fontSize: '30px',
+          margin: 15,
+          fontFamily: "Lora",
+          color: "rgba(255, 253, 253, 1)",
+          fontStyle: "italic",
+          fontWeight: 400
         }}>
         Welcome to
       </p>
       <p style={{
         fontSize: '40px',
-        fontWeight: '700',
-        margin: 15
+        fontWeight: 'bold',
+        margin: 15,
+        fontFamily: 'Montserrat',
+        lineHeight: '49px',
+        color: "rgba(255, 253, 253, 1)"
       }}>
-        Adopt-A-Green-Infrastructure
+        ADOPT-A-GREEN-INFRASTRUCTURE
       </p>
       <p
         style={{
-          fontWeight: "normal",
-          marginTop: 40
+          fontWeight: 400,
+          marginTop: 40,
+          fontFamily: "Lora",
+          color: "rgba(255, 253, 253, 1)",
+          fontSize: '15px'
         }}
       >
         A Partnership Between City of Boston and Code4Community
@@ -35,4 +46,4 @@ export default function Header() {
 
   );
 
-};
+}

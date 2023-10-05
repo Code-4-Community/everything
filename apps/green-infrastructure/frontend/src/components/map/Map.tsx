@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { loader, BOSTON_BOUNDS, BOSTON_PLACE_ID } from '../../constants';
 import { createPopupBoxContent } from '../mapIcon/PopupBox';
 import styled from 'styled-components';
-import { SITES } from '../../GI-Boston-Sites';
+import { SITES } from '../../GIBostonSites';
 import generateCircleSVG from '../../images/markers/circle';
 import generateSquareSVG from '../../images/markers/square';
 import generateDiamondSVG from '../../images/markers/diamond';
@@ -15,42 +15,64 @@ const MapDiv = styled.div`
 `;
 
 
-function filterMarkers(selectedFeatures: string[], markers: google.maps.Marker[], map: google.maps.Map) {
-  // removes all current markers
-  markers.forEach((marker: google.maps.Marker) => marker.setMap(null));
-  //resets markers if selected
-  markers.forEach((marker: google.maps.Marker) => {
-    const featureType = marker.get("featureType"); 
-    // if (assetType === 'Trench drain') {
-    if (selectedFeatures.includes(featureType)) {
+function filterMarkers(selectedFeatures: string[], selectedStatuses: string[], markers: google.maps.Marker[], map: google.maps.Map) {
+  let tempMarkers: google.maps.Marker[] = [];
+  if (selectedFeatures.length == 0) {
+    markers.forEach((marker: google.maps.Marker) => {
       marker.setMap(map);
-    }
-  });
+    })
+    tempMarkers = markers;
+  }
+  else {
+    markers.forEach((marker: google.maps.Marker) => marker.setMap(null));
+    markers.forEach((marker: google.maps.Marker) => {
+      const featureType = marker.get("featureType");
+      if (selectedFeatures.includes(featureType)) {
+        marker.setMap(map);
+        tempMarkers.push(marker)
+      }
+    });
+  }
+
+  // need to apply filtering from site type as well
+  if (selectedStatuses.length == 0) {
+    tempMarkers.forEach((marker: google.maps.Marker) => {
+      marker.setMap(map);
+    })
+  }
+  else {
+    tempMarkers.forEach((marker: google.maps.Marker) => marker.setMap(null));
+    tempMarkers.forEach((marker: google.maps.Marker) => {
+      const status = marker.get("status");
+      console.log(selectedStatuses)
+      if (selectedStatuses.includes(status)) {
+        marker.setMap(map);
+      }
+    });
+  }
 }
 
 
 interface MapProps {
   readonly zoom: number;
-  selectedFeatures: string [];
+  selectedFeatures: string[];
+  selectedStatuses: string[];
 }
 
 
 function randomizeStatus(): string {
-  const statuses = ["Available", "Adopted", "Future"];
+  const statuses = ["Available", "Adopted"];
   return statuses[Math.floor(Math.random() * statuses.length)];
 }
 
 const Map: React.FC<MapProps> = ({
   zoom,
   selectedFeatures,
+  selectedStatuses,
 }) => {
 
 
   const mapRef = useRef<HTMLDivElement | null>(null);
-
-  const [showAvailable, setShowAvailable] = useState(true);
-  const [showAdopted, setShowAdopted] = useState(true);
-  const [showFuture, setShowFuture] = useState(true);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
 
 
@@ -65,9 +87,14 @@ const Map: React.FC<MapProps> = ({
           zoom: 8,
           mapId: '3aa9b524d13192b',
           mapTypeControl: false,
+          fullscreenControl: true,
+          fullscreenControlOptions: {
+            position: google.maps.ControlPosition.LEFT_BOTTOM,
+          },
           zoomControlOptions: {
             position: google.maps.ControlPosition.LEFT_BOTTOM,
           },
+          streetViewControl: false,
           restriction: {
             latLngBounds: BOSTON_BOUNDS,
             strictBounds: false,
@@ -98,86 +125,54 @@ const Map: React.FC<MapProps> = ({
         const markersArray: google.maps.Marker[] = [];
 
 
-
-
         SITES.forEach(markerInfo => {
 
-          if (markerInfo["Lat"] != null && markerInfo["Long"] != null) {
+          const types = ['Bioretention', 'Bioswale', 'Porous Paving', 'Tree Trench/Pit', 'Rain Garden', 'Green Roof/Planter']
 
-            const status = randomizeStatus();
-            
-            
-            let typeColor = "red";
+          if (markerInfo["Lat"] != null && markerInfo["Long"] != null && types.includes(markerInfo['Symbol Type'])) {
 
+            const status = randomizeStatus()
 
-            if (status === "Available") {
+            let typeColor = "";
+            if (status === 'Available') {
               typeColor = "green"
             }
-            else if (status === "Unavailable") {
-              typeColor = "red"
-            }
-            else if (status === "Future") {
-              typeColor = "blue"
+            else if (status === 'Adopted') {
+              typeColor = "yellow"
             }
 
-        
-            
             let tempIcon = "";
-            let featureType = "";
             let iconFunc = null;
 
-            if (markerInfo['Asset Type'][0] == "Bioretention area" 
-            || markerInfo['Asset Type'][0] == "Vegetated swale"
-            || markerInfo['Asset Type'][0] == "Trench drain"
-            || markerInfo['Asset Type'][0] == "Porous asphalt"
-            || markerInfo['Asset Type'][0] == "Comprehensive park renovation"
-            || markerInfo['Asset Type'][0] == "Permeable pavers") {
+            if (markerInfo['Symbol Type'] === 'Bioretention') {
               tempIcon = generateCircleSVG(typeColor);
               iconFunc = generateCircleSVG;
-              featureType = "rainIcon";
             }
-            else if (markerInfo['Asset Type'][0] == "Rain garden" 
-            || markerInfo['Asset Type'][0] == "Plantings/Gardens"
-            || markerInfo['Asset Type'][0] == "Bioswale"
-            || markerInfo['Asset Type'][0] == "Stormwater trench"
-            || markerInfo['Asset Type'][0] == "Tree pit"
-            || markerInfo['Asset Type'][0] == "Porous pavers") {
+            else if (markerInfo['Symbol Type'] === 'Bioswale') {
               tempIcon = generateDiamondSVG(typeColor);
               iconFunc = generateDiamondSVG;
-              featureType = "swaleIcon";
             }
-            else if (markerInfo['Asset Type'][0] == "Planter" 
-            || markerInfo['Asset Type'][0] == "Permeable pavement - resin-bound stone"
-            || markerInfo['Asset Type'][0] == "Tree infiltration trench"
-            || markerInfo['Asset Type'][0] == "Porous concrete slabs"
-            || markerInfo['Asset Type'][0] == "Enhanced tree trench") {
+            else if (markerInfo['Symbol Type'] === 'Porous Paving') {
               tempIcon = generateSquareSVG(typeColor);
               iconFunc = generateSquareSVG;
-              featureType = "bioretentionIcon";
             }
-            else if (markerInfo['Asset Type'][0] == "Stormwater planter" 
-            || markerInfo['Asset Type'][0] == "Green roof"
-            || markerInfo['Asset Type'][0] == "Planter boxes"
-            || markerInfo['Asset Type'][0] == "Tree planter"
-            || markerInfo['Asset Type'][0] == "Porous paving") {
+            else if (markerInfo['Symbol Type'] === 'Rain Garden') {
               tempIcon = generateStarSVG(typeColor);
               iconFunc = generateStarSVG;
-              featureType = "porousIcon";
             }
-            else if (markerInfo['Asset Type'][0] == "Stormwater chambers" 
-            || markerInfo['Asset Type'][0] == "Subsurface gravel filter"
-            || markerInfo['Asset Type'][0] == "Forebay"
-            || markerInfo['Asset Type'][0] == "Enhanced tree pit"
-            || markerInfo['Asset Type'][0] == "Porous pavers") {
+            else if (markerInfo['Symbol Type'] === 'Tree Trench/Pit') {
               tempIcon = generateTriangleSVG(typeColor);
               iconFunc = generateTriangleSVG;
-              featureType = "treeIcon";
+            }
+            else if (markerInfo['Symbol Type'] === 'Green Roof/Planter') {
+              tempIcon = generateTriangleSVG(typeColor);
+              iconFunc = generateTriangleSVG;
             }
 
             const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
 
             const infoWindow = new google.maps.InfoWindow({
-              content: createPopupBoxContent(markerInfo['Project Location'], markerInfo['Address'], 'Available', markerInfo['Asset Type'][0], typeColor, iconFunc as (color: string) => string),
+              content: createPopupBoxContent(markerInfo['Asset Name'], markerInfo['Address'], 'Available', markerInfo['Symbol Type'], typeColor, iconFunc as (color: string) => string),
             });
 
             const customIcon = {
@@ -189,47 +184,38 @@ const Map: React.FC<MapProps> = ({
             };
 
             const marker: google.maps.Marker = new google.maps.Marker({
-              position: { lat: markerInfo["Lat"], lng: markerInfo["Long"] },
+              position: { lat: Number(markerInfo["Lat"]), lng: markerInfo["Long"] },
               map: map,
               icon: customIcon
             });
 
-            marker.set("featureType", featureType);
+            marker.set("featureType", markerInfo['Symbol Type']);
+            marker.set("status", status);
 
-  
             marker.addListener('click', () => {
               if (currentInfoWindow) {
                 currentInfoWindow.close();
               }
-  
               infoWindow.open(map, marker);
               currentInfoWindow = infoWindow;
             });
-
-            
-
             markersArray.push(marker);
-            
-
           }
 
-
-
         })
+
         setMarkers(markersArray);
         console.log(selectedFeatures)
-        filterMarkers(selectedFeatures, markersArray, map);
-        
-
+        filterMarkers(selectedFeatures, selectedStatuses, markersArray, map);
 
         const input = document.getElementById('pac-input') as HTMLInputElement;
 
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
 
-  
+
         autocomplete.addListener('place_changed', () => {
-          
+
           // marker.setVisible(false);
           const place = autocomplete.getPlace();
 
@@ -251,9 +237,9 @@ const Map: React.FC<MapProps> = ({
       });
     }
 
-    
 
-  }, [zoom, selectedFeatures]);
+
+  }, [zoom, selectedFeatures, selectedStatuses]);
 
 
 
