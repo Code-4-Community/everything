@@ -23,7 +23,7 @@ export default function MapPage() {
       <Divider />
       <div style={{ position: 'relative' }}>
         <Map selectedFeatures={selectedFeatures} zoom={8} />
-        <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100, marginTop: 40 }}>
+        <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100, marginTop: 50 }}>
           <MapLegend selectedFeatures={selectedFeatures} setSelectedFeatures={setSelectedFeatures} icons={icons} />
         </div>
         <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 100 }}>

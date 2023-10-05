@@ -15,7 +15,7 @@ const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   position: relative;
   transition: height 0.3s ease;
   min-height: ${(props) => (props.isVisible ? '20px' : 'auto')};
-  height: ${(props) => (props.isVisible ? '380px' : 'auto')};
+  height: ${(props) => (props.isVisible ? '360px' : 'auto')};
   overflow: hidden;
 `;
 
@@ -36,7 +36,7 @@ const LegendImage = styled(Image)`
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
   background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#3498db')};
-  height: 38px;
+  height: 35px;
   width: 370px;
   color: #fff;
   border: line;
