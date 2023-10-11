@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Image } from 'antd';
-import { useState } from 'react';
+import { Checkbox, Image, Space, Typography } from 'antd';
+import { ReactNode, useState } from 'react';
 import { SITE_STATUS_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
@@ -10,31 +10,29 @@ import circleSVG from '../../images/markers/circle.svg';
 import diamondSVG from '../../images/markers/diamond.svg';
 import starSVG from '../../images/markers/star.svg';
 import pentagonSVG from '../../images/markers/pentagon.svg';
-
+import { CheckboxOptionType, CheckboxValueType } from 'antd/es/checkbox/Group';
 
 const Title = styled.h1`
-font-size: 15px;
-font-weight: bold; 
-color: #091F2F;
-text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: #091f2f;
+  text-align: center;
 `;
-
 
 const Heading = styled.h2`
-color: rgba(88, 88, 91, 1);
-text-align: center;
-font-family: Lora;
-font-size: 15px;
-font-weight: 400;
-line-height: 19px;
-letter-spacing: 0em;
-text-align: center;
+  color: rgba(88, 88, 91, 1);
+  text-align: center;
+  font-family: Lora;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: center;
 `;
-
 
 const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   background: rgba(255, 253, 253, 1);
-  width: 247px;             
+  width: 247px;
   gap: 20px;
   position: relative;
   transition: height 0.3s ease;
@@ -51,7 +49,6 @@ const LegendItem = styled.div`
   margin: 10px;
 `;
 
-
 const LegendImage = styled(Image)`
   height: 20px;
   width: 20px;
@@ -60,20 +57,35 @@ const LegendImage = styled(Image)`
 `;
 
 const FeatureContainer = styled.div`
-width: 206px;
-height: 284px;
-margin: 10px;
-background: rgba(242, 242, 242, 1);
+  width: 206px;
+  height: 284px;
+  margin: 10px;
+  background: rgba(242, 242, 242, 1);
 `;
-
 
 const StatusContainer = styled.div`
-width: 206px;
-height: 79px;
-margin: 10px;
-background: rgba(242, 242, 242, 1);
+  width: 206px;
+  height: 79px;
+  margin: 10px;
+  background: rgba(242, 242, 242, 1);
 `;
 
+const StatusCheckbox = styled(Checkbox.Group)<{ isSelected: boolean }>`
+  height: 12px;
+  width: 200px;
+  color: #fff;
+  border: line;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: Montserrat;
+  font-weight: 600;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  align-items: center;
+  display: flex;
+`;
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
   background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#fff')};
@@ -90,32 +102,9 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   letter-spacing: 0em;
   text-align: left;
   align-items: center;
-  color:${(props) => (props.isSelected ? '#fff' : 'rgba(24, 112, 188, 1)')};
+  color: ${(props) => (props.isSelected ? '#fff' : 'rgba(24, 112, 188, 1)')};
   display: flex;
 `;
-
-
-
-const StatusButton = styled.button<{ isSelected: boolean }>`
-  // background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#fff')};
-  height: 28px;
-  width: 187px;
-  // color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  font-family: Montserrat;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 17px;
-  letter-spacing: 0em;
-  text-align: center;
-  align-items: center;
-  color: rgba(40, 139, 228, 1);
-  display: flex;
-`;
-
 
 const ToggleButton = styled.button`
   cursor: pointer;
@@ -126,182 +115,257 @@ const ToggleButton = styled.button`
   z-index: 1;
 `;
 
-
 const CaretDownStyled = styled(CaretDownOutlined)`
-  color: #FFFFFF;
+  color: #ffffff;
 `;
 
 const CaretUpStyled = styled(CaretUpOutlined)`
-  color: #FFFFFF;
+  color: #ffffff;
 `;
+
+const FullWidthSpace = styled(Space)`
+  width: 100%;
+`;
+
+const statusSpan = (statusIcon: string, labelString: string): ReactNode => {
+  return (
+    <FullWidthSpace direction={'horizontal'} size={'small'}>
+      <LegendImage
+        src={statusIcon}
+        alt="Adopted"
+        style={{
+          width: '20px',
+          height: '20px',
+          justifyContent: 'center',
+        }}
+      />
+      <Typography.Text>{labelString.replace(' Sites', '')}</Typography.Text>
+    </FullWidthSpace>
+  );
+};
 
 interface MapLegendProps {
   selectedFeatures: string[];
   setSelectedFeatures: any;
   selectedStatuses: string[];
   setSelectedStatuses: any;
-  icons: string[] | null; 
+  icons: string[] | null;
 }
 
-const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeatures, selectedStatuses, setSelectedStatuses, icons }) => {
-    const [isVisible, setIsVisible] = useState(true);
+const MapLegend: React.FC<MapLegendProps> = ({
+  selectedFeatures,
+  setSelectedFeatures,
+  selectedStatuses,
+  setSelectedStatuses,
+  icons,
+}) => {
+  const [isVisible, setIsVisible] = useState(true);
 
+  const options: CheckboxOptionType[] = SITE_STATUS_ROADMAP.map((option) => {
+    return {
+      label: statusSpan(option.image, option.label),
+      value: option.value,
+    };
+  });
 
-    const toggleShowLegend = () => {
-        setIsVisible((prev) => !prev);
-      };
+  const toggleShowLegend = () => {
+    setIsVisible((prev) => !prev);
+  };
 
-    const [availableIcon, adoptedIcon] =
-      icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
+  const [availableIcon, adoptedIcon] =
+    icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
 
-  
-      const handleFeatureClick = (icon: string) => {
-        // Check if the icon is already selected
-        const isAlreadySelected = selectedFeatures.includes(icon);
-    
-        if (isAlreadySelected) {
-          // Deselect the icon
-          setSelectedFeatures((prevSelectedFeatures: string []) =>
-            prevSelectedFeatures.filter((selected) => selected !== icon)
-          );
-        } else {
-          // Select the icon
-          setSelectedFeatures((prevSelectedFeatures: string []) => [...prevSelectedFeatures, icon]);
-        }
-      };
+  const handleFeatureClick = (icon: string) => {
+    // Check if the icon is already selected
+    const isAlreadySelected = selectedFeatures.includes(icon);
 
-      const handleStatusClick = (icon: string) => {
-        // Check if the icon is already selected
-        const isAlreadySelected = selectedStatuses.includes(icon);
-    
-        if (isAlreadySelected) {
-          // Deselect the icon
-          setSelectedStatuses((prevSelectedStatuses: string []) =>
-            prevSelectedStatuses.filter((selected) => selected !== icon)
-          );
-        } else {
-          // Select the icon
-          setSelectedStatuses((prevSelectedStatuses: string []) => [...prevSelectedStatuses, icon]);
-        }
-      };
+    if (isAlreadySelected) {
+      // Deselect the icon
+      setSelectedFeatures((prevSelectedFeatures: string[]) =>
+        prevSelectedFeatures.filter((selected) => selected !== icon)
+      );
+    } else {
+      // Select the icon
+      setSelectedFeatures((prevSelectedFeatures: string[]) => [
+        ...prevSelectedFeatures,
+        icon,
+      ]);
+    }
+  };
 
-    return (
+  const handleStatusClick = (icon: string, values: CheckboxValueType[]) => {
+    // set selected statuses
+    setSelectedStatuses(values);
+  };
 
-      <Collapse collapsedSize={28} in={isVisible}>
+  return (
+    <Collapse collapsedSize={28} in={isVisible}>
       <ToggleButton onClick={toggleShowLegend}>
         {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
       </ToggleButton>
       <MapLegendContainer isVisible={isVisible}>
-      <Title>FEATURE TYPE</Title>
-      <Heading>Legend and Description</Heading>
+        <Title>FEATURE TYPE</Title>
+        <Heading>Legend and Description</Heading>
 
-<FeatureContainer>
-      <LegendItem>
-  {icons && (
-    <StyledButton
-      onClick={() => handleFeatureClick('Rain Garden')} 
-      isSelected={selectedFeatures.includes('Rain Garden')} 
-    >
-      <LegendImage src={squareSVG} alt="Square" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      RAIN GARDEN
-    </StyledButton>
-  )}
-</LegendItem>
+        <FeatureContainer>
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Rain Garden')}
+                isSelected={selectedFeatures.includes('Rain Garden')}
+              >
+                <LegendImage
+                  src={squareSVG}
+                  alt="Square"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                RAIN GARDEN
+              </StyledButton>
+            )}
+          </LegendItem>
 
-<LegendItem>
-  {icons && (
-    <StyledButton
-      onClick={() => handleFeatureClick('Bioswale')} 
-      isSelected={selectedFeatures.includes('Bioswale')} 
-    >
-      <LegendImage src={triangleSVG} alt="Triangle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      BIOSWALE
-    </StyledButton>
-  )}
-</LegendItem>
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Bioswale')}
+                isSelected={selectedFeatures.includes('Bioswale')}
+              >
+                <LegendImage
+                  src={triangleSVG}
+                  alt="Triangle"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                BIOSWALE
+              </StyledButton>
+            )}
+          </LegendItem>
 
-<LegendItem>
-  {icons && (
-    <StyledButton
-      onClick={() => handleFeatureClick('Bioretention')} 
-      isSelected={selectedFeatures.includes('Bioretention')} 
-    >
-      <LegendImage src={circleSVG} alt="Circle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      BIORETENTION
-    </StyledButton>
-  )}
-</LegendItem>
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Bioretention')}
+                isSelected={selectedFeatures.includes('Bioretention')}
+              >
+                <LegendImage
+                  src={circleSVG}
+                  alt="Circle"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                BIORETENTION
+              </StyledButton>
+            )}
+          </LegendItem>
 
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Porous Paving')}
+                isSelected={selectedFeatures.includes('Porous Paving')}
+              >
+                <LegendImage
+                  src={diamondSVG}
+                  alt="Diamond"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                POROUS PAVING
+              </StyledButton>
+            )}
+          </LegendItem>
 
-<LegendItem>
-  {icons && (
-    <StyledButton
-      onClick={() => handleFeatureClick('Porous Paving')} 
-      isSelected={selectedFeatures.includes('Porous Paving')} 
-    >
-      <LegendImage src={diamondSVG} alt="Diamond" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      POROUS PAVING
-    </StyledButton>
-  )}
-</LegendItem>
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Tree Trench/Pit')}
+                isSelected={selectedFeatures.includes('Tree Trench/Pit')}
+              >
+                <LegendImage
+                  src={starSVG}
+                  alt="Star"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                TREE TRENCH/PIT
+              </StyledButton>
+            )}
+          </LegendItem>
 
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Green Roof/Planter')}
+                isSelected={selectedFeatures.includes('Green Roof/Planter')}
+              >
+                <LegendImage
+                  src={pentagonSVG}
+                  alt="Pentagon"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                GREEN ROOF/PLANTER
+              </StyledButton>
+            )}
+          </LegendItem>
+        </FeatureContainer>
 
-<LegendItem>
-  {icons && (
-    <StyledButton
-      onClick={() => handleFeatureClick('Tree Trench/Pit')} 
-      isSelected={selectedFeatures.includes('Tree Trench/Pit')} 
-    >
-      <LegendImage src={starSVG} alt="Star" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      TREE TRENCH/PIT
-    </StyledButton>
-  )}
-</LegendItem>
-
-<LegendItem>
-  {icons && (
-    <StyledButton
-      onClick={() => handleFeatureClick('Green Roof/Planter')} 
-      isSelected={selectedFeatures.includes('Green Roof/Planter')} 
-    >
-      <LegendImage src={pentagonSVG} alt="Pentagon" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      GREEN ROOF/PLANTER
-    </StyledButton>
-  )}
-</LegendItem>
-</FeatureContainer>
-
-<StatusContainer>
-
-      <LegendItem>
-  {icons && (
-    <StatusButton
-      onClick={() => handleStatusClick('Available')} 
-      isSelected={selectedStatuses.includes('Available')} 
-    >
-      <LegendImage src={availableIcon} alt="Available" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      AVAILABLE
-    </StatusButton>
-  )}
-</LegendItem>
-<LegendItem>
-  {icons && (
-    <StatusButton
-      onClick={() => handleStatusClick('Adopted')} 
-      isSelected={selectedStatuses.includes('Adopted')} 
-    >
-      <LegendImage src={adoptedIcon} alt="Adopted" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      ADOPTED
-    </StatusButton>
-  )}
-</LegendItem>
-</StatusContainer>
-  </MapLegendContainer>
-  </Collapse>
+        <StatusContainer>
+          <LegendItem>
+            {icons && (
+              <StatusCheckbox
+                onChange={(values: CheckboxValueType[]) =>
+                  handleStatusClick('Adopted', values)
+                }
+                value={selectedStatuses}
+                options={options}
+              />
+            )}
+          </LegendItem>
+          {/* <LegendItem>
+            {icons && (
+              <StatusCheckbox
+                onChange={(values: CheckboxValueType[]) =>
+                  handleStatusClick('Available', values)
+                }
+                isSelected={selectedStatuses.includes('Adopted')}
+              >
+                <LegendImage
+                  src={adoptedIcon}
+                  alt="Adopted"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                ADOPTED
+              </StatusCheckbox>
+            )}
+          </LegendItem> */}
+        </StatusContainer>
+      </MapLegendContainer>
+    </Collapse>
   );
 };
 
-
-
 export default MapLegend;
-
