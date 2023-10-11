@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import { Checkbox, Image } from 'antd';
 import { useState } from 'react';
-import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
+import { SITE_STATUS_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
-import generateCircleSVG from '../../images/markers/circle';
-import generateDiamondSVG from '../../images/markers/diamond';
-import generateSquareSVG from '../../images/markers/square';
-import generateStarSVG from '../../images/markers/star';
-import generateTriangleSVG from '../../images/markers/triangle';
-import { CheckboxValueType } from 'antd/es/checkbox/Group';
+import squareSVG from '../../images/markers/square.svg';
+import triangleSVG from '../../images/markers/triangle.svg';
+import circleSVG from '../../images/markers/circle.svg';
+import diamondSVG from '../../images/markers/diamond.svg';
+import starSVG from '../../images/markers/star.svg';
+import pentagonSVG from '../../images/markers/pentagon.svg';
 
 const Title = styled.h1`
   font-size: 15px;
@@ -102,7 +102,7 @@ const StyledButton = styled.div`
   letter-spacing: 0em;
   text-align: left;
   align-items: center;
-  color: rgba(24, 112, 188, 1);
+  color: ${(props) => (props.isSelected ? '#fff' : 'rgba(24, 112, 188, 1)')};
   display: flex;
 `;
 
@@ -167,8 +167,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
   const [availableIcon, adoptedIcon, futureIcon] =
     icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
 
-  const [circleIcon, diamondIcon, squareIcon, starIcon, triangleIcon] =
-    icons ?? SITE_TYPE_ROADMAP.map((option) => option.image);
+  const [availableIcon, adoptedIcon] =
+    icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
 
   const handleFeatureClick = (icon: string) => {
     // Check if the icon is already selected
@@ -188,28 +188,6 @@ const MapLegend: React.FC<MapLegendProps> = ({
     }
   };
 
-  const handleStatusClick = (
-    icon: string,
-    checkedValues: CheckboxValueType[]
-  ) => {
-    console.log(checkedValues);
-    // Check if the icon is already selected
-    const isAlreadySelected = selectedStatuses.includes(icon);
-
-    if (isAlreadySelected) {
-      // Deselect the icon
-      setSelectedStatuses((prevSelectedStatuses: string[]) =>
-        prevSelectedStatuses.filter((selected) => selected !== icon)
-      );
-    } else {
-      // Select the icon
-      setSelectedStatuses((prevSelectedStatuses: string[]) => [
-        ...prevSelectedStatuses,
-        icon,
-      ]);
-    }
-  };
-
   return (
     <Collapse collapsedSize={28} in={isVisible}>
       <ToggleButton onClick={toggleShowLegend}>
@@ -223,11 +201,51 @@ const MapLegend: React.FC<MapLegendProps> = ({
           <LegendItem>
             {icons && (
               <StyledButton
+                onClick={() => handleFeatureClick('Rain Garden')}
+                isSelected={selectedFeatures.includes('Rain Garden')}
+              >
+                <LegendImage
+                  src={squareSVG}
+                  alt="Square"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                RAIN GARDEN
+              </StyledButton>
+            )}
+          </LegendItem>
+
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Bioswale')}
+                isSelected={selectedFeatures.includes('Bioswale')}
+              >
+                <LegendImage
+                  src={triangleSVG}
+                  alt="Triangle"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                BIOSWALE
+              </StyledButton>
+            )}
+          </LegendItem>
+
+          <LegendItem>
+            {icons && (
+              <StyledButton
                 onClick={() => handleFeatureClick('Bioretention')}
                 isSelected={selectedFeatures.includes('Bioretention')}
               >
                 <LegendImage
-                  src={generateCircleSVG('grey')}
+                  src={circleSVG}
                   alt="Circle"
                   style={{
                     width: '20px',
@@ -243,32 +261,12 @@ const MapLegend: React.FC<MapLegendProps> = ({
           <LegendItem>
             {icons && (
               <StyledButton
-                onClick={() => handleFeatureClick('Bioswale')}
-                isSelected={selectedFeatures.includes('Bioswale')}
-              >
-                <LegendImage
-                  src={generateDiamondSVG('grey')}
-                  alt="Diamond"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    justifyContent: 'center',
-                  }}
-                />
-                BIOSWALE
-              </StyledButton>
-            )}
-          </LegendItem>
-
-          <LegendItem>
-            {icons && (
-              <StyledButton
                 onClick={() => handleFeatureClick('Porous Paving')}
                 isSelected={selectedFeatures.includes('Porous Paving')}
               >
                 <LegendImage
-                  src={generateSquareSVG('grey')}
-                  alt="Square"
+                  src={diamondSVG}
+                  alt="Diamond"
                   style={{
                     width: '20px',
                     height: '20px',
@@ -303,19 +301,19 @@ const MapLegend: React.FC<MapLegendProps> = ({
           <LegendItem>
             {icons && (
               <StyledButton
-                onClick={() => handleFeatureClick('Rain Garden')}
-                isSelected={selectedFeatures.includes('Rain Garden')}
+                onClick={() => handleFeatureClick('Tree Trench/Pit')}
+                isSelected={selectedFeatures.includes('Tree Trench/Pit')}
               >
                 <LegendImage
-                  src={generateTriangleSVG('grey')}
-                  alt="Triangle"
+                  src={starSVG}
+                  alt="Star"
                   style={{
                     width: '20px',
                     height: '20px',
                     justifyContent: 'center',
                   }}
                 />
-                RAIN GARDEN
+                TREE TRENCH/PIT
               </StyledButton>
             )}
           </LegendItem>
@@ -327,8 +325,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Green Roof/Planter')}
               >
                 <LegendImage
-                  src={generateTriangleSVG('grey')}
-                  alt="Triangle"
+                  src={pentagonSVG}
+                  alt="Pentagon"
                   style={{
                     width: '20px',
                     height: '20px',
@@ -344,10 +342,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
         <StatusContainer>
           <LegendItem>
             {icons && (
-              <StatusCheckbox
-                onChange={(checkedValues: CheckboxValueType[]) =>
-                  handleStatusClick('Adopted', checkedValues)
-                }
+              <StatusButton
+                onClick={() => handleStatusClick('Available')}
                 isSelected={selectedStatuses.includes('Available')}
               >
                 <LegendImage
@@ -360,15 +356,13 @@ const MapLegend: React.FC<MapLegendProps> = ({
                   }}
                 />
                 AVAILABLE
-              </StatusCheckbox>
+              </StatusButton>
             )}
           </LegendItem>
           <LegendItem>
             {icons && (
-              <StatusCheckbox
-                onChange={(checkedValues: CheckboxValueType[]) =>
-                  handleStatusClick('Adopted', checkedValues)
-                }
+              <StatusButton
+                onClick={() => handleStatusClick('Adopted')}
                 isSelected={selectedStatuses.includes('Adopted')}
               >
                 <LegendImage
@@ -381,7 +375,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
                   }}
                 />
                 ADOPTED
-              </StatusCheckbox>
+              </StatusButton>
             )}
           </LegendItem>
         </StatusContainer>
