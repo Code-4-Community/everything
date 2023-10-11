@@ -341,27 +341,6 @@ const MapLegend: React.FC<MapLegendProps> = ({
               />
             )}
           </LegendItem>
-          {/* <LegendItem>
-            {icons && (
-              <StatusCheckbox
-                onChange={(values: CheckboxValueType[]) =>
-                  handleStatusClick('Available', values)
-                }
-                isSelected={selectedStatuses.includes('Adopted')}
-              >
-                <LegendImage
-                  src={adoptedIcon}
-                  alt="Adopted"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    justifyContent: 'center',
-                  }}
-                />
-                ADOPTED
-              </StatusCheckbox>
-            )}
-          </LegendItem> */}
         </StatusContainer>
       </MapLegendContainer>
     </Collapse>
