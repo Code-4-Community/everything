@@ -78,6 +78,10 @@ const StatusCheckbox = styled(Checkbox.Group)<{ isSelected: boolean }>`
   padding: 10px 20px;
   cursor: pointer;
   display: flex;
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+  }
 `;
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
