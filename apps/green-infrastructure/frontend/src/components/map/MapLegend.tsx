@@ -199,7 +199,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
     }
   };
 
-  const handleStatusClick = (icon: string, values: CheckboxValueType[]) => {
+  const handleStatusClick = (values: CheckboxValueType[]) => {
     // set selected statuses
     setSelectedStatuses(values);
   };
@@ -340,7 +340,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
             {icons && (
               <StatusCheckbox
                 onChange={(values: CheckboxValueType[]) =>
-                  handleStatusClick('Adopted', values)
+                  handleStatusClick(values)
                 }
                 value={selectedStatuses}
                 options={options}
