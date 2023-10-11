@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Image } from 'antd';
 import { useState } from 'react';
-import { SITE_STATUS_ROADMAP, SITE_TYPE_ROADMAP } from '../../constants';
+import { SITE_STATUS_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
 import squareSVG from '../../images/markers/square.svg';
@@ -151,14 +151,10 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
         setIsVisible((prev) => !prev);
       };
 
-    const [availableIcon, adoptedIcon, futureIcon] =
+    const [availableIcon, adoptedIcon] =
       icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
 
-    const [circleIcon, diamondIcon, squareIcon, starIcon, triangleIcon] =
-      icons ?? SITE_TYPE_ROADMAP.map((option) => option.image);
-
-
-
+  
       const handleFeatureClick = (icon: string) => {
         // Check if the icon is already selected
         const isAlreadySelected = selectedFeatures.includes(icon);
@@ -253,11 +249,11 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 <LegendItem>
   {icons && (
     <StyledButton
-      onClick={() => handleFeatureClick('Tree Trench/Planter')} 
-      isSelected={selectedFeatures.includes('Tree Trench/Planter')} 
+      onClick={() => handleFeatureClick('Tree Trench/Pit')} 
+      isSelected={selectedFeatures.includes('Tree Trench/Pit')} 
     >
       <LegendImage src={starSVG} alt="Star" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      TREE TRENCH/PLANTER
+      TREE TRENCH/PIT
     </StyledButton>
   )}
 </LegendItem>

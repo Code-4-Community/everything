@@ -19,7 +19,7 @@ const MapDiv = styled.div`
 
 function filterMarkers(selectedFeatures: string[], selectedStatuses: string[], markers: google.maps.Marker[], map: google.maps.Map) {
   let tempMarkers: google.maps.Marker[] = [];
-  if (selectedFeatures.length == 0) {
+  if (selectedFeatures.length === 0) {
     markers.forEach((marker: google.maps.Marker) => {
       marker.setMap(map);
     })
@@ -37,7 +37,7 @@ function filterMarkers(selectedFeatures: string[], selectedStatuses: string[], m
   }
 
   // need to apply filtering from site type as well
-  if (selectedStatuses.length == 0) {
+  if (selectedStatuses.length === 0) {
     tempMarkers.forEach((marker: google.maps.Marker) => {
       marker.setMap(map);
     })
@@ -129,7 +129,7 @@ const Map: React.FC<MapProps> = ({
 
         SITES.forEach(markerInfo => {
 
-          const types = ['Rain Garden', 'Bioswale', 'Bioretention', 'Porous Paving', 'Tree Trench/Planter', 'Green Roof/Planter']
+          const types = ['Rain Garden', 'Bioswale', 'Bioretention', 'Porous Paving', 'Tree Trench/Pit', 'Green Roof/Planter']
 
           if (markerInfo["Lat"] != null && markerInfo["Long"] != null && types.includes(markerInfo['Symbol Type'])) {
 
@@ -162,7 +162,7 @@ const Map: React.FC<MapProps> = ({
               tempIcon = generateDiamondSVG(typeColor);
               iconFunc = generateDiamondSVG;
             }
-            else if (markerInfo['Symbol Type'] === 'Tree Trench/Planter') {
+            else if (markerInfo['Symbol Type'] === 'Tree Trench/Pit') {
               tempIcon = generateStarSVG(typeColor);
               iconFunc = generateStarSVG;
             }
