@@ -8,6 +8,8 @@ import generateSquareSVG from '../../images/markers/square';
 import generateDiamondSVG from '../../images/markers/diamond';
 import generateTriangleSVG from '../../images/markers/triangle';
 import generateStarSVG from '../../images/markers/star';
+import generatePentagonSVG from '../../images/markers/pentagon';
+
 
 
 const MapDiv = styled.div`
@@ -127,7 +129,7 @@ const Map: React.FC<MapProps> = ({
 
         SITES.forEach(markerInfo => {
 
-          const types = ['Bioretention', 'Bioswale', 'Porous Paving', 'Tree Trench/Pit', 'Rain Garden', 'Green Roof/Planter']
+          const types = ['Rain Garden', 'Bioswale', 'Bioretention', 'Porous Paving', 'Tree Trench/Planter', 'Green Roof/Planter']
 
           if (markerInfo["Lat"] != null && markerInfo["Long"] != null && types.includes(markerInfo['Symbol Type'])) {
 
@@ -144,29 +146,29 @@ const Map: React.FC<MapProps> = ({
             let tempIcon = "";
             let iconFunc = null;
 
-            if (markerInfo['Symbol Type'] === 'Bioretention') {
-              tempIcon = generateCircleSVG(typeColor);
-              iconFunc = generateCircleSVG;
-            }
-            else if (markerInfo['Symbol Type'] === 'Bioswale') {
-              tempIcon = generateDiamondSVG(typeColor);
-              iconFunc = generateDiamondSVG;
-            }
-            else if (markerInfo['Symbol Type'] === 'Porous Paving') {
+            if (markerInfo['Symbol Type'] === 'Rain Garden') {
               tempIcon = generateSquareSVG(typeColor);
               iconFunc = generateSquareSVG;
             }
-            else if (markerInfo['Symbol Type'] === 'Rain Garden') {
+            else if (markerInfo['Symbol Type'] === 'Bioswale') {
+              tempIcon = generateTriangleSVG(typeColor);
+              iconFunc = generateTriangleSVG;
+            }
+            else if (markerInfo['Symbol Type'] === 'Bioretention') {
+              tempIcon = generateCircleSVG(typeColor);
+              iconFunc = generateCircleSVG;
+            }
+            else if (markerInfo['Symbol Type'] === 'Porous Paving') {
+              tempIcon = generateDiamondSVG(typeColor);
+              iconFunc = generateDiamondSVG;
+            }
+            else if (markerInfo['Symbol Type'] === 'Tree Trench/Planter') {
               tempIcon = generateStarSVG(typeColor);
               iconFunc = generateStarSVG;
             }
-            else if (markerInfo['Symbol Type'] === 'Tree Trench/Pit') {
-              tempIcon = generateTriangleSVG(typeColor);
-              iconFunc = generateTriangleSVG;
-            }
             else if (markerInfo['Symbol Type'] === 'Green Roof/Planter') {
-              tempIcon = generateTriangleSVG(typeColor);
-              iconFunc = generateTriangleSVG;
+              tempIcon = generatePentagonSVG(typeColor);
+              iconFunc = generatePentagonSVG;
             }
 
             const typeIcon = `data:image/svg+xml;utf8,${encodeURIComponent(tempIcon)}`;
