@@ -77,13 +77,6 @@ const StatusCheckbox = styled(Checkbox.Group)<{ isSelected: boolean }>`
   border: line;
   padding: 10px 20px;
   cursor: pointer;
-  font-size: 14px;
-  font-family: Montserrat;
-  font-weight: 600;
-  line-height: 17px;
-  letter-spacing: 0em;
-  text-align: left;
-  align-items: center;
   display: flex;
 `;
 
@@ -139,7 +132,20 @@ const statusSpan = (statusIcon: string, labelString: string): ReactNode => {
           justifyContent: 'center',
         }}
       />
-      <Typography.Text>{labelString.replace(' Sites', '')}</Typography.Text>
+      <Typography.Text
+        style={{
+          fontSize: '14px',
+          fontFamily: 'Montserrat',
+          fontWeight: '600',
+          lineHeight: '17px',
+          letterSpacing: '0em',
+          textAlign: 'left',
+          alignItems: 'center',
+          color: 'rgba(24, 112, 188, 1)',
+        }}
+      >
+        {labelString.replace(' Sites', '').toUpperCase()}
+      </Typography.Text>
     </FullWidthSpace>
   );
 };
