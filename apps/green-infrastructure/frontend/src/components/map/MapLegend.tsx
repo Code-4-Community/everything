@@ -156,8 +156,6 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
     const [circleIcon, diamondIcon, squareIcon, starIcon, triangleIcon] =
       icons ?? SITE_TYPE_ROADMAP.map((option) => option.image);
 
-
-
       const handleFeatureClick = (icon: string) => {
         // Check if the icon is already selected
         const isAlreadySelected = selectedFeatures.includes(icon);
@@ -211,12 +209,12 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
   )}
 </LegendItem>
 
+
 <LegendItem>
   {icons && (
     <StyledButton
       onClick={() => handleFeatureClick('Bioswale')} 
-      isSelected={selectedFeatures.includes('Bioswale')} 
-    >
+      isSelected={selectedFeatures.includes('Bioswale')} >
       <LegendImage src={generateDiamondSVG('grey')} alt="Diamond" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
       BIOSWALE
     </StyledButton>
@@ -242,7 +240,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       onClick={() => handleFeatureClick('Tree Trench/Pit')} 
       isSelected={selectedFeatures.includes('Tree Trench/Pit')} 
     >
-      <LegendImage src={starIcon} alt="Star" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
+      <LegendImage src={generateStarSVG('grey')} alt="Star" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
       TREE TRENCH/PIT
     </StyledButton>
   )}
@@ -291,8 +289,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
   {icons && (
     <StatusButton
       onClick={() => handleStatusClick('Adopted')} 
-      isSelected={selectedStatuses.includes('Adopted')} 
-    >
+      isSelected={selectedStatuses.includes('Adopted')}>
       <LegendImage src={adoptedIcon} alt="Adopted" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
       ADOPTED
     </StatusButton>
