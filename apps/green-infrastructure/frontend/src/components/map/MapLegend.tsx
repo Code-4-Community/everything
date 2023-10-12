@@ -240,11 +240,49 @@ const MapLegend: React.FC<MapLegendProps> = ({
           <LegendItem>
             {icons && (
               <StyledButton
+                onClick={() => handleFeatureClick('Rain Garden')}
+                isSelected={selectedFeatures.includes('Rain Garden')}
+              >
+                <LegendImage
+                  src={squareSVG}
+                  alt="Square"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                RAIN GARDEN
+              </StyledButton>
+            )}
+          </LegendItem>
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Bioswale')}
+                isSelected={selectedFeatures.includes('Bioswale')}
+              >
+                <LegendImage
+                  src={triangleSVG}
+                  alt="Triangle"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                BIOSWALE
+              </StyledButton>
+            )}
+          </LegendItem>
+          <LegendItem>
+            {icons && (
+              <StyledButton
                 onClick={() => handleFeatureClick('Bioretention')}
                 isSelected={selectedFeatures.includes('Bioretention')}
               >
                 <LegendImage
-                  src={generateCircleSVG('grey')}
+                  src={circleSVG}
                   alt="Circle"
                   style={{
                     width: '20px',
@@ -256,27 +294,6 @@ const MapLegend: React.FC<MapLegendProps> = ({
               </StyledButton>
             )}
           </LegendItem>
-
-          <LegendItem>
-            {icons && (
-              <StyledButton
-                onClick={() => handleFeatureClick('Bioswale')}
-                isSelected={selectedFeatures.includes('Bioswale')}
-              >
-                <LegendImage
-                  src={generateDiamondSVG('grey')}
-                  alt="Diamond"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    justifyContent: 'center',
-                  }}
-                />
-                BIOSWALE
-              </StyledButton>
-            )}
-          </LegendItem>
-
           <LegendItem>
             {icons && (
               <StyledButton
@@ -284,8 +301,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Porous Paving')}
               >
                 <LegendImage
-                  src={generateSquareSVG('grey')}
-                  alt="Square"
+                  src={diamondSVG}
+                  alt="Diamond"
                   style={{
                     width: '20px',
                     height: '20px',
@@ -303,7 +320,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Tree Trench/Pit')}
               >
                 <LegendImage
-                  src={generateStarSVG('grey')}
+                  src={starSVG}
                   alt="Star"
                   style={{
                     width: '20px',
@@ -315,27 +332,6 @@ const MapLegend: React.FC<MapLegendProps> = ({
               </StyledButton>
             )}
           </LegendItem>
-
-          <LegendItem>
-            {icons && (
-              <StyledButton
-                onClick={() => handleFeatureClick('Rain Garden')}
-                isSelected={selectedFeatures.includes('Rain Garden')}
-              >
-                <LegendImage
-                  src={generateTriangleSVG('grey')}
-                  alt="Triangle"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    justifyContent: 'center',
-                  }}
-                />
-                RAIN GARDEN
-              </StyledButton>
-            )}
-          </LegendItem>
-
           <LegendItem>
             {icons && (
               <StyledButton
@@ -343,8 +339,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Green Roof/Planter')}
               >
                 <LegendImage
-                  src={generateTriangleSVG('grey')}
-                  alt="Triangle"
+                  src={pentagonSVG}
+                  alt="Pentagon"
                   style={{
                     width: '20px',
                     height: '20px',
@@ -370,25 +366,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
           </LegendItem>
         </StatusContainer>
       </MapLegendContainer>
-      <ToggleContainer isVisible={isVisible} onClick={toggleShowLegend}>
-        {isVisible ? (
-          <ArrowBackIosIcon
-            style={{
-              transform: 'translateY(-30%) rotate(-90deg)',
-              color: 'white',
-            }}
-          />
-        ) : (
-          <ArrowBackIosIcon
-            style={{
-              transform: 'translateY(15%) rotate(90deg)',
-              color: 'white',
-            }}
-          />
-        )}
-      </ToggleContainer>
     </Collapse>
   );
 };
-
 export default MapLegend;
