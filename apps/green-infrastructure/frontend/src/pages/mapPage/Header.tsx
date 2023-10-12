@@ -23,24 +23,13 @@ export default function Header() {
       </p>
       <p style={{
         fontSize: '40px',
-        fontWeight: 'bold',
+        fontWeight: 700,
         margin: 15,
         fontFamily: 'Montserrat',
         lineHeight: '49px',
         color: "rgba(255, 253, 253, 1)"
       }}>
         ADOPT-A-GREEN-INFRASTRUCTURE
-      </p>
-      <p
-        style={{
-          fontWeight: 400,
-          marginTop: 40,
-          fontFamily: "Lora",
-          color: "rgba(255, 253, 253, 1)",
-          fontSize: '15px'
-        }}
-      >
-        A Partnership Between City of Boston and Code4Community
       </p>
     </div>
 
