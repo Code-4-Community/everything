@@ -4,6 +4,12 @@ import { useState } from 'react';
 import { SITE_STATUS_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
+import ArrowBackIosIcon  from '@mui/icons-material/ArrowBackIos';
+import generateCircleSVG from '../../images/markers/circle';
+import generateDiamondSVG from '../../images/markers/diamond';
+import generateSquareSVG from '../../images/markers/square';
+import generateStarSVG from '../../images/markers/star';
+import generateTriangleSVG from '../../images/markers/triangle';
 import squareSVG from '../../images/markers/square.svg';
 import triangleSVG from '../../images/markers/triangle.svg';
 import circleSVG from '../../images/markers/circle.svg';
@@ -117,13 +123,18 @@ const StatusButton = styled.button<{ isSelected: boolean }>`
 `;
 
 
-const ToggleButton = styled.button`
+const ToggleContainer = styled.div<{ isVisible: boolean }>`
   cursor: pointer;
   font-size: 18px;
-  bottom: 1px;
-  left: 200px;
   position: absolute;
+  width: 247px;
+  height: 20px;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  background: #091F2F;
+  bottom: 0px;
+  
 `;
 
 
@@ -187,10 +198,7 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 
     return (
 
-      <Collapse collapsedSize={28} in={isVisible}>
-      <ToggleButton onClick={toggleShowLegend}>
-        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
-      </ToggleButton>
+      <Collapse collapsedSize={20} in={isVisible}>
       <MapLegendContainer isVisible={isVisible}>
       <Title>FEATURE TYPE</Title>
       <Heading>Legend and Description</Heading>
@@ -297,6 +305,12 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 </LegendItem>
 </StatusContainer>
   </MapLegendContainer>
+  <ToggleContainer isVisible={isVisible} onClick={toggleShowLegend}>
+  {isVisible? <ArrowBackIosIcon  style={{
+    transform: 'translateY(-30%) rotate(-90deg)',
+    color: 'white'}} /> : <ArrowBackIosIcon style={{transform: 'translateY(15%) rotate(90deg)',
+    color: 'white'}} />}
+  </ToggleContainer>
   </Collapse>
   );
 };
