@@ -1,16 +1,9 @@
 import styled from 'styled-components';
-import { Checkbox, Image, Space, Typography } from 'antd';
-import { ReactNode, useState } from 'react';
+import { Image } from 'antd';
+import { useState } from 'react';
 import { SITE_STATUS_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
-import squareSVG from '../../images/markers/square.svg';
-import triangleSVG from '../../images/markers/triangle.svg';
-import circleSVG from '../../images/markers/circle.svg';
-import diamondSVG from '../../images/markers/diamond.svg';
-import starSVG from '../../images/markers/star.svg';
-import pentagonSVG from '../../images/markers/pentagon.svg';
-import { CheckboxOptionType, CheckboxValueType } from 'antd/es/checkbox/Group';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import generateCircleSVG from '../../images/markers/circle';
 import generateDiamondSVG from '../../images/markers/diamond';
@@ -46,6 +39,7 @@ const MapLegendContainer = styled.div<{ isVisible: boolean }>`
   height: ${(props) => (props.isVisible ? '475px' : 'auto')};
   overflow: hidden;
 `;
+
 const LegendItem = styled.div`
   width: 100%;
   display: flex;
@@ -60,6 +54,7 @@ const LegendImage = styled(Image)`
   justify-content: center;
   display: inline-block;
 `;
+
 const FeatureContainer = styled.div`
   width: 206px;
   height: 284px;
@@ -72,19 +67,6 @@ const StatusContainer = styled.div`
   height: 79px;
   margin: 10px;
   background: rgba(242, 242, 242, 1);
-`;
-const StatusCheckbox = styled(Checkbox.Group)`
-  height: 12px;
-  width: 200px;
-  color: #fff;
-  border: line;
-  padding: 10px 20px;
-  cursor: pointer;
-  display: flex;
-  .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #e74c3c;
-    border-color: #e74c3c;
-  }
 `;
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
@@ -102,10 +84,6 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   letter-spacing: 0em;
   text-align: left;
   align-items: center;
-  color: ${(props) => (props.isSelected ? '#fff' : 'rgba(24, 112, 188, 1)')};
-  display: flex;
-`;
-const ToggleButton = styled.button`
   color: rgba(24, 112, 188, 1);
   display: flex;
 `;
@@ -133,9 +111,9 @@ const StatusButton = styled.button<{ isSelected: boolean }>`
 const ToggleContainer = styled.div<{ isVisible: boolean }>`
   cursor: pointer;
   font-size: 18px;
-  bottom: 1px;
-  left: 200px;
   position: absolute;
+  width: 247px;
+  height: 20px;
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -146,41 +124,11 @@ const ToggleContainer = styled.div<{ isVisible: boolean }>`
 const CaretDownStyled = styled(CaretDownOutlined)`
   color: #ffffff;
 `;
+
 const CaretUpStyled = styled(CaretUpOutlined)`
   color: #ffffff;
 `;
-const FullWidthSpace = styled(Space)`
-  width: 100%;
-`;
-const statusSpan = (statusIcon: string, labelString: string): ReactNode => {
-  return (
-    <FullWidthSpace direction={'horizontal'} size={'small'}>
-      <LegendImage
-        src={statusIcon}
-        alt="Adopted"
-        style={{
-          width: '20px',
-          height: '20px',
-          justifyContent: 'center',
-        }}
-      />
-      <Typography.Text
-        style={{
-          fontSize: '14px',
-          fontFamily: 'Montserrat',
-          fontWeight: '600',
-          lineHeight: '17px',
-          letterSpacing: '0em',
-          textAlign: 'left',
-          alignItems: 'center',
-          color: 'rgba(24, 112, 188, 1)',
-        }}
-      >
-        {labelString.replace(' Sites', '').toUpperCase()}
-      </Typography.Text>
-    </FullWidthSpace>
-  );
-};
+
 interface MapLegendProps {
   selectedFeatures: string[];
   setSelectedFeatures: any;
@@ -197,20 +145,21 @@ const MapLegend: React.FC<MapLegendProps> = ({
   icons,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const options: CheckboxOptionType[] = SITE_STATUS_ROADMAP.map((option) => {
-    return {
-      label: statusSpan(option.image, option.label),
-      value: option.value,
-    };
-  });
+
   const toggleShowLegend = () => {
     setIsVisible((prev) => !prev);
   };
-  const [availableIcon, adoptedIcon] =
+
+  const [availableIcon, adoptedIcon, futureIcon] =
     icons ?? SITE_STATUS_ROADMAP.map((option) => option.image);
+
+  const [circleIcon, diamondIcon, squareIcon, starIcon, triangleIcon] =
+    icons ?? SITE_TYPE_ROADMAP.map((option) => option.image);
+
   const handleFeatureClick = (icon: string) => {
     // Check if the icon is already selected
     const isAlreadySelected = selectedFeatures.includes(icon);
+
     if (isAlreadySelected) {
       // Deselect the icon
       setSelectedFeatures((prevSelectedFeatures: string[]) =>
@@ -224,57 +173,32 @@ const MapLegend: React.FC<MapLegendProps> = ({
       ]);
     }
   };
-  const handleStatusClick = (values: CheckboxValueType[]) => {
-    // set selected statuses
-    setSelectedStatuses(values);
+
+  const handleStatusClick = (icon: string) => {
+    // Check if the icon is already selected
+    const isAlreadySelected = selectedStatuses.includes(icon);
+
+    if (isAlreadySelected) {
+      // Deselect the icon
+      setSelectedStatuses((prevSelectedStatuses: string[]) =>
+        prevSelectedStatuses.filter((selected) => selected !== icon)
+      );
+    } else {
+      // Select the icon
+      setSelectedStatuses((prevSelectedStatuses: string[]) => [
+        ...prevSelectedStatuses,
+        icon,
+      ]);
+    }
   };
+
   return (
-    <Collapse collapsedSize={28} in={isVisible}>
-      <ToggleButton onClick={toggleShowLegend}>
-        {isVisible ? <CaretDownStyled /> : <CaretUpStyled />}
-      </ToggleButton>
+    <Collapse collapsedSize={20} in={isVisible}>
       <MapLegendContainer isVisible={isVisible}>
         <Title>FEATURE TYPE</Title>
         <Heading>Legend and Description</Heading>
+
         <FeatureContainer>
-          <LegendItem>
-            {icons && (
-              <StyledButton
-                onClick={() => handleFeatureClick('Rain Garden')}
-                isSelected={selectedFeatures.includes('Rain Garden')}
-              >
-                <LegendImage
-                  src={squareSVG}
-                  alt="Square"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    justifyContent: 'center',
-                  }}
-                />
-                RAIN GARDEN
-              </StyledButton>
-            )}
-          </LegendItem>
-          <LegendItem>
-            {icons && (
-              <StyledButton
-                onClick={() => handleFeatureClick('Bioswale')}
-                isSelected={selectedFeatures.includes('Bioswale')}
-              >
-                <LegendImage
-                  src={triangleSVG}
-                  alt="Triangle"
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    justifyContent: 'center',
-                  }}
-                />
-                BIOSWALE
-              </StyledButton>
-            )}
-          </LegendItem>
           <LegendItem>
             {icons && (
               <StyledButton
@@ -282,7 +206,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Bioretention')}
               >
                 <LegendImage
-                  src={circleSVG}
+                  src={generateCircleSVG('grey')}
                   alt="Circle"
                   style={{
                     width: '20px',
@@ -294,6 +218,27 @@ const MapLegend: React.FC<MapLegendProps> = ({
               </StyledButton>
             )}
           </LegendItem>
+
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Bioswale')}
+                isSelected={selectedFeatures.includes('Bioswale')}
+              >
+                <LegendImage
+                  src={generateDiamondSVG('grey')}
+                  alt="Diamond"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                BIOSWALE
+              </StyledButton>
+            )}
+          </LegendItem>
+
           <LegendItem>
             {icons && (
               <StyledButton
@@ -301,8 +246,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Porous Paving')}
               >
                 <LegendImage
-                  src={diamondSVG}
-                  alt="Diamond"
+                  src={generateSquareSVG('grey')}
+                  alt="Square"
                   style={{
                     width: '20px',
                     height: '20px',
@@ -313,6 +258,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
               </StyledButton>
             )}
           </LegendItem>
+
           <LegendItem>
             {icons && (
               <StyledButton
@@ -320,7 +266,7 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Tree Trench/Pit')}
               >
                 <LegendImage
-                  src={starSVG}
+                  src={generateStarSVG('grey')}
                   alt="Star"
                   style={{
                     width: '20px',
@@ -332,6 +278,27 @@ const MapLegend: React.FC<MapLegendProps> = ({
               </StyledButton>
             )}
           </LegendItem>
+
+          <LegendItem>
+            {icons && (
+              <StyledButton
+                onClick={() => handleFeatureClick('Rain Garden')}
+                isSelected={selectedFeatures.includes('Rain Garden')}
+              >
+                <LegendImage
+                  src={generateTriangleSVG('grey')}
+                  alt="Triangle"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                RAIN GARDEN
+              </StyledButton>
+            )}
+          </LegendItem>
+
           <LegendItem>
             {icons && (
               <StyledButton
@@ -339,8 +306,8 @@ const MapLegend: React.FC<MapLegendProps> = ({
                 isSelected={selectedFeatures.includes('Green Roof/Planter')}
               >
                 <LegendImage
-                  src={pentagonSVG}
-                  alt="Pentagon"
+                  src={generateTriangleSVG('grey')}
+                  alt="Triangle"
                   style={{
                     width: '20px',
                     height: '20px',
@@ -352,21 +319,67 @@ const MapLegend: React.FC<MapLegendProps> = ({
             )}
           </LegendItem>
         </FeatureContainer>
+
         <StatusContainer>
           <LegendItem>
             {icons && (
-              <StatusCheckbox
-                onChange={(values: CheckboxValueType[]) =>
-                  handleStatusClick(values)
-                }
-                value={selectedStatuses}
-                options={options}
-              />
+              <StatusButton
+                onClick={() => handleStatusClick('Available')}
+                isSelected={selectedStatuses.includes('Available')}
+              >
+                <LegendImage
+                  src={availableIcon}
+                  alt="Available"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                AVAILABLE
+              </StatusButton>
+            )}
+          </LegendItem>
+          <LegendItem>
+            {icons && (
+              <StatusButton
+                onClick={() => handleStatusClick('Adopted')}
+                isSelected={selectedStatuses.includes('Adopted')}
+              >
+                <LegendImage
+                  src={adoptedIcon}
+                  alt="Adopted"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    justifyContent: 'center',
+                  }}
+                />
+                ADOPTED
+              </StatusButton>
             )}
           </LegendItem>
         </StatusContainer>
       </MapLegendContainer>
+      <ToggleContainer isVisible={isVisible} onClick={toggleShowLegend}>
+        {isVisible ? (
+          <ArrowBackIosIcon
+            style={{
+              transform: 'translateY(-30%) rotate(-90deg)',
+              color: 'white',
+            }}
+          />
+        ) : (
+          <ArrowBackIosIcon
+            style={{
+              transform: 'translateY(15%) rotate(90deg)',
+              color: 'white',
+            }}
+          />
+        )}
+      </ToggleContainer>
     </Collapse>
   );
 };
+
 export default MapLegend;
