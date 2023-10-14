@@ -82,7 +82,7 @@ background: rgba(242, 242, 242, 1);
 
 
 const StyledButton = styled.button<{ isSelected: boolean }>`
-  background-color: ${(props) => (props.isSelected ? '#e74c3c' : '#fff')};
+  background-color: ${(props) => (props.isSelected ? '#45789C;' : '#fff')};
   height: 36px;
   width: 187px;
   color: #fff;
