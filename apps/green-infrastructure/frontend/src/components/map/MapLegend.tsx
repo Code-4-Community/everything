@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Image } from 'antd';
-import { useState } from 'react';
+import { Checkbox, Image, Space, Typography } from 'antd';
+import { ReactNode, useState } from 'react';
 import { SITE_STATUS_ROADMAP } from '../../constants';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Collapse } from '@mui/material';
@@ -16,6 +16,7 @@ import circleSVG from '../../images/markers/circle.svg';
 import diamondSVG from '../../images/markers/diamond.svg';
 import starSVG from '../../images/markers/star.svg';
 import pentagonSVG from '../../images/markers/pentagon.svg';
+import { CheckboxOptionType, CheckboxValueType } from 'antd/es/checkbox/Group';
 
 
 const Title = styled.h1`
@@ -72,6 +73,19 @@ margin: 10px;
 background: rgba(242, 242, 242, 1);
 `;
 
+const StatusCheckbox = styled(Checkbox.Group)`
+  height: 12px;
+  width: 200px;
+  color: #fff;
+  border: line;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+  }
+`;
 
 const StatusContainer = styled.div`
 width: 206px;
@@ -146,6 +160,39 @@ const CaretUpStyled = styled(CaretUpOutlined)`
   color: #FFFFFF;
 `;
 
+const FullWidthSpace = styled(Space)`
+  width: 100%;
+`;
+const statusSpan = (statusIcon: string, labelString: string): ReactNode => {
+  return (
+    <FullWidthSpace direction={'horizontal'} size={'small'}>
+      <LegendImage
+        src={statusIcon}
+        alt="Adopted"
+        style={{
+          width: '20px',
+          height: '20px',
+          justifyContent: 'center',
+        }}
+      />
+      <Typography.Text
+        style={{
+          fontSize: '14px',
+          fontFamily: 'Montserrat',
+          fontWeight: '600',
+          lineHeight: '17px',
+          letterSpacing: '0em',
+          textAlign: 'left',
+          alignItems: 'center',
+          color: 'rgba(24, 112, 188, 1)',
+        }}
+      >
+        {labelString.replace(' Sites', '').toUpperCase()}
+      </Typography.Text>
+    </FullWidthSpace>
+  );
+};
+
 interface MapLegendProps {
   selectedFeatures: string[];
   setSelectedFeatures: any;
@@ -157,6 +204,12 @@ interface MapLegendProps {
 const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeatures, selectedStatuses, setSelectedStatuses, icons }) => {
     const [isVisible, setIsVisible] = useState(true);
 
+    const options: CheckboxOptionType[] = SITE_STATUS_ROADMAP.map((option) => {
+      return {
+        label: statusSpan(option.image, option.label),
+        value: option.value,
+      };
+    });
 
     const toggleShowLegend = () => {
         setIsVisible((prev) => !prev);
@@ -181,19 +234,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
         }
       };
 
-      const handleStatusClick = (icon: string) => {
-        // Check if the icon is already selected
-        const isAlreadySelected = selectedStatuses.includes(icon);
-    
-        if (isAlreadySelected) {
-          // Deselect the icon
-          setSelectedStatuses((prevSelectedStatuses: string []) =>
-            prevSelectedStatuses.filter((selected) => selected !== icon)
-          );
-        } else {
-          // Select the icon
-          setSelectedStatuses((prevSelectedStatuses: string []) => [...prevSelectedStatuses, icon]);
-        }
+      const handleStatusClick = (values: CheckboxValueType[]) => {
+        // set selected statuses
+        setSelectedStatuses(values);
       };
 
     return (
@@ -280,27 +323,15 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
 </FeatureContainer>
 
 <StatusContainer>
-
-      <LegendItem>
-  {icons && (
-    <StatusButton
-      onClick={() => handleStatusClick('Available')} 
-      isSelected={selectedStatuses.includes('Available')} 
-    >
-      <LegendImage src={availableIcon} alt="Available" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      AVAILABLE
-    </StatusButton>
-  )}
-</LegendItem>
 <LegendItem>
   {icons && (
-    <StatusButton
-      onClick={() => handleStatusClick('Adopted')} 
-      isSelected={selectedStatuses.includes('Adopted')} 
-    >
-      <LegendImage src={adoptedIcon} alt="Adopted" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      ADOPTED
-    </StatusButton>
+    <StatusCheckbox
+      onChange={(values: CheckboxValueType[]) =>
+        handleStatusClick(values)
+      }
+      value={selectedStatuses}
+      options={options}
+    />
   )}
 </LegendItem>
 </StatusContainer>
