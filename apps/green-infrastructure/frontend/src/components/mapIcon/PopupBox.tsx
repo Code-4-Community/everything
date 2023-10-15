@@ -7,7 +7,7 @@ export function createPopupBoxContent(name: string, location: string, status: st
       <div class='typeBox'>
         ${type ? 
           `${svgFunction(color)}
-          <p>Feature Type: </p><p><b>${type.toUpperCase()}</b></p>` 
+          <p class='featureType'>Feature Type: </p><p><b>${type.toUpperCase()}</b></p>` 
           : ''}
       </div>
       <div class='infoBox'>
