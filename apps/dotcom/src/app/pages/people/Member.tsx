@@ -138,7 +138,7 @@ const Member: React.FC<MemberProps> = ({
             <a href={github} rel="noopener noreferrer" target="_blank">
               <img
                 className={classes.icon}
-                // src="https://c4cneu-public.s3.us-east-2.amazonaws.com/Site/github.svg"
+                src="https://c4cneu-public.s3.us-east-2.amazonaws.com/Site/github_icon.svg"
                 alt="Github"
               />
             </a>
@@ -147,7 +147,7 @@ const Member: React.FC<MemberProps> = ({
             <a href={website} rel="noopener noreferrer" target="_blank">
               <img
                 className={classes.icon}
-                // src="https://c4cneu-public.s3.us-east-2.amazonaws.com/Site/website.svg"
+                src="https://c4cneu-public.s3.us-east-2.amazonaws.com/Site/website_icon.svg"
                 alt="Website"
               />
             </a>
