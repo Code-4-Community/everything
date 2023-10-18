@@ -57,7 +57,15 @@ export const people: Person[] = [
     linkedin: 'https://www.linkedin.com/in/derekleung27/',
     email: 'dleung2140@gmail.com',
   },
-  // Kenny
+  {
+    name: 'Kenny Jung',
+    position: 'Director of Engineering',
+    image:
+      'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2021/kenny_jung.jpg',
+    linkedin: 'https://www.linkedin.com/in/kenny-jung/',
+    email: 'jung.du@northeastern.edu',
+    github: 'https://github.com/chromium-52',
+  },
   // Angeli
   // Lisa
   // Harrison
@@ -189,7 +197,14 @@ export const people: Person[] = [
     email: 'krishnan.ki@northeastern.edu',
     github: 'https://github.com/kirtanakrishnan',
   },
-  // Jamie
+  {
+    name: 'Jamie Pan',
+    position: 'Developer',
+    image:
+      'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2023/jamie_pan.jpeg',
+    linkedin: 'https://www.linkedin.com/in/jamie-pan/',
+    email: 'pan.jam@northeastern.edu',
+  },
 
   /* Constellation */
   {
@@ -289,7 +304,14 @@ export const people: Person[] = [
     linkedin: 'https://www.linkedin.com/in/davidlevin55/',
     email: 'levin.da@northeastern.edu',
   },
-  // Arunima
+  {
+    name: 'Arunima Gupta',
+    position: 'Product Manager',
+    image:
+      'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2023/arunima_gupta.jpeg',
+    linkedin: 'https://www.linkedin.com/in/arunimagupta123/',
+    email: 'gupta.aru@northeastern.edu',
+  },
   {
     name: 'Victoria Arzumanova',
     position: 'Product Manager',
@@ -302,7 +324,7 @@ export const people: Person[] = [
   // Ella
   {
     name: 'Adalia Lee',
-    position: 'Product Manager',
+    position: 'Product Designer; Co-Director of Events',
     image:
       'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2023/adalia_lee.jpeg',
     linkedin: 'https://www.linkedin.com/in/adalia-lee/',
@@ -392,8 +414,16 @@ export const people: Person[] = [
     github: 'https://github.com/airman416',
     website: 'https://armaanagrawal.com/',
   },
+  {
+    name: 'Jaren Adams',
+    position: 'Developer',
+    image:
+      'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2023/jaren_adams.jpg',
+    linkedin: 'https://www.linkedin.com/in/jarenadams/',
+    email: 'adams.jar@northeastern.edu',
+    github: 'https://github.com/jarenadams21',
+  },
   // David
-  // Jaren
 
   /* Core Infrastructure */
   {
