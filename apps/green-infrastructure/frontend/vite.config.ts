@@ -9,10 +9,10 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
-    fs: {
-      // Allow serving files from one level up to the project root
-      allow: ['..'],
-    },
+    // fs: {
+    //   // Allow serving files from one level up to the project root
+    //   allow: ['..'],
+    // },
   },
 
   preview: {
@@ -38,12 +38,12 @@ export default defineConfig({
   //  ],
   // },
 
-  // test: {
-  //   globals: true,
-  //   cache: {
-  //     dir: '../../../node_modules/.vitest',
-  //   },
-  //   environment: 'jsdom',
-  //   include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  // },
+  test: {
+    globals: true,
+    cache: {
+      dir: '../../../node_modules/.vitest',
+    },
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+  },
 });
