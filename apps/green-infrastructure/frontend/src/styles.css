@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+#map {
+    height: 100%;
+  }
+  
+  /* 
+   * Optional: Makes the sample page fill the window. 
+   */
+  html,
+  body {
+    height: 80%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .popup {
+    font-family: 'Lora';
+    width: 411px;
+    height: 123px;
+    top: -639px;
+    left: 846px;
+    display: flex;
+  }
+
+  .infoBox, .typeBox {
+      width: 50%;
+      display: inline-block;
+      text-align: center;
+  }
+  
+  .typeBox {
+    padding-top: 15px;
+    background: rgba(242, 242, 242, 1);
+  }

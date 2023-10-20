@@ -9,6 +9,10 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    // fs: {
+    //   // Allow serving files from one level up to the project root
+    //   allow: ['..'],
+    // },
   },
 
   preview: {
@@ -22,6 +26,8 @@ export default defineConfig({
       root: '../../../',
     }),
   ],
+
+  
 
   // Uncomment this if you are using workers.
   // worker: {
