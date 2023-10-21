@@ -21,7 +21,7 @@
     left: 846px;
     display: flex;
   }
-  
+
   .infoBox, .typeBox {
       width: 50%;
       display: inline-block;
@@ -29,10 +29,6 @@
   }
   
   .typeBox {
-    padding-top: 25px;
+    padding-top: 15px;
     background: rgba(242, 242, 242, 1);
-  }
-
-  .featureType {
-    padding-top: 25px;
   }
