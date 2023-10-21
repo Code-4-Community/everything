@@ -108,9 +108,8 @@ const StyledButton = styled.button<{ isSelected: boolean }>`
   color: ${(props) => (props.isSelected ? '#fff' : 'rgba(24, 112, 188, 1)')};
   display: flex;
   &:hover {
-    background-color: ${(props) => (props.isSelected ? '#fff' : '#45789C')};
-    color: ${(props) => (props.isSelected ? '#45789C' : '#fff')};
-    border-color: green;
+    background-color: ${(props) => (props.isSelected ? '#45789C' : '#45789C')};
+    color: ${(props) => (props.isSelected ? '#fff' : '#fff')};
   }
 `;
 
