@@ -25,7 +25,7 @@ export default function MapPage() {
         <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 100 }}>
           <MapLegend selectedFeatures={selectedFeatures} setSelectedFeatures={setSelectedFeatures} selectedStatuses={selectedStatuses} setSelectedStatuses={setSelectedStatuses} icons={icons} />
         </div>
-        <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 100 }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 100 }}>
           <input 
             id="pac-input"
             type="text"
@@ -33,7 +33,6 @@ export default function MapPage() {
             style={{
               width: '200px', 
               height: '40px',
-              borderRadius: '10px',
               fontFamily: "Open Sans",
               paddingLeft: '15px'
             }}
