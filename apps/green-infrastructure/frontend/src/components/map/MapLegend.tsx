@@ -57,6 +57,7 @@ const LegendItem = styled.div`
   width: 100%;
   display: flex;
   gap: 10px;
+  padding-left: 10px;
   align-items: center;
   margin: 10px;
 `;
@@ -67,6 +68,10 @@ const LegendImage = styled(Image)`
   width: 20px;
   justify-content: center;
   display: inline-block;
+`;
+
+const LegendText = styled.div`
+margin-left: 15px;
 `;
 
 const FeatureContainer = styled.div`
@@ -260,14 +265,16 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       <Heading>Legend and Description</Heading>
 
 <FeatureContainer>
-      <LegendItem>
+  <LegendItem>
   {icons && (
     <StyledButton
       onClick={() => handleFeatureClick('Rain Garden')} 
       isSelected={selectedFeatures.includes('Rain Garden')} 
     >
-      <LegendImage src={squareSVG} alt="Square" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      RAIN GARDEN
+      <LegendImage src={squareSVG} alt="Square" style={{ width: '20px', height: '20px', justifyContent: 'center',}} />
+      <LegendText>
+        RAIN GARDEN
+      </LegendText>
     </StyledButton>
   )}
 </LegendItem>
@@ -279,7 +286,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Bioswale')} 
     >
       <LegendImage src={triangleSVG} alt="Triangle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      BIOSWALE
+      <LegendText>
+        BIOSWALE
+      </LegendText>
     </StyledButton>
   )}
 </LegendItem>
@@ -291,7 +300,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Bioretention')} 
     >
       <LegendImage src={circleSVG} alt="Circle" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      BIORETENTION
+      <LegendText>
+        BIORETENTION
+      </LegendText>
     </StyledButton>
   )}
 </LegendItem>
@@ -304,7 +315,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Porous Paving')} 
     >
       <LegendImage src={diamondSVG} alt="Diamond" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      POROUS PAVING
+      <LegendText>
+        POROUS PAVING
+      </LegendText>
     </StyledButton>
   )}
 </LegendItem>
@@ -317,7 +330,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Tree Trench/Pit')} 
     >
       <LegendImage src={starSVG} alt="Star" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      TREE TRENCH/PIT
+      <LegendText>
+        TREE TRENCH/PIT
+      </LegendText>
     </StyledButton>
   )}
 </LegendItem>
@@ -329,7 +344,9 @@ const MapLegend: React.FC<MapLegendProps> = ({ selectedFeatures, setSelectedFeat
       isSelected={selectedFeatures.includes('Green Roof/Planter')} 
     >
       <LegendImage src={pentagonSVG} alt="Pentagon" style={{ width: '20px', height: '20px', justifyContent: 'center' }} />
-      GREEN ROOF/PLANTER
+      <LegendText>
+        GREEN ROOF/PLANTER
+      </LegendText>
     </StyledButton>
   )}
 </LegendItem>
