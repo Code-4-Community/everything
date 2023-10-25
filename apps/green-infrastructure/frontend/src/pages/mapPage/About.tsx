@@ -1,5 +1,8 @@
 import { useRef } from "react";
 
+const SCROLL_OFFSET = 20
+const NAVBAR_HEIGHT = 109
+
 export default function About() {
 
   const aboutSection = useRef(null)
@@ -8,7 +11,8 @@ export default function About() {
   function executeScrollTo(e: any) {
       e.preventDefault();
       const aboutTitle: HTMLElement = e.target as HTMLElement
-      aboutTitle.scrollIntoView({behavior: 'smooth'});
+      const yPos = aboutTitle.getBoundingClientRect().top + window.scrollY - (NAVBAR_HEIGHT + SCROLL_OFFSET)
+      window.scrollTo({top: yPos, behavior: 'smooth'} )
   }
 
   const title = {
