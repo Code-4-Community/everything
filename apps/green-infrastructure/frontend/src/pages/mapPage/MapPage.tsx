@@ -6,6 +6,7 @@ import Header from './Header';
 import MapLegend from '../../components/map/MapLegend';
 import Navbar from '../Navbar';
 import { SITE_STATUS_ROADMAP } from '../../constants';
+import Tiles from './Tiles';
 
 const icons: string[] = SITE_STATUS_ROADMAP.map((option) => option.image);
 
@@ -42,6 +43,7 @@ export default function MapPage() {
       </div>
       <Divider />
       <About />
+      <Tiles />
     </div>
   );
 }
