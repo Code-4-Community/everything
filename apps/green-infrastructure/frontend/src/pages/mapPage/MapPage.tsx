@@ -45,7 +45,9 @@ export default function MapPage() {
       <About />
       <Divider />
       <div style={{ paddingTop: '15px'}} />
-      <Tiles />
+      <div style={{ alignContent: 'center' }}>
+        <Tiles />
+      </div>
     </div>
   );
 }

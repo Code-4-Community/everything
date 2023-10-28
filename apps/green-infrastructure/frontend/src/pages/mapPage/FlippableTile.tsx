@@ -15,13 +15,13 @@ export default function FlipCard({ ...props }) {
     <div className="flip-card-outer" onClick={handleClick}>
       <div className={`flip-card-inner ${showBack ? 'showBack' : ''}`}>
         <div className="card front">
-          <div className="card-body d-flex justify-content-center align-items-center row">
+          <div className="card-body d-flex justify-content-around align-items-center row">
             <div className="icon-placeholder col-md-4"></div>
             <p className="card-text text-center">{card.front}</p>
           </div>
         </div>
         <div className="card back">
-          <div className="card-body d-flex justify-content-center align-items-center">
+          <div className="card-body d-flex justify-content-around align-items-center">
             <p className="card-text text-center">{card.back}</p>
           </div>
         </div>
