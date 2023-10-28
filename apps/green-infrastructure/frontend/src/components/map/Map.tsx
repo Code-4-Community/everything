@@ -137,10 +137,10 @@ const Map: React.FC<MapProps> = ({
 
             let typeColor = "";
             if (status === 'Available') {
-              typeColor = "green"
+              typeColor = "#2D6A4F"
             }
             else if (status === 'Adopted') {
-              typeColor = "yellow"
+              typeColor = "#FB4D42"
             }
 
             let tempIcon = "";

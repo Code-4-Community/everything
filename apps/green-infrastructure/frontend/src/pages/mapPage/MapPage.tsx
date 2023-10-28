@@ -16,7 +16,7 @@ export default function MapPage() {
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
 
   return (
-    <div>
+    <div style={{ background: 'var(--Foreground, #F2F2F2)' }}>
       <Navbar />
       <div style={{ marginTop: '50px'}} />
       <Header />
@@ -43,6 +43,8 @@ export default function MapPage() {
       </div>
       <Divider />
       <About />
+      <Divider />
+      <div style={{ paddingTop: '15px'}} />
       <Tiles />
     </div>
   );
