@@ -20,7 +20,6 @@ function AdminPage () {
           const accessTokenKey = Object.keys(cognitoStorage).find((key) => key.includes('accessToken'));
           const accessTokenValue = accessTokenKey ? cognitoStorage[accessTokenKey] : '';
           setAccessToken(accessTokenValue);
-          //console.log(accessToken);
         }
         fetchData();
     }, []);
@@ -28,7 +27,7 @@ function AdminPage () {
     return (
         <Tabs isManual variant='enclosed'>
             <TabList>
-              <Tab>Search</Tab>
+              <Tab>Home</Tab>
               <Tab>Manage</Tab>
             </TabList>
             <TabPanels>

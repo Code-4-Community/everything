@@ -12,16 +12,14 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
-        <main
-          style={{ display: 'block', maxWidth: 1080, marginInline: 'auto' }}
-        >
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<SearchTherapists accessToken=''/>} />
-          </Routes>
-          <Routes>
-            <Route path="/admin" element={<AdminPage />} />
-          </Routes>
+        <main style={{ display: 'block', maxWidth: 1080, marginInline: 'auto' }}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<SearchTherapists accessToken=''/>} />
+            </Routes>
+            <Routes>
+              <Route path="/admin" element={<AdminPage />} />
+            </Routes>
           </BrowserRouter>
         </main>
       </QueryClientProvider>

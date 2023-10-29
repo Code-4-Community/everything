@@ -182,14 +182,43 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     navigate('/admin');
   };
 
+  const handleLogout = () => {
+    navigate('/');
+  };
+
+  const parentStyles = {
+    display: 'flex'
+  };
+
+  const regularStyles = {
+    paddingTop: '20px',
+    paddingRight: '30px'
+  }
+
+  const adminStyles = {
+    paddingRight: '30px'
+  }
+
   return (
-    <div>
-      <div style={{ marginTop: 10 }}>
-        {location.pathname !== '/admin' && (
+    <span style={parentStyles}>   
+      {location.pathname !== '/admin' && (
+        <div style={regularStyles}>       
           <Button colorScheme="teal" onClick={handleLogin}>
             Login
           </Button>
-        )}
+        </div> 
+      )}
+      {location.pathname === '/admin' && (
+        <div style={adminStyles}>       
+          <Button colorScheme="teal" onClick={handleLogout}>
+            Logout
+          </Button>
+        </div> 
+      )}
+
+    <div>
+
+      <div style={{ marginTop: 10 }}>
         <InputGroup size="lg">
           <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
           <Input
@@ -387,6 +416,7 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
         </Stack>
       )}
     </div>
+    </span>
   );
 };
 
