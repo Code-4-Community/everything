@@ -44,7 +44,7 @@ const App: React.FC = () => {
           <Route path="/apply/brand-designer" Component={ApplyBrandDesigner} />
           <Route path="/projects" Component={Projects} />
           <Route path="/people" Component={People} />
-          <Route path="/faq" Component={FAQ} />
+          {/* <Route path="/faq" Component={FAQ} /> */}
           <Route path="*" Component={NotFound} />
         </Routes>
         <Footer />
