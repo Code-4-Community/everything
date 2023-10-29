@@ -10,6 +10,7 @@ import ApplyDeveloper from './pages/apply/developer/ApplyDeveloper';
 import ApplyProductDesigner from './pages/apply/product-designer/ApplyProductDesigner';
 import ApplyProductManager from './pages/apply/product-manager/ApplyProductManager';
 import Events from './pages/events/Events';
+import FAQ from './pages/faq/FAQ';
 import Home from './pages/home/Home';
 import NotFound from './pages/notfound/NotFound';
 import People from './pages/people/People';
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <Route path="/apply/brand-designer" Component={ApplyBrandDesigner} />
           <Route path="/projects" Component={Projects} />
           <Route path="/people" Component={People} />
+          <Route path="/faq" Component={FAQ} />
           <Route path="*" Component={NotFound} />
         </Routes>
         <Footer />
