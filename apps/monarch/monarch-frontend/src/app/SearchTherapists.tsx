@@ -113,10 +113,6 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     );
   });
 
-  if (therapists) {
-    console.log(therapists[0]);
-  }
-
   // const therapists = data?.filter(
   //   (therapist) =>
   //     therapist.geocode == null ||
@@ -321,7 +317,10 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
                       </Box>
                     </WrapItem>
                     {accessToken.length > 0 && (
-                      <DeleteButton onDelete={() => controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, accessToken)} />
+                      <DeleteButton onDelete={() => {
+                        controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, accessToken)
+                      }
+                      } />
                     )}
                   </Wrap>
                 </Box>

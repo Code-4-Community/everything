@@ -11,7 +11,7 @@ import postNewPractitioner from './workflows/postNewPractitioner';
 import deletePractitionerWF from './workflows/deletePractitioner';
 import deletePendingPractitionerWF from './workflows/deletePendingPractitioner';
 // Import effectful dependencies (database connections, email clients, etc.)
-import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, deletePractitioner } from './dynamodb';
+import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, deletePractitioner, deletePendingPractitioner } from './dynamodb';
 import { zodiosApp } from '@zodios/express';
 import { userApi } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
@@ -40,7 +40,7 @@ const deletePractitionerHandler = async (req: Request) => {
 }
 
 const deletePendingPractitionerHandler = async (req: Request) => {
-	return deletePendingPractitionerWF(req, deletePractitioner);
+	return deletePendingPractitionerWF(req, deletePendingPractitioner);
 }
 
 app.use(cors());
@@ -95,7 +95,6 @@ authenticatedRoute.get("/admin", (req, res) => {
 });
 
 authenticatedRoute.post('/practitioners', async (req: Request, res: Response) => {
-	console.log(req);
 	const practitioner = await postPractitionerHandler(req);
 	res.status(201).json(practitioner).end();
 });

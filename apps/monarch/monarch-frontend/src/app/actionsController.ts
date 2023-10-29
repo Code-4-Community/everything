@@ -143,7 +143,6 @@ export function makeActionsController(): ActionsController {
     },
     getApplicants: async (accessToken: string) => {
       const applicants = await fetchPendingPractitioners(false, accessToken);
-      console.log(applicants);
       return applicants;
     },
     fetchTherapist: (id: string) => {

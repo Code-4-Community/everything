@@ -18,16 +18,13 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
     const { isOpen: isDenyOpen, onOpen: onDenyOpen, onClose: onDenyClose } = useDisclosure();
 
     const handleAcceptFormSubmission = async () => {
-        console.log(practitioner);
-        const therapist = await controller.postTherapist(practitioner, accessToken);
+        controller.postTherapist(practitioner, accessToken);
         // Remove therapist from PendingPractitioners table
         const phoneNumber = practitioner.phoneNumber;
         const fullName = practitioner.fullName;
-        const key = { phoneNumber, fullName };
-        console.log(key);
-        await controller.deleteApplicant(key, accessToken);
+        const key = { phoneNumber: phoneNumber, fullName: fullName };
+        controller.deleteApplicant(key, accessToken);
         console.log('Successfully added new therapist');
-        console.log(therapist);
     }
 
     const handleDenyFormSubmission = async () => {
