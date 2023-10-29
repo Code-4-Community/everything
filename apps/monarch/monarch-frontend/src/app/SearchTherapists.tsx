@@ -18,7 +18,6 @@ import {
   Divider,
   Heading,
   HStack,
-  IconButton,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -26,7 +25,6 @@ import {
   Skeleton,
   Stack,
   Text,
-  useColorModeValue,
   useDisclosure,
   VStack,
   Wrap,
@@ -43,7 +41,6 @@ import {
   CheckCircleIcon,
   QuestionIcon,
   Search2Icon,
-  DeleteIcon,
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
@@ -58,19 +55,12 @@ const debouncedSearchTherapists = debouncePromise(
 );
 
 const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload?: (arg: boolean) => void }> = ({ therapist, accessToken, setReload }) => {
-  const buttonColor = useColorModeValue('red.500', 'red.300');
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
 
   return (
     <>
-      <IconButton
-        icon={<DeleteIcon />}
-        variant="ghost"
-        color={buttonColor}
-        onClick={onDeleteOpen}
-        aria-label="Delete Item"
-      />
+      <Button onClick={onDeleteOpen} colorScheme='red' size='sm'>Remove</Button>
 
       <Modal isOpen={isDeleteOpen} onClose={() => {
           onDeleteClose();
@@ -272,7 +262,10 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
                 borderWidth="1px"
                 borderRadius="lg"
                 overflow="hidden"
-                padding={5}
+                paddingRight={5}
+                paddingLeft={5}
+                paddingTop={5}
+                paddingBottom={therapist.searchScore ? 5 : 0}
                 gap={20}
               >
                 <Box marginBottom={5}>
@@ -386,10 +379,12 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
                         </Text>
                       </Box>
                     </WrapItem>
+                  </Wrap>
+                  <div style={{ paddingTop: '10px' }}>
                     {accessToken.length > 0 && (
                       <DeleteButton therapist={therapist} accessToken={accessToken} setReload={setReload} />
                     )}
-                  </Wrap>
+                  </div>
                 </Box>
                 {therapist.searchScore != null && (
                   <Box gap={1} alignItems="end" display="flex" dir="row">
@@ -447,9 +442,11 @@ export function dist(lat1: number, lon1: number, lat2: number, lon2: number) {
      * @param abortValue if has abortValue, promise will reject it if
      * @returns Promise
      */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debouncePromise<T extends (...args: any[]) => any>(
   fn: T,
   wait: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abortValue: any = undefined
 ) {
   let cancel = () => {

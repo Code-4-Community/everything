@@ -54,7 +54,9 @@ const ManageTherapists: React.FC<{ accessToken: string, reload: boolean, setRelo
                 borderWidth="1px"
                 borderRadius="lg"
                 overflow="hidden"
-                padding={5}
+                paddingRight={5}
+                paddingLeft={5}
+                paddingTop={5}
                 gap={20}
               >
                 <Box marginBottom={5}>
@@ -168,15 +170,14 @@ const ManageTherapists: React.FC<{ accessToken: string, reload: boolean, setRelo
                         </Text>
                       </Box>
                     </WrapItem>
-                    <WrapItem>
-                      <AddPractitioner accessToken={accessToken} practitioner={therapist} setReload={setReload}/>
-                    </WrapItem>
                   </Wrap>
+                  <div style={{ paddingTop: '15px'}}>
+                      <AddPractitioner accessToken={accessToken} practitioner={therapist} setReload={setReload}/>
+                  </div>
                 </Box>
               </Box>
             ))}
           </VStack>
-        // </InfiniteScroll>
       )}
     </div>
   );

@@ -35,7 +35,6 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
         const phoneNumber = practitioner.phoneNumber;
         const fullName = practitioner.fullName;
         const key = { phoneNumber, fullName };
-        console.log(key);
         await controller.deleteApplicant(key, accessToken);
         console.log('Successfully denied new therapist');
         if (setReload) {
@@ -45,7 +44,8 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
 
     return (
         <>
-            <Button onClick={onAcceptOpen} colorScheme='teal' size='sm'>Accept</Button>
+            <span>
+            <Button onClick={onAcceptOpen} colorScheme='green' size='sm'>Accept</Button>
 
             <Modal isOpen={isAcceptOpen} onClose={() => {
                 onAcceptClose();
@@ -58,19 +58,21 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
                         Are you sure you want to accept this practitioner?                    
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={() => {
-                            onAcceptClose();
-                            //setPractitioner(defaultPractitioner);
-                        }} variant='ghost' mr={2}>Cancel</Button>
+                        <Button onClick={() => { onAcceptClose() }} variant='ghost' mr={2}>
+                            Cancel
+                        </Button>
                         <Button onClick={() => {
                             onAcceptClose();
                             handleAcceptFormSubmission();
-                        }} colorScheme='teal'>Submit</Button>
+                        }} colorScheme='teal'>
+                            Submit
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-
-            <Button onClick={onDenyOpen} colorScheme='teal' size='sm'>Deny</Button>
+            </span>
+            <span style={{ paddingLeft: '10px' }}>
+            <Button onClick={onDenyOpen} colorScheme='red' size='sm'>Deny</Button>
 
             <Modal isOpen={isDenyOpen} onClose={() => {
                 onDenyClose();
@@ -93,6 +95,7 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            </span>
         </>
     );
 };
