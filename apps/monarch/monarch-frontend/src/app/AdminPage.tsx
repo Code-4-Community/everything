@@ -13,6 +13,8 @@ Amplify.configure(awsmobile);
 
 function AdminPage () {
     const [accessToken, setAccessToken] = useState<string>('');
+    const [reload, setReload] = useState<boolean>(false);
+
     useEffect(() => {
         async function fetchData() {
           const userData = await Auth.currentAuthenticatedUser();
@@ -32,10 +34,10 @@ function AdminPage () {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <SearchTherapists accessToken={accessToken} />
+                <SearchTherapists accessToken={accessToken} reload={reload} setReload={setReload}/>
               </TabPanel>
               <TabPanel>
-                <ManageTherapists accessToken={accessToken}/>
+                <ManageTherapists accessToken={accessToken} reload={reload} setReload={setReload}/>
               </TabPanel>
             </TabPanels>
           </Tabs>

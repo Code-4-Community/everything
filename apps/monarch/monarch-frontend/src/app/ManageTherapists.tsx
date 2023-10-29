@@ -18,22 +18,18 @@ import {
   Heading,
   HStack,
   Link,
-  Skeleton,
-  Stack,
   Text,
   VStack,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { controller } from './actionsController';
 import { Practitioner } from '@c4c/monarch/common';
 Amplify.configure(awsmobile);
 
-const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
+const ManageTherapists: React.FC<{ accessToken: string, reload: boolean, setReload: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
 
   const [applicants, setApplicants] = useState<Practitioner[]>([]);
-  const [reload, setReload] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,25 +40,13 @@ const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
     }
     fetchData();
     setReload(false);
-  }, [accessToken, reload]); 
+  }, [accessToken, reload, setReload]); 
 
   const { coords } = useGeolocated();
 
   return (
     <div>
       {applicants != null && (
-        // <InfiniteScroll
-        //   dataLength={therapistsToRender.length} // This is important field to render the next data
-        //   next={() => setNumTherapistsToRender(numTherapistsToRender + 10)}
-        //   hasMore={therapistsToRender?.length < therapists.length}
-        //   loader={
-        //     <Stack>
-        //       <Skeleton height="40px" />
-        //       <Skeleton height="40px" />
-        //       <Skeleton height="40px" />
-        //     </Stack>
-        //   }
-        // >
           <VStack spacing={5}>
             {applicants.map((therapist) => (
               <Box

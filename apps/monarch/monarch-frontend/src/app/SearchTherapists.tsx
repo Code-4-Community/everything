@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { controller, SearchTherapistsQuery } from './actionsController';
 import { useGeolocated } from 'react-geolocated';
 import { Therapist, TherapistDisplayModel } from './therapist';
@@ -50,7 +50,6 @@ import SearchTherapistsFilter from './SearchTherapistsFilter';
 //@ts-ignore
 import awsmobile from '../aws-exports.js';
 import { Amplify } from 'aws-amplify';
-import { Key } from '@c4c/monarch/common';
 Amplify.configure(awsmobile);
 
 const debouncedSearchTherapists = debouncePromise(
@@ -58,7 +57,7 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
-const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload }> = ({ therapist, accessToken, setReload }) => {
+const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload?: (arg: boolean) => void }> = ({ therapist, accessToken, setReload }) => {
   const buttonColor = useColorModeValue('red.500', 'red.300');
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
@@ -90,7 +89,9 @@ const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: st
                   <Button onClick={() => {
                       onDeleteClose();
                       controller.deleteTherapist(key, accessToken);
-                      setReload(true);
+                      if (setReload) {
+                        setReload(true);
+                      }
                   }} colorScheme='teal'>Submit</Button>
               </ModalFooter>
           </ModalContent>
@@ -99,7 +100,7 @@ const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: st
   );
 }
 
-export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
+export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean, setReload?: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
   const { coords } = useGeolocated();
   const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>({
     searchString: '',
@@ -111,13 +112,14 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     TherapistDisplayModel[] | null
   >(null);
 
-  const [reload, setReload] = useState<boolean>(false);
-
   useEffect(() => {
     setSearchResult(null);
     debouncedSearchTherapists(searchQuery).then(setSearchResult);
-    setReload(false);
-  }, [searchQuery, reload]);
+    if (setReload) {
+      setReload(false);
+    }
+    console.log('here');
+  }, [searchQuery, reload, setReload]);
 
   const data = searchResult;
   const isLoading = searchResult == null;
@@ -216,7 +218,7 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
         </div> 
       )}
 
-    <div>
+    <div style={{flex: 1}}>
 
       <div style={{ marginTop: 10 }}>
         <InputGroup size="lg">
@@ -410,7 +412,7 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
 
       {isLoading && (
         <Stack spacing={5} marginTop="48px">
-          <Skeleton height="240px" />
+          <Skeleton height="240px"/>
           <Skeleton height="240px" />
           <Skeleton height="240px" />
         </Stack>
