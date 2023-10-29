@@ -189,7 +189,7 @@ const ApplyDeveloper: React.FC = () => {
           <Fade>
             <CTA
               disabled={false}
-              onClick="https://forms.gle/C6jpMFBh7Wj3U8t99"
+              onClick="https://forms.gle/yEY5GTYpdZVbuBNK8"
             />
           </Fade>
         </Grid>
