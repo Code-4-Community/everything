@@ -56,13 +56,13 @@ export default function FAQ() {
   }, []);
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       <Hero
         title="FAQs"
         subtitle="Everything you need to know about our product teams."
         SvgNode={SVG}
       />
-      <Container maxWidth="sm">
+      <Container maxWidth="xs">
         <Box py="5vh">
           <Accordion sections={frequently_asked_questions} />
         </Box>
