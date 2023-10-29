@@ -10,7 +10,6 @@ import ApplyDeveloper from './pages/apply/developer/ApplyDeveloper';
 import ApplyProductDesigner from './pages/apply/product-designer/ApplyProductDesigner';
 import ApplyProductManager from './pages/apply/product-manager/ApplyProductManager';
 import Events from './pages/events/Events';
-import FAQ from './pages/faq/FAQ';
 import Home from './pages/home/Home';
 import NotFound from './pages/notfound/NotFound';
 import People from './pages/people/People';
@@ -20,38 +19,35 @@ import theme from './theme';
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
-        <Helmet>
-          <meta
-            name="keywords"
-            content="C4C,code,for,community,code4community,codeforcommunity,northeastern,boston"
-          />
-        </Helmet>
+      <Helmet>
+        <meta
+          name="keywords"
+          content="C4C,code,for,community,code4community,codeforcommunity,northeastern,boston"
+        />
+      </Helmet>
 
-        <Router>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/apply" Component={Apply} />
-            <Route path="/apply/developer" Component={ApplyDeveloper} />
-            <Route
-              path="/apply/product-manager"
-              Component={ApplyProductManager}
-            />
-            <Route
-              path="/apply/product-designer"
-              Component={ApplyProductDesigner}
-            />
-            <Route
-              path="/apply/brand-designer"
-              Component={ApplyBrandDesigner}
-            />
-            <Route path="/projects" Component={Projects} />
-            <Route path="/people" Component={People} />
-            <Route path="*" Component={NotFound} />
-          </Routes>
-          <Footer />
-        </Router>
-      </ThemeProvider>
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/apply" Component={Apply} />
+          <Route path="/apply/developer" Component={ApplyDeveloper} />
+          <Route
+            path="/apply/product-manager"
+            Component={ApplyProductManager}
+          />
+          <Route
+            path="/apply/product-designer"
+            Component={ApplyProductDesigner}
+          />
+          <Route path="/apply/brand-designer" Component={ApplyBrandDesigner} />
+          <Route path="/projects" Component={Projects} />
+          <Route path="/people" Component={People} />
+          <Route path="*" Component={NotFound} />
+        </Routes>
+        <Footer />
+      </Router>
+    </ThemeProvider>
   );
 };
 
