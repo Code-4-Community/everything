@@ -3,7 +3,7 @@
   "npmScope": "c4c",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "nx-cloud",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "MTY1NThmMGYtZDE4MC00N2YyLWE3MWEtOWM4NDExOThmN2IxfHJlYWQtd3JpdGU="
@@ -41,7 +41,7 @@
     "sharedGlobals": ["{workspaceRoot}/babel.config.json"]
   },
   "generators": {
-    "@nrwl/react": {
+    "@nx/react": {
       "application": {
         "style": "css",
         "linter": "eslint",

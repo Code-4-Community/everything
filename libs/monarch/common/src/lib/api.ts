@@ -1,7 +1,7 @@
 import { makeApi } from "@zodios/core";
 import { z } from "zod";
 import { Practitioner } from './dto/Practitioner'
-import { Key } from "./dto/Key";
+import { Key } from "./dto/Key";import { GeolocationPosition } from "./dto/GeolocationPosition";
 
 export const userApi = makeApi([
   {
@@ -95,5 +95,20 @@ export const userApi = makeApi([
         type: 'Header',
       }
     ]
-  }
+  },
+  {
+   method: "get",
+   path: "/geocode",
+   alias: "getGeocode",
+   description: "Get Geocode",
+   response: GeolocationPosition,
+   parameters: [
+    {
+      name: "zipcode",
+      description: "Zipcode Query",
+      schema: z.string(),
+      type: "Query",
+    },
+   ]
+  },
 ]);

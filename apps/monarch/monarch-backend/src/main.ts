@@ -10,10 +10,12 @@ import getPendingPractitioners from './workflows/getPendingPractitioners';
 import postNewPractitioner from './workflows/postNewPractitioner';
 import deletePractitionerWF from './workflows/deletePractitioner';
 import deletePendingPractitionerWF from './workflows/deletePendingPractitioner';
+import getGeocode from './workflows/getGeocode';
 // Import effectful dependencies (database connections, email clients, etc.)
 import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, deletePractitioner, deletePendingPractitioner } from './dynamodb';
+import { extractGeocode } from './location';
 import { zodiosApp } from '@zodios/express';
-import { userApi } from '@c4c/monarch/common';
+import { userApi, isValidZipcode } from '@c4c/monarch/common';
 import serverlessExpress from '@vendia/serverless-express';
 
 import CognitoExpress from "cognito-express";
@@ -42,6 +44,10 @@ const deletePractitionerHandler = async (req: Request) => {
 const deletePendingPractitionerHandler = async (req: Request) => {
 	return deletePendingPractitionerWF(req, deletePendingPractitioner);
 }
+
+const getGeocodeHandler = async (address: string) => {
+  return getGeocode(address, extractGeocode);
+};
 
 app.use(cors());
 
@@ -112,6 +118,14 @@ authenticatedRoute.delete('/practitioners', async (req: Request, res: Response) 
 authenticatedRoute.delete('/pendingPractitioners', async (req: Request, res: Response) => {
 	const response = await deletePendingPractitionerHandler(req);
 	res.status(200).json(response);
+});
+
+app.get('/geocode', async (req, res) => {
+  if (!isValidZipcode(req.query.zipcode)) {
+    res.status(400);
+  };
+  const geocode = await getGeocodeHandler(req.query.zipcode);
+  res.status(200).json(geocode).end();
 });
 
 //app.use('/assets', express.static(path.join(__dirname, 'assets')));
