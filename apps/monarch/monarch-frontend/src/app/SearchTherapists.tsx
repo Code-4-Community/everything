@@ -27,9 +27,17 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useDisclosure,
   VStack,
   Wrap,
   WrapItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from '@chakra-ui/react';
 import {
   CheckCircleIcon,
@@ -42,6 +50,7 @@ import SearchTherapistsFilter from './SearchTherapistsFilter';
 //@ts-ignore
 import awsmobile from '../aws-exports.js';
 import { Amplify } from 'aws-amplify';
+import { Key } from '@c4c/monarch/common';
 Amplify.configure(awsmobile);
 
 const debouncedSearchTherapists = debouncePromise(
@@ -49,17 +58,43 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
-function DeleteButton({ onDelete }) {
+const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string }> = ({ therapist, accessToken }) => {
   const buttonColor = useColorModeValue('red.500', 'red.300');
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
 
   return (
-    <IconButton
-      icon={<DeleteIcon />}
-      variant="ghost"
-      color={buttonColor}
-      onClick={onDelete}
-      aria-label="Delete Item"
-    />
+    <>
+      <IconButton
+        icon={<DeleteIcon />}
+        variant="ghost"
+        color={buttonColor}
+        onClick={onDeleteOpen}
+        aria-label="Delete Item"
+      />
+
+      <Modal isOpen={isDeleteOpen} onClose={() => {
+          onDeleteClose();
+      }}>
+          <ModalOverlay />
+          <ModalContent>
+              <ModalHeader>Remove Practitioner</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                  Are you sure you want to remove this practitioner?                    
+              </ModalBody>
+              <ModalFooter>
+                  <Button onClick={() => {
+                      onDeleteClose();
+                  }} variant='ghost' mr={2}>Cancel</Button>
+                  <Button onClick={() => {
+                      onDeleteClose();
+                      controller.deleteTherapist(key, accessToken);
+                  }} colorScheme='teal'>Submit</Button>
+              </ModalFooter>
+          </ModalContent>
+      </Modal>
+    </>
   );
 }
 
@@ -317,10 +352,7 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
                       </Box>
                     </WrapItem>
                     {accessToken.length > 0 && (
-                      <DeleteButton onDelete={() => {
-                        controller.deleteTherapist({phoneNumber: therapist.phone, fullName: therapist.fullName}, accessToken)
-                      }
-                      } />
+                      <DeleteButton therapist={therapist} accessToken={accessToken} />
                     )}
                   </Wrap>
                 </Box>

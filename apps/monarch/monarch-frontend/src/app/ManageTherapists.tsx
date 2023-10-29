@@ -46,10 +46,6 @@ const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
 
   const { coords } = useGeolocated();
 
-  if (applicants) {
-    console.log(applicants[0]);
-  }
-
   return (
     <div>
       {applicants != null && (
