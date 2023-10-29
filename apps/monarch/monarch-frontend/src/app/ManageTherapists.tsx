@@ -33,6 +33,7 @@ Amplify.configure(awsmobile);
 const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
 
   const [applicants, setApplicants] = useState<Practitioner[]>([]);
+  const [reload, setReload] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -42,7 +43,8 @@ const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
       }
     }
     fetchData();
-  }, [accessToken]); 
+    setReload(false);
+  }, [accessToken, reload]); 
 
   const { coords } = useGeolocated();
 
@@ -183,7 +185,7 @@ const ManageTherapists: React.FC<{ accessToken: string }> = ({accessToken}) => {
                       </Box>
                     </WrapItem>
                     <WrapItem>
-                      <AddPractitioner accessToken={accessToken} practitioner={therapist}/>
+                      <AddPractitioner accessToken={accessToken} practitioner={therapist} setReload={setReload}/>
                     </WrapItem>
                   </Wrap>
                 </Box>

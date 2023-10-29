@@ -13,7 +13,7 @@ import {
 import { Practitioner } from '@c4c/monarch/common';
 import { controller } from './actionsController';
 
-const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitioner }> = ({ accessToken, practitioner }) => {
+const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitioner, setReload }> = ({ accessToken, practitioner, setReload }) => {
     const { isOpen: isAcceptOpen, onOpen: onAcceptOpen, onClose: onAcceptClose } = useDisclosure();
     const { isOpen: isDenyOpen, onOpen: onDenyOpen, onClose: onDenyClose } = useDisclosure();
 
@@ -25,6 +25,7 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
         const key = { phoneNumber: phoneNumber, fullName: fullName };
         controller.deleteApplicant(key, accessToken);
         console.log('Successfully added new therapist');
+        setReload(true);
     }
 
     const handleDenyFormSubmission = async () => {
@@ -35,6 +36,7 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
         console.log(key);
         await controller.deleteApplicant(key, accessToken);
         console.log('Successfully denied new therapist');
+        setReload(true);
     }
 
     return (

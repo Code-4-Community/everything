@@ -58,7 +58,7 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
-const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string }> = ({ therapist, accessToken }) => {
+const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload }> = ({ therapist, accessToken, setReload }) => {
   const buttonColor = useColorModeValue('red.500', 'red.300');
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
   const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
@@ -90,6 +90,7 @@ const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: st
                   <Button onClick={() => {
                       onDeleteClose();
                       controller.deleteTherapist(key, accessToken);
+                      setReload(true);
                   }} colorScheme='teal'>Submit</Button>
               </ModalFooter>
           </ModalContent>
@@ -110,10 +111,13 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
     TherapistDisplayModel[] | null
   >(null);
 
+  const [reload, setReload] = useState<boolean>(false);
+
   useEffect(() => {
     setSearchResult(null);
     debouncedSearchTherapists(searchQuery).then(setSearchResult);
-  }, [searchQuery]);
+    setReload(false);
+  }, [searchQuery, reload]);
 
   const data = searchResult;
   const isLoading = searchResult == null;
@@ -352,7 +356,7 @@ export const SearchTherapists: React.FC<{ accessToken: string }> = ({accessToken
                       </Box>
                     </WrapItem>
                     {accessToken.length > 0 && (
-                      <DeleteButton therapist={therapist} accessToken={accessToken} />
+                      <DeleteButton therapist={therapist} accessToken={accessToken} setReload={setReload} />
                     )}
                   </Wrap>
                 </Box>
