@@ -103,6 +103,8 @@ const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: st
 
 export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean, setReload?: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
   const { coords } = useGeolocated();
+  const [distanceFilterEnabled, setDistanceFilterEnabled] = useState(false);
+  const [clientCoordinates, setClientCoordinates] = useState<GeolocationPosition>();
   const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>({
     searchString: '',
     languages: [],
@@ -134,26 +136,28 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
   );
 
   function comparableDistance(therapist: Therapist): number {
-    return therapist.geocode != null && clientCoordinates != null
-      ? dist(
-          therapist.geocode?.lat,
-          therapist.geocode?.long,
-          clientCoordinates?.latitude,
-          clientCoordinates?.longitude
-        )
-      : Number.POSITIVE_INFINITY;
+    return 1;
+    // therapist.geocode != null && clientCoordinates != null
+    //   ? dist(
+    //       therapist.geocode?.lat,
+    //       therapist.geocode?.long,
+    //       clientCoordinates?.latitude,
+    //       clientCoordinates?.longitude
+    //     )
+    //   : Number.POSITIVE_INFINITY;
   }
 
   const therapists = data?.filter((therapist) => {
-    return (
-      !distanceFilterEnabled || clientCoordinates === undefined ||
-      dist(
-        therapist.geocode.lat,
-        therapist.geocode.long,
-        clientCoordinates.latitude,
-        clientCoordinates.longitude
-      ) < searchQuery.maxDistance
-    );
+    return true; 
+    // (
+    //   !distanceFilterEnabled || clientCoordinates === undefined ||
+    //   dist(
+    //     therapist.geocode.lat,
+    //     therapist.geocode.long,
+    //     clientCoordinates.latitude,
+    //     clientCoordinates.longitude
+    //   ) < searchQuery.maxDistance
+    // );
   });
   
   if (searchQuery.searchString.length === 0) {
