@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Divider from '../Divider';
 import Resources from './Resources';
 import Header from './Header';
-import MapLegend from '../../components/map/MapLegend';
+import MapPreview from '../../assets/images/siteIcons/mapPreview.png';
 import Navbar from '../Navbar';
 import { SITE_STATUS_ROADMAP } from '../../constants';
 
@@ -15,13 +15,33 @@ export default function VolunteerPage() {
       <Navbar />
       <div style={{ marginTop: '50px' }} />
       <Header />
-      <Divider />
-      <div style={{ position: 'relative' }}>
-        <Map
-          selectedFeatures={selectedFeatures}
-          selectedStatuses={selectedStatuses}
-          zoom={8}
-        />
+      <div
+        style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'white',
+          padding: '50px 40px',
+          gap: '60px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <img src={MapPreview} />
+        <a
+          href=""
+          style={{
+            top: '50%',
+            left: '50%',
+            fontSize: '25px',
+            fontWeight: 'bold',
+            fontFamily: 'Montserrat',
+            lineHeight: '49px',
+            color: 'black',
+          }}
+        >
+          VIEW THE INTERACTIVE MAP &rarr;
+        </a>
       </div>
       <Divider />
       <Resources />
