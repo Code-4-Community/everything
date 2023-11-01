@@ -20,11 +20,11 @@ export default function VolunteerPage() {
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'space-evenly',
           background: 'white',
           padding: '50px 40px',
           gap: '60px',
-          flexWrap: 'wrap',
+          flexWrap: 'nowrap',
         }}
       >
         <img src={MapPreview} />
@@ -33,11 +33,11 @@ export default function VolunteerPage() {
           style={{
             top: '50%',
             left: '50%',
-            fontSize: '25px',
+            fontSize: '27px',
             fontWeight: 'bold',
             fontFamily: 'Montserrat',
             lineHeight: '49px',
-            color: 'black',
+            color: '#091F2F',
           }}
         >
           VIEW THE INTERACTIVE MAP &rarr;

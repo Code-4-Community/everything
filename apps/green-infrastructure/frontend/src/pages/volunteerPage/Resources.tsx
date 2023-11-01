@@ -1,3 +1,7 @@
+import { Box, Grid, ThemeProvider } from "@mui/material";
+import { VolunteerResource, VOLUNTEER_RESOURCES  } from "./volunteerResources";
+import CircleIcon from '@mui/icons-material/Circle';
+
 export default function Resources() {
   const title = {
     color: 'var(--Text-Primary, #091F2F)',
@@ -33,7 +37,7 @@ export default function Resources() {
     <div
       style={{
         display: 'flex',
-        padding: '20px 40px',
+        padding: '34px 45px 49px 45px',
         flexDirection: 'column',
         alignItems: 'flex-start',
         gap: '15px',
@@ -44,69 +48,69 @@ export default function Resources() {
       <p style={title}>
         <u>Featured Resources &rarr;</u>
       </p>
-      <p style={headings}>
-        Setting the Scene and Brief History: <br />
-        <div style={content}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex
-        </div>
-      </p>
-
-      <p style={headings}>
-        Purpose of Interactive Map: <br />
-        <div style={content}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex
-        </div>
-      </p>
-      <p style={headings}>
-        How to use Map: <br />
-        <div style={content}>
-          <ol type="1" style={{ margin: '0' }}>
-            <li>Lorem ipsum dolor sit amet</li>
-            <li>consectetur adipiscing elit</li>
-            <li>sed do eiusmod tempor incididunt ut labore</li>
-            <li>et dolore magna aliqua</li>
-          </ol>
-        </div>
-      </p>
-
-      <p style={headings}>
-        Importance: <br />
-        <div style={content}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex
-        </div>
-      </p>
-
-      <p style={headings}>
-        Feature Type and Descriptions: <br />
-        <div style={content}>
-          Rain Garden: Small shallow depressed planted areas consisting of
-          biosoil and simple plant palettes. <br />
-          Bioswale: Medium-sized depressed planted features that are often
-          longer than they are wide and may have overflow structures/pipes.{' '}
-          <br />
-          Bioretention: Larger depressed planted features that vary in size and
-          shape and can capture and infiltrate larger volumes of runoff
-          (typically have pipes and structures). <br />
-          Porous Paving: Paving materials, like asphalt, concrete or pavers,
-          with voids or gaps that water is able to pass through. <br />
-          Tree Trench/Planter: Hybrid features that are planted with trees at
-          the surface and have subsurface infiltration areas that give trees
-          access to large volumes of stormwater while it absorbs into the
-          ground. <br />
-          Green Roof/Planter: Vegetated areas, at ground level or on roofs, that
-          consist of planting soil or other lightweight planting materials, and
-          native plants.
-        </div>
-      </p>
+      <Grid container sx={{
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
+      }}>
+      {VOLUNTEER_RESOURCES.map((resource: VolunteerResource) => {
+        return (<Grid xs={4} item>
+          <BoxPanel textContent={resource.resourceName}/>
+          </Grid>)
+      })}
+      </Grid>
     </div>
+  );
+}
+
+interface PanelProps {
+  textContent: string
+}
+function BoxPanel(props: PanelProps) {
+  return (
+    <ThemeProvider
+      theme={{
+        palette: {
+          primary: {
+            main: '#F2F2F2',
+            dark: '#B1F1F1',
+          },
+        },
+      }}
+    >
+      <Box
+        sx={{
+          width: '330px',
+          height: '253px',
+          marginTop: '28px',
+          marginBottom: '49px',
+          borderRadius: 1,
+          bgcolor: 'primary.main',
+          '&:hover': {
+            bgcolor: 'primary.dark',
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircleIcon sx={{
+          width: '100px',
+          height: '100px',
+          marginTop: '48px',
+          marginBottom: '24px',
+          color: '#FFFDFD',
+        }}/>
+        <span style={
+          {
+            color: '#288BE4',
+            fontSize: '20px',
+            fontStyle: 'italic',
+            marginBottom: '50px',
+          }
+        }>{props.textContent}</span>
+      </Box>
+    </ThemeProvider>
   );
 }
