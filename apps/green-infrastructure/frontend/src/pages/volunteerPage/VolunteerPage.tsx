@@ -23,8 +23,8 @@ export default function VolunteerPage() {
           justifyContent: 'space-evenly',
           background: 'white',
           padding: '50px 40px',
-          gap: '60px',
-          flexWrap: 'nowrap',
+          gap: '20px',
+          flexWrap: 'wrap',
         }}
       >
         <img src={MapPreview} />
@@ -35,7 +35,7 @@ export default function VolunteerPage() {
             left: '50%',
             fontSize: '27px',
             fontWeight: 'bold',
-            fontFamily: 'Montserrat',
+            fontFamily: 'Helvetica',
             lineHeight: '49px',
             color: '#091F2F',
           }}

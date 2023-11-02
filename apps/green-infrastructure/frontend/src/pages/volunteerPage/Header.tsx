@@ -18,7 +18,7 @@ export default function Header() {
           textAlign: 'left',
           color: 'black',
           width: '100%',
-          borderBottom: '3px solid rgba(0, 0, 0, 1)',
+          borderBottom: '4px solid rgba(0, 0, 0, 1)',
         }}
       >
         Welcome back, Volunteer!
