@@ -27,12 +27,10 @@ export default function VolunteerPage() {
           flexWrap: 'wrap',
         }}
       >
-        <img src={MapPreview} />
+        <img src={MapPreview}/>
         <a
           href=""
           style={{
-            top: '50%',
-            left: '50%',
             fontSize: '27px',
             fontWeight: 'bold',
             fontFamily: 'Helvetica',

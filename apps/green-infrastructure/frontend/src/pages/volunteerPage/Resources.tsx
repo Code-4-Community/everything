@@ -39,30 +39,27 @@ export default function Resources() {
         display: 'flex',
         padding: '34px 45px 49px 45px',
         flexDirection: 'column',
-        alignItems: 'flex-start',
         gap: '15px',
         flexShrink: '0',
         background: 'white',
+        margin: '0',
       }}
     >
       <p style={title}>
         <u>FEATURED RESOURCES &rarr;</u>
       </p>
-      <Grid
-        container
-        sx={{
+      <Grid container rowSpacing={8} sx={{
+        padding: '18px',
+      }}>
+      {VOLUNTEER_RESOURCES.map((resource: VolunteerResource) => {
+        return (<Grid xs={4} item sx={{
           display: 'flex',
-          justifyContent: 'space-evenly',
           alignItems: 'center',
-        }}
-      >
-        {VOLUNTEER_RESOURCES.map((resource: VolunteerResource) => {
-          return (
-            <Grid xs={4} item>
-              <BoxPanel textContent={resource.resourceName} />
-            </Grid>
-          );
-        })}
+          justifyContent: 'center',
+        }}>
+          <BoxPanel textContent={resource.resourceName}/>
+          </Grid>)
+      })}
       </Grid>
     </div>
   );
@@ -85,11 +82,8 @@ function BoxPanel(props: PanelProps) {
     >
       <Box
         sx={{
-          width: '330px',
-          height: '253px',
-          marginTop: '28px',
-          marginBottom: '49px',
-          borderRadius: 1,
+          width: '380px',
+          height: '303px',
           bgcolor: 'primary.main',
           '&:hover': {
             bgcolor: 'primary.dark',
@@ -114,11 +108,9 @@ function BoxPanel(props: PanelProps) {
             color: '#288BE4',
             fontSize: '20px',
             fontStyle: 'italic',
-            marginBottom: '50px',
-          }}
-        >
-          {props.textContent}
-        </span>
+            lineHeight: '25.6px',
+          }
+        }>{props.textContent}</span>
       </Box>
     </ThemeProvider>
   );
