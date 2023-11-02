@@ -1,14 +1,14 @@
-import { Box, Grid, ThemeProvider } from "@mui/material";
-import { VolunteerResource, VOLUNTEER_RESOURCES  } from "./volunteerResources";
+import { Box, Grid, ThemeProvider } from '@mui/material';
+import { VolunteerResource, VOLUNTEER_RESOURCES } from './volunteerResources';
 import CircleIcon from '@mui/icons-material/Circle';
 
 export default function Resources() {
   const title = {
     color: 'var(--Text-Primary, #091F2F)',
-    fontFamily: 'Montserrat',
+    fontFamily: 'Helvetica',
     fontSize: '27px',
     fontStyle: 'bold',
-    fontWeight: '1000',
+    fontWeight: 'bold',
     lineHeight: 'normal',
     textDecorationLine: 'underline',
     margin: '0',
@@ -46,25 +46,30 @@ export default function Resources() {
       }}
     >
       <p style={title}>
-        <u>Featured Resources &rarr;</u>
+        <u>FEATURED RESOURCES &rarr;</u>
       </p>
-      <Grid container sx={{
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        alignItems: 'center'
-      }}>
-      {VOLUNTEER_RESOURCES.map((resource: VolunteerResource) => {
-        return (<Grid xs={4} item>
-          <BoxPanel textContent={resource.resourceName}/>
-          </Grid>)
-      })}
+      <Grid
+        container
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
+        }}
+      >
+        {VOLUNTEER_RESOURCES.map((resource: VolunteerResource) => {
+          return (
+            <Grid xs={4} item>
+              <BoxPanel textContent={resource.resourceName} />
+            </Grid>
+          );
+        })}
       </Grid>
     </div>
   );
 }
 
 interface PanelProps {
-  textContent: string
+  textContent: string;
 }
 function BoxPanel(props: PanelProps) {
   return (
@@ -95,21 +100,25 @@ function BoxPanel(props: PanelProps) {
           justifyContent: 'center',
         }}
       >
-        <CircleIcon sx={{
-          width: '100px',
-          height: '100px',
-          marginTop: '48px',
-          marginBottom: '24px',
-          color: '#FFFDFD',
-        }}/>
-        <span style={
-          {
+        <CircleIcon
+          sx={{
+            width: '100px',
+            height: '100px',
+            marginTop: '48px',
+            marginBottom: '24px',
+            color: '#FFFDFD',
+          }}
+        />
+        <span
+          style={{
             color: '#288BE4',
             fontSize: '20px',
             fontStyle: 'italic',
             marginBottom: '50px',
-          }
-        }>{props.textContent}</span>
+          }}
+        >
+          {props.textContent}
+        </span>
       </Box>
     </ThemeProvider>
   );
