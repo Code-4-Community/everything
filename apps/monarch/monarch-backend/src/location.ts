@@ -10,12 +10,8 @@ if (process.env.AWS_SECRET_ACCESS_KEY == null) {
 };
 
 const client = new LocationClient({
-    region: 'us-east-2',
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-});
+    region: 'us-east-2'
+})
 
 export async function extractGeocode(address: string): Promise<GeolocationPosition> {
     const searchQuery = new SearchPlaceIndexForTextCommand({
