@@ -4,7 +4,7 @@
  {
     "phoneNumber": "123456789",
     "website": "https://ryanjung.dev",
-    "languages": "French",
+    "languagesList": "French",
     "modality": "Software",
     "businessLocation": "Boston, MA",
     "businessName": "Code4Community",

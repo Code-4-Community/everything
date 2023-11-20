@@ -64,8 +64,7 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
       languagesList: req.body.languagesList,
       minAgeServed: req.body.minAgeServed,
       modality: req.body.modality,
-      website: req.body.website,
-      languages: req.body.languages,
+      website: req.body.website
     }),
   };
 

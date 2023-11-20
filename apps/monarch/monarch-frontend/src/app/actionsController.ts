@@ -113,7 +113,6 @@ async function fetchPendingPractitioners(useFake = false, accessToken: string): 
   const therapists: Practitioner[] = data.map((d) => ({
     phoneNumber: d.phoneNumber,
     website: d.website,
-    languages: d.languagesList[0],
     modality: d.modality,
     businessLocation: d.businessLocation,
     businessName: d.businessName,
