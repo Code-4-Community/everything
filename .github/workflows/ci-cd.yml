@@ -51,8 +51,47 @@ jobs:
       - name: Nx Affected Lint
         run: npx nx affected -t lint
 
-      # - name: Nx Affected Test
-      #   run: npx nx affected -t test
+      - name: Nx Affected Test
+        run: npx nx affected -t test
+
+      - name: Nx Affected Build
+        run: npx nx affected -t build
+
+      - name: Determine who needs to be deployed
+        id: should-deploy
+        run: |
+          echo "The following projects have been affected: [$(npx nx print-affected -t build --select=tasks.target.project)]";
+          echo "affected=$(npx nx print-affected -t build --select=tasks.target.project)" >> "$GITHUB_OUTPUT"
+
+  pre-deploy-monarch:
+    runs-on: ubuntu-latest
+    outputs:
+      affected: ${{ steps.should-deploy.outputs.affected }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      # In any subsequent steps within this job (myjob) we can reference the resolved SHAs
+      # using either the step outputs or environment variables:
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
+
+      - name: Nx Affected Lint
+        run: npx nx affected -t lint
 
       - name: Nx Affected Build
         run: npx nx affected -t build
@@ -88,7 +127,7 @@ jobs:
           DOTCOM_WEBHOOK_DEPLOY: ${{ secrets.DOTCOM_WEBHOOK_DEPLOY }}
 
   deploy-monarch-frontend:
-    needs: pre-deploy
+    needs: pre-deploy-monarch
     if: (contains(github.event.inputs.manual-deploy, 'monarch-frontend') || contains(needs.pre-deploy.outputs.affected, 'monarch-frontend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # For "simplicity", deployment settings are configured in the AWS Amplify Console
@@ -100,7 +139,7 @@ jobs:
           MONARCH_WEBHOOK_DEPLOY: ${{ secrets.MONARCH_WEBHOOK_DEPLOY }}
 
   deploy-monarch-backend:
-    needs: pre-deploy
+    needs: pre-deploy-monarch
     if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
