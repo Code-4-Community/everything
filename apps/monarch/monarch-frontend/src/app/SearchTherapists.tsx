@@ -136,28 +136,28 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
   );
 
   function comparableDistance(therapist: Therapist): number {
-    return 1;
-    // therapist.geocode != null && clientCoordinates != null
-    //   ? dist(
-    //       therapist.geocode?.lat,
-    //       therapist.geocode?.long,
-    //       clientCoordinates?.latitude,
-    //       clientCoordinates?.longitude
-    //     )
-    //   : Number.POSITIVE_INFINITY;
+    // return 1;
+    return therapist.geocode != null && clientCoordinates != null
+      ? dist(
+          therapist.geocode?.lat,
+          therapist.geocode?.long,
+          clientCoordinates?.latitude,
+          clientCoordinates?.longitude
+        )
+      : Number.POSITIVE_INFINITY;
   }
 
   const therapists = data?.filter((therapist) => {
-    return true; 
-    // (
-    //   !distanceFilterEnabled || clientCoordinates === undefined ||
-    //   dist(
-    //     therapist.geocode.lat,
-    //     therapist.geocode.long,
-    //     clientCoordinates.latitude,
-    //     clientCoordinates.longitude
-    //   ) < searchQuery.maxDistance
-    // );
+    // return true; 
+    return (
+      !distanceFilterEnabled || clientCoordinates === undefined ||
+      dist(
+        therapist.geocode.lat,
+        therapist.geocode.long,
+        clientCoordinates.latitude,
+        clientCoordinates.longitude
+      ) < searchQuery.maxDistance
+    );
   });
   
   if (searchQuery.searchString.length === 0) {
@@ -196,34 +196,37 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
 
   return (
     <span style={parentStyles}>   
-      {location.pathname !== '/admin' && (
-        <div style={regularStyles}>       
+      
+
+    <div style={{flex: 1}}>
+
+      <div style={{ marginTop: 10 }}>
+      <HStack>
+        <InputGroup size="lg">
+            <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
+            <Input
+              type="search"
+              placeholder='Search practitioners by text (e.g. "Taekwondo", "Tracy", "Spanish")'
+              onChange={onInputChange}
+              value={searchQuery.searchString}
+              autoFocus
+            />
+          </InputGroup>
+          {location.pathname !== '/admin' && (
+        <div>       
           <Button colorScheme="teal" onClick={handleLogin}>
             Login
           </Button>
         </div> 
       )}
       {location.pathname === '/admin' && (
-        <div style={adminStyles}>       
+        <div>       
           <Button colorScheme="teal" onClick={handleLogout}>
             Logout
           </Button>
         </div> 
       )}
-
-    <div style={{flex: 1}}>
-
-      <div style={{ marginTop: 10 }}>
-        <InputGroup size="lg">
-          <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
-          <Input
-            type="search"
-            placeholder='Search practitioners by text (e.g. "Taekwondo", "Tracy", "Spanish")'
-            onChange={onInputChange}
-            value={searchQuery.searchString}
-            autoFocus
-          />
-        </InputGroup>
+      </HStack>
         
         <QueryContext.Provider value={{
           searchQuery: searchQuery,

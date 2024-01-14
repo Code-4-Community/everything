@@ -60,6 +60,14 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
 	res.status(200).json(practitioners).end();
 });
 
+app.get('/geocode', async (req, res) => {
+	if (!isValidZipcode(req.query.zipcode)) {
+	  res.status(400);
+	};
+	const geocode = await getGeocodeHandler(req.query.zipcode);
+	res.status(200).json(geocode).end();
+  });
+
 //Initializing CognitoExpress constructor
 const cognitoExpress = new CognitoExpress({
 	region: "us-east-1",
@@ -118,14 +126,6 @@ authenticatedRoute.delete('/practitioners', async (req: Request, res: Response) 
 authenticatedRoute.delete('/pendingPractitioners', async (req: Request, res: Response) => {
 	const response = await deletePendingPractitionerHandler(req);
 	res.status(200).json(response);
-});
-
-app.get('/geocode', async (req, res) => {
-  if (!isValidZipcode(req.query.zipcode)) {
-    res.status(400);
-  };
-  const geocode = await getGeocodeHandler(req.query.zipcode);
-  res.status(200).json(geocode).end();
 });
 
 //app.use('/assets', express.static(path.join(__dirname, 'assets')));
