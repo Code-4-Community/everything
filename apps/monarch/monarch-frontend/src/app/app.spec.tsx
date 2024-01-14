@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 
 import { BrowserRouter } from 'react-router-dom';
+import { describe } from 'node:test';
 
 describe('App', () => {
   it('should pass', () => {
