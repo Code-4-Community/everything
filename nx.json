@@ -18,6 +18,9 @@
     "e2e": {
       "inputs": ["default", "^production"]
     },
+    "test": {
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
+    },
     "lint": {
       "inputs": [
         "default",
