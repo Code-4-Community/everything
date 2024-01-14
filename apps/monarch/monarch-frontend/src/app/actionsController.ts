@@ -22,7 +22,7 @@ export interface ActionsController {
   searchTherapists: (
     query: SearchTherapistsQuery
   ) => Promise<TherapistDisplayModel[]>;
-  getApplicants: (accessToken: string) => Promise<Practitioner[]>;
+  getApplicants: (accessToken: string) => Promise<Therapist[]>;
   extractGeocodeFromZipcode: (
     zipcode: string
   ) => Promise<GeolocationPosition>;
@@ -100,7 +100,7 @@ async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
   return therapists;
 }
 
-async function fetchPendingPractitioners(useFake = false, accessToken: string): Promise<Practitioner[]> {
+async function fetchPendingPractitioners(useFake = false, accessToken: string): Promise<Therapist[]> {
   const data = await serverApiClient.getPendingPractitioners({
     headers: {
       "accessToken": accessToken
@@ -110,16 +110,22 @@ async function fetchPendingPractitioners(useFake = false, accessToken: string): 
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const therapists: Practitioner[] = data.map((d) => ({
-    phoneNumber: d.phoneNumber,
-    website: d.website,
-    modality: d.modality,
-    businessLocation: d.businessLocation,
-    businessName: d.businessName,
-    minAgeServed: d.minAgeServed,
-    email: d.email,
+  const therapists: Therapist[] = data.map((d) => ({
     fullName: d.fullName,
-    languagesList: d.languagesList,
+    address: d.businessLocation,
+    city: '',
+    state: '',
+    zip: '',
+    email: d.email,
+    phone: d.phoneNumber,
+    profilePictureUrl: '',
+    minimumAgeServed: d.minAgeServed,
+    description: '',
+    therapyType: d.modality,
+    title: d.businessName,
+    website: d.website,
+    badges: [],
+    languages: d.languagesList,
     geocode: {
       lat: d.geocode.lat,
       long: d.geocode.long,
