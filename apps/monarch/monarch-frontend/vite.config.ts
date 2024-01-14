@@ -19,10 +19,6 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  // define: {
-  //   global: {}
-  // }, // this causes the build step on pre-deploy to fail, removing this fixes it
-
   plugins: [
     react(),
     viteTsConfigPaths({
