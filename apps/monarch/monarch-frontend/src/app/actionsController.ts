@@ -1,12 +1,12 @@
-import { Badge, Therapist, TherapistDisplayModel } from './therapist';
-import { faker } from '@faker-js/faker';
-import Fuse from 'fuse.js';
-import { Practitioner, Key, createApiClient } from '@c4c/monarch/common';;
 import corpImage from '../assets/Badge_Corp.png';
 import longTimePartnerImage from '../assets/Badge_Heart.png';
 import frequentPartner from '../assets/Badge_Partner.png';
 import { GeolocationPosition } from '@c4c/monarch/common';
 import { dist } from './SearchTherapists';
+import { Badge, Therapist, TherapistDisplayModel } from './therapist';
+import { faker } from '@faker-js/faker';
+import Fuse from 'fuse.js';
+import { Practitioner, Key, createApiClient } from '@c4c/monarch/common';;
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
