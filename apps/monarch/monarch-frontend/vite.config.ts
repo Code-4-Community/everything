@@ -19,9 +19,6 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  define: {
-    global: {},
-  },
 
   plugins: [
     react(),
