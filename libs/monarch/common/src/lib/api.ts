@@ -1,7 +1,7 @@
 import { makeApi } from "@zodios/core";
 import { z } from "zod";
 import { Practitioner } from './dto/Practitioner'
-import { GeolocationPosition } from "./dto/GeolocationPosition";
+import { Key } from "./dto/Key";import { GeolocationPosition } from "./dto/GeolocationPosition";
 
 export const userApi = makeApi([
   {
@@ -17,6 +17,84 @@ export const userApi = makeApi([
     alias: "getPractitioners",
     description: "Get Practitioners",
     response: z.array(Practitioner),
+  },
+  {
+    method: "get",
+    path: "/pendingPractitioners",
+    alias: "getPendingPractitioners",
+    description: "Get Pending Practitioners",
+    response: z.array(Practitioner),
+    parameters: [
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
+  },
+  {
+    method: "post",
+    path: "/practitioners",
+    alias: "postPractitioner",
+    description: "Post Practitioner",
+    response: Practitioner,
+    parameters: [
+      {
+        name: 'practitioner',
+        description: 'New Practitioner',
+        schema: Practitioner,
+        type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
+  },
+  {
+    method: "delete",
+    path: "/practitioners",
+    alias: "deletePractitioner",
+    description: "Delete Practitioner",
+    response: Key,
+    parameters: [
+      {
+        name: 'Key',
+        description: 'Partition key and sort key',
+        schema: Key,
+        type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
+  },
+  {
+    method: "delete",
+    path: "/pendingPractitioners",
+    alias: "deletePendingPractitioner",
+    description: "Delete Pending Practitioner",
+    response: Key,
+    parameters: [
+      {
+        name: 'Key',
+        description: 'Partition key and sort key',
+        schema: Key,
+        type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
   },
   {
    method: "get",

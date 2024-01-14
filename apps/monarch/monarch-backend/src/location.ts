@@ -3,11 +3,11 @@ import type { GeolocationPosition } from '@c4c/monarch/common';
 
 if (process.env.AWS_ACCESS_KEY_ID == null) {
     throw new Error('AWS Access Key not configured');
-};
+}
 
 if (process.env.AWS_SECRET_ACCESS_KEY == null) {
     throw new Error('AWS Secret Access Key not configured');
-};
+}
 
 const client = new LocationClient({
     region: 'us-east-2'
@@ -23,4 +23,4 @@ export async function extractGeocode(address: string): Promise<GeolocationPositi
         latitude: searchResult.Results[0].Place.Geometry.Point[1],
         longitude: searchResult.Results[0].Place.Geometry.Point[0],
     };
-};
+}

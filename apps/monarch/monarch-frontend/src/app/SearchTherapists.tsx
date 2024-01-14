@@ -1,12 +1,5 @@
-import {
-  Button,
-  Card,
-  ControlGroup,
-  Elevation,
-  Label,
-  NumericInput,
-  Spinner,
-} from '@blueprintjs/core';
+/* eslint-disable no-restricted-globals */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {
   ChangeEvent,
   useCallback,
@@ -15,6 +8,7 @@ import React, {
   useState,
   createContext,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { controller, SearchTherapistsQuery } from './actionsController';
 import { GeolocationPosition } from '@c4c/monarch/common';
 import { useGeolocated } from 'react-geolocated';
@@ -22,41 +16,40 @@ import { Therapist, TherapistDisplayModel } from './therapist';
 import {
   Badge,
   Box,
-  Center,
+  Button,
   Divider,
-  Flex,
-  Grid,
-  GridItem,
   Heading,
   HStack,
-  Image,
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Link,
-  SimpleGrid,
   Skeleton,
   Stack,
-  StackItem,
-  Stat,
-  StatArrow,
-  StatHelpText,
-  StatLabel,
-  StatNumber,
   Text,
+  useDisclosure,
   VStack,
   Wrap,
   WrapItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from '@chakra-ui/react';
 import {
   CheckCircleIcon,
   QuestionIcon,
   Search2Icon,
-  StarIcon,
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
+//@ts-ignore
+import awsmobile from '../aws-exports.js';
+import { Amplify } from 'aws-amplify';
+Amplify.configure(awsmobile);
 
 interface QueryContext {
   searchQuery: SearchTherapistsQuery;
@@ -72,17 +65,51 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
-const defaultSearchQuery: SearchTherapistsQuery = {
-  searchString: '',
-  languages: [],
-  maxDistance: 100,
+const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload?: (arg: boolean) => void }> = ({ therapist, accessToken, setReload }) => {
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
+  const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
+
+  return (
+    <>
+      <Button onClick={onDeleteOpen} colorScheme='red' size='sm'>Remove</Button>
+
+      <Modal isOpen={isDeleteOpen} onClose={() => {
+          onDeleteClose();
+      }}>
+          <ModalOverlay />
+          <ModalContent>
+              <ModalHeader>Remove Practitioner</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                  Are you sure you want to remove this practitioner?                    
+              </ModalBody>
+              <ModalFooter>
+                  <Button onClick={() => {
+                      onDeleteClose();
+                  }} variant='ghost' mr={2}>Cancel</Button>
+                  <Button onClick={() => {
+                      onDeleteClose();
+                      controller.deleteTherapist(key, accessToken);
+                      if (setReload) {
+                        setReload(true);
+                      }
+                  }} colorScheme='teal'>Submit</Button>
+              </ModalFooter>
+          </ModalContent>
+      </Modal>
+    </>
+  );
 }
 
-export const SearchTherapists: React.FC = () => {
-  // const { coords } = useGeolocated();
+export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean, setReload?: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
+  const { coords } = useGeolocated();
   const [distanceFilterEnabled, setDistanceFilterEnabled] = useState(false);
   const [clientCoordinates, setClientCoordinates] = useState<GeolocationPosition>();
-  const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>(defaultSearchQuery);
+  const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>({
+    searchString: '',
+    languages: [],
+    maxDistance: 100,
+  });
 
   const [searchResult, setSearchResult] = useState<
     TherapistDisplayModel[] | null
@@ -91,27 +118,25 @@ export const SearchTherapists: React.FC = () => {
   useEffect(() => {
     setSearchResult(null);
     debouncedSearchTherapists(searchQuery).then(setSearchResult);
-  }, [searchQuery]);
+    if (setReload) {
+      setReload(false);
+    }
+    console.log('here');
+  }, [searchQuery, reload, setReload]);
 
   const data = searchResult;
   const isLoading = searchResult == null;
 
   const onInputChange = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
-      setNumTherapistsToRender(10);
+      setNumTherapistsToRender(50);
       setSearchQuery({ ...searchQuery, searchString: evt.target.value });
     },
     [searchQuery, setSearchQuery]
   );
 
-  const onMaxDistanceChange = useCallback(
-    (value: number) => {
-      setSearchQuery({ ...searchQuery, maxDistance: value });
-    },
-    [searchQuery, setSearchQuery]
-  );
-
   function comparableDistance(therapist: Therapist): number {
+    // return 1;
     return therapist.geocode != null && clientCoordinates != null
       ? dist(
           therapist.geocode?.lat,
@@ -123,6 +148,7 @@ export const SearchTherapists: React.FC = () => {
   }
 
   const therapists = data?.filter((therapist) => {
+    // return true; 
     return (
       !distanceFilterEnabled || clientCoordinates === undefined ||
       dist(
@@ -145,19 +171,62 @@ export const SearchTherapists: React.FC = () => {
     [numTherapistsToRender, therapists]
   );
 
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate('/admin');
+  };
+
+  const handleLogout = () => {
+    navigate('/');
+  };
+
+  const parentStyles = {
+    display: 'flex'
+  };
+
+  const regularStyles = {
+    paddingTop: '20px',
+    paddingRight: '30px'
+  }
+
+  const adminStyles = {
+    paddingRight: '30px'
+  }
+
   return (
-    <div>
-      <div style={{ marginTop: 64 }}>
+    <span style={parentStyles}>   
+      
+
+    <div style={{flex: 1}}>
+
+      <div style={{ marginTop: 10 }}>
+      <HStack>
         <InputGroup size="lg">
-          <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
-          <Input
-            type="search"
-            placeholder='Search practitioners by text (e.g. "Taekwondo", "Tracy", "Spanish")'
-            onChange={onInputChange}
-            value={searchQuery.searchString}
-            autoFocus
-          />
-        </InputGroup>
+            <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
+            <Input
+              type="search"
+              placeholder='Search practitioners by text (e.g. "Taekwondo", "Tracy", "Spanish")'
+              onChange={onInputChange}
+              value={searchQuery.searchString}
+              autoFocus
+            />
+          </InputGroup>
+          {location.pathname !== '/admin' && (
+        <div>       
+          <Button colorScheme="teal" onClick={handleLogin}>
+            Login
+          </Button>
+        </div> 
+      )}
+      {location.pathname === '/admin' && (
+        <div>       
+          <Button colorScheme="teal" onClick={handleLogout}>
+            Logout
+          </Button>
+        </div> 
+      )}
+      </HStack>
         
         <QueryContext.Provider value={{
           searchQuery: searchQuery,
@@ -196,7 +265,10 @@ export const SearchTherapists: React.FC = () => {
                 borderWidth="1px"
                 borderRadius="lg"
                 overflow="hidden"
-                padding={5}
+                paddingRight={5}
+                paddingLeft={5}
+                paddingTop={5}
+                paddingBottom={therapist.searchScore ? 5 : 0}
                 gap={20}
               >
                 <Box marginBottom={5}>
@@ -311,6 +383,11 @@ export const SearchTherapists: React.FC = () => {
                       </Box>
                     </WrapItem>
                   </Wrap>
+                  <div style={{ paddingTop: '10px' }}>
+                    {accessToken.length > 0 && (
+                      <DeleteButton therapist={therapist} accessToken={accessToken} setReload={setReload} />
+                    )}
+                  </div>
                 </Box>
                 {therapist.searchScore != null && (
                   <Box gap={1} alignItems="end" display="flex" dir="row">
@@ -333,12 +410,13 @@ export const SearchTherapists: React.FC = () => {
 
       {isLoading && (
         <Stack spacing={5} marginTop="48px">
-          <Skeleton height="240px" />
+          <Skeleton height="240px"/>
           <Skeleton height="240px" />
           <Skeleton height="240px" />
         </Stack>
       )}
     </div>
+    </span>
   );
 };
 
@@ -367,9 +445,11 @@ export function dist(lat1: number, lon1: number, lat2: number, lon2: number) {
      * @param abortValue if has abortValue, promise will reject it if
      * @returns Promise
      */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debouncePromise<T extends (...args: any[]) => any>(
   fn: T,
   wait: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abortValue: any = undefined
 ) {
   let cancel = () => {

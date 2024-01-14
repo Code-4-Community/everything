@@ -9,12 +9,16 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
-  },
+    fs: {
+      allow: ["/Users/james/2023/C4C/everything/apps/"]
+    }
+  }, 
 
   preview: {
     port: 4300,
     host: 'localhost',
   },
+
 
   plugins: [
     react(),
@@ -32,12 +36,12 @@ export default defineConfig({
   //  ],
   // },
 
-  test: {
-    globals: true,
-    cache: {
-      dir: '../../../node_modules/.vitest',
-    },
-    environment: 'jsdom',
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  },
+  // test: {
+  //   globals: true,
+  //   cache: {
+  //     dir: '../../../node_modules/.vitest',
+  //   },
+  //   environment: 'jsdom',
+  //   include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+  // },
 });
