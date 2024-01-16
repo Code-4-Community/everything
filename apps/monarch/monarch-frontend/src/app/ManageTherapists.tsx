@@ -1,10 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-//@ts-ignore
-import awsmobile from '../aws-exports.js';
 import AddPractitioner from './AddPractitioner';
 import React, {
   useEffect,
@@ -25,7 +22,6 @@ import {
 } from '@chakra-ui/react';
 import { controller } from './actionsController';
 import { Practitioner } from '@c4c/monarch/common';
-Amplify.configure(awsmobile);
 
 const ManageTherapists: React.FC<{ accessToken: string, reload: boolean, setReload: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
 
