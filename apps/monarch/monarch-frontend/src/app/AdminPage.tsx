@@ -1,12 +1,15 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Auth } from 'aws-amplify';
+import { Auth, Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+// @ts-ignore
+import awsmobile from '../aws-exports.js';
 import { useEffect, useState } from 'react';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { SearchTherapists } from './SearchTherapists.js';
 import ManageTherapists from './ManageTherapists';
+Amplify.configure(awsmobile);
 
 function AdminPage () {
     const [accessToken, setAccessToken] = useState<string>('');

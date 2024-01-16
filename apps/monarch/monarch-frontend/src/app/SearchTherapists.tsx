@@ -46,6 +46,10 @@ import {
 } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
+//@ts-ignore
+import awsmobile from '../aws-exports.js';
+import { Amplify } from 'aws-amplify';
+Amplify.configure(awsmobile);
 
 interface QueryContext {
   searchQuery: SearchTherapistsQuery;
