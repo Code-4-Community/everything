@@ -26,6 +26,8 @@ export const baseApp = express();
 export const app = zodiosApp(userApi, { express: baseApp });
 export const handler = serverlessExpress({ app: baseApp });
 
+app.use(cors());
+
 // Composition Root
 const getAllPractitionersHandler = async () =>
   getAllPractitioners(scanAllPractitioners);
@@ -48,8 +50,6 @@ const deletePendingPractitionerHandler = async (req: Request) => {
 const getGeocodeHandler = async (address: string) => {
   return getGeocode(address, extractGeocode);
 };
-
-app.use(cors());
 
 app.get('/', (_req: Request, res: Response) => {
   	res.status(200).json({ ok: Date.now() });
