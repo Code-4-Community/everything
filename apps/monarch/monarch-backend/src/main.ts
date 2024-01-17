@@ -23,6 +23,7 @@ import { Request, Response } from 'express';
 // Need to use base Express in order for compat with serverless-express
 // See: https://github.com/ecyrbe/zodios-express/issues/103
 export const baseApp = express();
+baseApp.use(cors());
 export const app = zodiosApp(userApi, { express: baseApp });
 export const handler = serverlessExpress({ app: baseApp });
 
@@ -49,7 +50,7 @@ const getGeocodeHandler = async (address: string) => {
   return getGeocode(address, extractGeocode);
 };
 
-app.use(cors());
+// app.use(cors());
 
 app.get('/', (_req: Request, res: Response) => {
   	res.status(200).json({ ok: Date.now() });
@@ -102,8 +103,6 @@ authenticatedRoute.use(function(req, res, next) {
 		next();
 	});
 });
-
-authenticatedRoute.use(cors());
 
 //Define your routes that need authentication check
 authenticatedRoute.get("/admin", (req, res) => {
