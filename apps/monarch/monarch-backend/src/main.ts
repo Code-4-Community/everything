@@ -80,7 +80,6 @@ const cognitoExpress = new CognitoExpress({
 });
 
 const authenticatedRoute = express.Router();
-authenticatedRoute.use(cors());
 
 app.use("/", authenticatedRoute);
 
@@ -103,6 +102,8 @@ authenticatedRoute.use(function(req, res, next) {
 		next();
 	});
 });
+
+authenticatedRoute.use(cors());
 
 //Define your routes that need authentication check
 authenticatedRoute.get("/admin", (req, res) => {
