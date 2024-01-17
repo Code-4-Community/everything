@@ -23,9 +23,10 @@ import { Request, Response } from 'express';
 // Need to use base Express in order for compat with serverless-express
 // See: https://github.com/ecyrbe/zodios-express/issues/103
 export const baseApp = express();
-baseApp.use(cors());
 export const app = zodiosApp(userApi, { express: baseApp });
 export const handler = serverlessExpress({ app: baseApp });
+
+app.use(cors());
 
 // Composition Root
 const getAllPractitionersHandler = async () =>
@@ -49,8 +50,6 @@ const deletePendingPractitionerHandler = async (req: Request) => {
 const getGeocodeHandler = async (address: string) => {
   return getGeocode(address, extractGeocode);
 };
-
-// app.use(cors());
 
 app.get('/', (_req: Request, res: Response) => {
   	res.status(200).json({ ok: Date.now() });
