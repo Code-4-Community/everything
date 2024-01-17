@@ -80,6 +80,7 @@ const cognitoExpress = new CognitoExpress({
 });
 
 const authenticatedRoute = express.Router();
+authenticatedRoute.use(cors());
 
 app.use("/", authenticatedRoute);
 
