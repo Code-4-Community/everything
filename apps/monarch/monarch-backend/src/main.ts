@@ -23,10 +23,11 @@ import { Request, Response } from 'express';
 // Need to use base Express in order for compat with serverless-express
 // See: https://github.com/ecyrbe/zodios-express/issues/103
 export const baseApp = express();
+baseApp.use(cors());
+baseApp.options('*', cors());
+
 export const app = zodiosApp(userApi, { express: baseApp });
 export const handler = serverlessExpress({ app: baseApp });
-
-app.use(cors());
 
 // Composition Root
 const getAllPractitionersHandler = async () =>
