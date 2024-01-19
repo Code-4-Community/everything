@@ -329,7 +329,7 @@ export const people: Person[] = [
       'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2023/adalia_lee.jpeg',
     linkedin: 'https://www.linkedin.com/in/adalia-lee/',
     email: 'lee.adal@northeastern.edu',
-    website: 'https://adalia-lee.adalial.repl.co',
+    website: 'https://adalialee.github.io/adalia-lee/',
   },
   {
     name: 'Kaylee Wu',
@@ -342,7 +342,14 @@ export const people: Person[] = [
     email: 'wu.kay@northeastern.edu',
   },
   // Aditya
-  // Neeti
+  {
+    name: 'Neeti Desai',
+    position: 'Developer',
+    image: 'https://c4cneu-public.s3.us-east-2.amazonaws.com/Board/2023/neeti_desai.jpg',
+    linkedin: 'https://www.linkedin.com/in/neeti-desai/',
+    email: 'desai.ne@northeastern.edu',
+    github: 'https://github.com/neetidesai'
+  },
   {
     name: 'Ethan Kong',
     position: 'Developer',
