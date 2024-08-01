@@ -40,6 +40,11 @@ import {
   ModalFooter,
   FormControl,
   FormLabel,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, QuestionIcon, Search2Icon } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -135,7 +140,7 @@ const EditButton: React.FC<{
     onOpen: onEditOpen,
     onClose: onEditClose,
   } = useDisclosure();
-  const key = { phoneNumber: therapist.phone, fullName: therapist.fullName };
+  const key = { phoneNumber: therapist.phone, fullName: therapist.fullName }; // { uuid: therapist.uuid };
 
   const [phone, setPhone] = useState<string>(therapist.phone);
   const [fullName, setFullName] = useState<string>(therapist.fullName);
@@ -219,35 +224,28 @@ const EditButton: React.FC<{
                 />
               </FormControl>
               <FormControl isRequired>
-                <FormLabel>Date Joined (YYYY-MM-DD)</FormLabel>
+                <FormLabel>Date Joined</FormLabel>
                 <Input
+                  type="date"
                   value={dateJoined}
                   onChange={(e) => setDateJoined(e.target.value)}
                 />
               </FormControl>
               <FormControl isRequired>
                 <FormLabel>Families Helped</FormLabel>
-                <Input
+                <NumberInput
                   value={familiesHelped}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (value === '' || /^[0-9]+$/.test(value)) {
-                      setFamiliesHelped(value === '' ? 0 : Number(value));
-                    }
-                  }}
-                  onKeyDown={(e) => {
-                    if (
-                      e.key === 'Backspace' ||
-                      e.key === 'Delete' ||
-                      e.key === 'ArrowLeft' ||
-                      e.key === 'ArrowRight' ||
-                      /^[0-9]$/.test(e.key)
-                    ) {
-                      return;
-                    }
-                    e.preventDefault();
-                  }}
-                />
+                  onChange={(valueString, valueNumber) =>
+                    setFamiliesHelped(valueNumber)
+                  }
+                  min={0}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
               </FormControl>
               <FormControl>
                 <FormLabel>Website</FormLabel>
