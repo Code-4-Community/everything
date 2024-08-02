@@ -18,7 +18,7 @@ const client = new DynamoDBClient({ region: 'us-east-2' });
 // This is kind of a pain, and a "slow" test so we elide it`
 
 // Validates and extracts practitioner data from a request bdoy
-function practitionerDataFromBody(request: Request, schema, keyPrefix: string = '') {
+function practitionerDataFromBody(request: Request, schema, keyPrefix = '') {
   const parsedBody = schema.parse(request.body)
   // List of fields on Practitioner model
   const practitionerProperties = schema.keyof().options;
@@ -106,7 +106,7 @@ export async function updatePractitioner(req: Request): Promise<Practitioner> {
     },
     ExpressionAttributeValues: marshall(practitionerData),
     UpdateExpression: updateExpression,
-    ReturnValues: "ALL_NEW"
+    ReturnValues: ReturnValue.ALL_NEW,
   }
 
   const updateCommand = new UpdateItemCommand(updateItemParameters)
