@@ -27,9 +27,9 @@ export default defineConfig({
     }),
   ],
 
-  define: {
-    global: {}
-  },
+  // define: {
+  //   global: {}
+  // },
   // https://github.com/vitejs/vite/discussions/5912
 
   // Uncomment this if you are using workers.
