@@ -1,8 +1,9 @@
-import { DynamoDBClient, ScanCommand, PutItemCommand, GetItemCommand, DeleteItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, ScanCommand, PutItemCommand, UpdateItemCommand, GetItemCommand, DeleteItemCommand, ReturnValue, AttributeValue, UpdateTimeToLiveCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { Practitioner as practitionerSchema, PractitionerInfo as practitionerInfoSchema } from '@c4c/monarch/common';
-import type { Key, Practitioner } from '@c4c/monarch/common';
+import { Practitioner as practitionerSchema, PractitionerInfo as practitionerInfoSchema, PractitionerInfo } from '@c4c/monarch/common';
+import { Key, Practitioner } from '@c4c/monarch/common';
 import { Request } from 'express';
+import { ZodObject, ZodRawShape } from 'zod';
 
 if (process.env.AWS_ACCESS_KEY_ID == null) {
   throw new Error('AWS Access Key not configured');
@@ -14,7 +15,17 @@ if (process.env.AWS_SECRET_ACCESS_KEY == null) {
 const client = new DynamoDBClient({ region: 'us-east-2' });
 
 // TODO: Write persitence level test using local DB
-// This is kind of a pain, and a "slow" test so we elide it
+// This is kind of a pain, and a "slow" test so we elide it`
+
+// Validates and extracts practitioner data from a request bdoy
+function practitionerDataFromBody(request: Request, schema, keyPrefix: string = '') {
+  const parsedBody = schema.parse(request.body)
+  // List of fields on Practitioner model
+  const practitionerProperties = schema.keyof().options;
+  const pairs = practitionerProperties.map(prop => [keyPrefix + prop, parsedBody[prop]])
+
+  return Object.fromEntries(pairs);
+}
 
 export async function scanAllPractitioners(): Promise<Practitioner[]> {
   const command = new ScanCommand({
@@ -57,20 +68,10 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
 
   const parameters = {
     TableName: 'PractitionersV2',
-    Item: marshall({
-      uuid: req.body.uuid,
-      phoneNumber: req.body.phoneNumber,
-      fullName: req.body.fullName,
-      businessLocation: req.body.businessLocation,
-      businessName: req.body.businessName,
-      email: req.body.email,
-      geocode: req.body.geocode,
-      languagesList: req.body.languagesList,
-      minAgeServed: req.body.minAgeServed,
-      modality: req.body.modality,
-      website: req.body.website,
+    Item: marshall({ 
+      ...practitionerDataFromBody(req, practitionerInfoSchema), 
       dateJoined: nowString,
-      familiesHelped: 0,
+      familiesHelped: 0 
     }),
   };
 
@@ -88,6 +89,30 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
   const practitioner = await client.send(getCommand);
 
   return practitionerSchema.parse(unmarshall(practitioner.Item));
+}
+
+export async function updatePractitioner(req: Request): Promise<Practitioner> {
+  // Remove UUID from list of fields since we cannot update that it (and shouldn't, anyways)
+  const practitionerKeys = Practitioner.omit({ uuid: true }).keyof().options;
+  // Prefix with ':' to use as expression attribute values
+  const practitionerData = practitionerDataFromBody(req, practitionerSchema.omit({ uuid: true }), ':');
+
+  // Map keys to expression e.g. "phoneNumber" => "phoneNumber=:phoneNumber"
+  const updateExpression = `SET ${practitionerKeys.map(k => `${k} = :${k}`).join(', ')}`
+  const updateItemParameters = {
+    TableName: 'PractitionersV2',
+    Key: {
+      uuid: { "S": req.body.uuid }
+    },
+    ExpressionAttributeValues: marshall(practitionerData),
+    UpdateExpression: updateExpression,
+    ReturnValues: "ALL_NEW"
+  }
+
+  const updateCommand = new UpdateItemCommand(updateItemParameters)
+  const { Attributes: updatedAttributes } = await client.send(updateCommand);
+
+  return practitionerSchema.parse(unmarshall(updatedAttributes));
 }
 
 export async function deletePractitioner(req: Request): Promise<Key> {

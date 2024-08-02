@@ -55,6 +55,27 @@ export const userApi = makeApi([
     ]
   },
   {
+    method: "put",
+    path: "/practitioners",
+    alias: "updatePractitioner",
+    description: "Update Practitioner",
+    response: Practitioner,
+    parameters: [
+      {
+        name: 'practitioner',
+        description: 'Updated practitioner data',
+        schema: Practitioner,
+        type: 'Body',
+      },
+      {
+        name: 'accessToken',
+        description: 'Admin Access Token',
+        schema: z.string(),
+        type: 'Header',
+      }
+    ]
+  },
+  {
     method: "delete",
     path: "/practitioners",
     alias: "deletePractitioner",
