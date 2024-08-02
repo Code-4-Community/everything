@@ -1,6 +1,6 @@
 import { DynamoDBClient, ScanCommand, PutItemCommand, GetItemCommand, DeleteItemCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { Practitioner as practitionerSchema } from '@c4c/monarch/common';
+import { Practitioner as practitionerSchema, PractitionerInfo as practitionerInfoSchema } from '@c4c/monarch/common';
 import type { Key, Practitioner } from '@c4c/monarch/common';
 import { Request } from 'express';
 
@@ -18,7 +18,7 @@ const client = new DynamoDBClient({ region: 'us-east-2' });
 
 export async function scanAllPractitioners(): Promise<Practitioner[]> {
   const command = new ScanCommand({
-    TableName: 'Practitioners',
+    TableName: 'PractitionersV2',
   });
   const dynamoRawResult = await client.send(command);
   if (dynamoRawResult == null || dynamoRawResult.Items == null) {
@@ -34,7 +34,7 @@ export async function scanAllPractitioners(): Promise<Practitioner[]> {
 
 export async function scanPendingPractitioners(): Promise<Practitioner[]> {
   const command = new ScanCommand({
-    TableName: 'PendingPractitioners',
+    TableName: 'PendingPractitionersV2',
   });
   const dynamoRawResult = await client.send(command);
   if (dynamoRawResult == null || dynamoRawResult.Items == null) {
@@ -43,28 +43,34 @@ export async function scanPendingPractitioners(): Promise<Practitioner[]> {
   const unmarshalledItems = dynamoRawResult.Items.map((i) => unmarshall(i));
 
   const practitioners = unmarshalledItems.map((i) =>
-    practitionerSchema.parse(i)
+    practitionerInfoSchema.parse(i)
   );
   return practitioners;
 }
 
 export async function postPractitioner(req: Request): Promise<Practitioner> {
+  const now = new Date(Date.now());
+  // getMonth() returns 0-indexed month values (i.e. january is 0)
+  const monthString = String(now.getMonth() + 1).padStart(2, '0');
+  const dayString = String(now.getDate()).padStart(2, '0');
+  const nowString = `${now.getFullYear()}-${monthString}-${dayString}`;
+
   const parameters = {
-    TableName: 'Practitioners',
+    TableName: 'PractitionersV2',
     Item: marshall({
+      uuid: req.body.uuid,
       phoneNumber: req.body.phoneNumber,
       fullName: req.body.fullName,
       businessLocation: req.body.businessLocation,
       businessName: req.body.businessName,
       email: req.body.email,
-      geocode: {
-        lat: 0,
-        long: 0,
-      },
+      geocode: req.body.geocode,
       languagesList: req.body.languagesList,
       minAgeServed: req.body.minAgeServed,
       modality: req.body.modality,
-      website: req.body.website
+      website: req.body.website,
+      dateJoined: nowString,
+      familiesHelped: 0,
     }),
   };
 
@@ -72,14 +78,9 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
   await client.send(command);
 
   const newItemParameters = {
-    TableName: 'Practitioners',
+    TableName: 'PractitionersV2',
     Key: {
-      phoneNumber: {
-        "S": req.body.phoneNumber,
-      },
-      fullName: {
-        "S": req.body.fullName,
-      },
+      uuid: { "S": req.body.uuid }
     },
   }
 
@@ -91,30 +92,28 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
 
 export async function deletePractitioner(req: Request): Promise<Key> {
   const parameters = {
-    TableName: 'Practitioners',
+    TableName: 'PractitionersV2',
     Key: {
-      phoneNumber: { S: req.body.phoneNumber },
-      fullName: { S: req.body.fullName },
+      uuid: { S: req.body.uuid },
     },
   };
 
   const command = new DeleteItemCommand(parameters);
   await client.send(command);
 
-  return { phoneNumber: req.body.phoneNumber, fullName: req.body.fullName };
+  return { uuid: req.body.uuid };
 }
 
 export async function deletePendingPractitioner(req: Request): Promise<Key> {
   const parameters = {
-    TableName: 'PendingPractitioners',
+    TableName: 'PendingPractitionersV2',
     Key: {
-      phoneNumber: { S: req.body.phoneNumber },
-      fullName: { S: req.body.fullName },
+      uuid: { S: req.body.uuid },
     },
   };
 
   const command = new DeleteItemCommand(parameters);
   await client.send(command);
 
-  return { phoneNumber: req.body.phoneNumber, fullName: req.body.fullName };
+  return { uuid: req.body.uuid };
 }

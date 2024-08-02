@@ -1,6 +1,7 @@
 // Symlinked to backend therapist.ts
 
 export interface Therapist {
+  uuid: string;
   fullName: string;
   address: string; // 123 Huntington St
   city: string;

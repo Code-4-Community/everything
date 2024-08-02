@@ -6,7 +6,7 @@ import { dist } from './SearchTherapists';
 import { Badge, Therapist, TherapistDisplayModel } from './therapist';
 import { faker } from '@faker-js/faker';
 import Fuse from 'fuse.js';
-import { Practitioner, Key, createApiClient } from '@c4c/monarch/common';;
+import { Practitioner, PractitionerInfo, Key, createApiClient } from '@c4c/monarch/common';
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,13 +22,13 @@ export interface ActionsController {
   searchTherapists: (
     query: SearchTherapistsQuery
   ) => Promise<TherapistDisplayModel[]>;
-  getApplicants: (accessToken: string) => Promise<Practitioner[]>;
+  getApplicants: (accessToken: string) => Promise<PractitionerInfo[]>;
   extractGeocodeFromZipcode: (
     zipcode: string
   ) => Promise<GeolocationPosition>;
   fetchTherapist: (id: string) => Therapist;
   fetchApplicant: (id: string) => Therapist;
-  postTherapist: (therapist: Practitioner, accessToken: string) => Promise<Practitioner>;
+  postTherapist: (therapist: PractitionerInfo, accessToken: string) => Promise<Practitioner>;
   deleteTherapist: (key: Key, accessToken: string) => Promise<Key>;
   deleteApplicant: (key: Key, accessToken: string) => Promise<Key>;
 }
@@ -110,7 +110,8 @@ async function fetchPendingPractitioners(useFake = false, accessToken: string): 
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const therapists: Practitioner[] = data.map((d) => ({
+  const therapists: PractitionerInfo[] = data.map((d) => ({
+    uuid: d.uuid,
     phoneNumber: d.phoneNumber,
     website: d.website,
     modality: d.modality,
@@ -189,7 +190,7 @@ export function makeActionsController(): ActionsController {
     fetchApplicant: (id: string) => {
       return {} as Therapist;
     },
-    postTherapist: async (practitioner: Practitioner, accessToken: string): Promise<Practitioner> => {
+    postTherapist: async (practitioner: PractitionerInfo, accessToken: string): Promise<Practitioner> => {
       return await serverApiClient.postPractitioner(practitioner, {
         headers: {
           "accessToken": accessToken

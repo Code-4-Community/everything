@@ -1,6 +1,6 @@
 import { makeApi } from "@zodios/core";
 import { z } from "zod";
-import { Practitioner } from './dto/Practitioner'
+import { Practitioner, PractitionerInfo } from './dto/Practitioner'
 import { Key } from "./dto/Key";import { GeolocationPosition } from "./dto/GeolocationPosition";
 
 export const userApi = makeApi([
@@ -23,7 +23,7 @@ export const userApi = makeApi([
     path: "/pendingPractitioners",
     alias: "getPendingPractitioners",
     description: "Get Pending Practitioners",
-    response: z.array(Practitioner),
+    response: z.array(PractitionerInfo),
     parameters: [
       {
         name: 'accessToken',
@@ -43,7 +43,7 @@ export const userApi = makeApi([
       {
         name: 'practitioner',
         description: 'New Practitioner',
-        schema: Practitioner,
+        schema: PractitionerInfo,
         type: 'Body',
       },
       {

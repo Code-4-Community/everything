@@ -67,7 +67,7 @@ const debouncedSearchTherapists = debouncePromise(
 
 const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload?: (arg: boolean) => void }> = ({ therapist, accessToken, setReload }) => {
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
+  const key = { uuid: therapist.uuid};
 
   return (
     <>
