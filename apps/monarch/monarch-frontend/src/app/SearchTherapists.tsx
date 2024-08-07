@@ -38,12 +38,15 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  FormControl,
+  FormLabel,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
-import {
-  CheckCircleIcon,
-  QuestionIcon,
-  Search2Icon,
-} from '@chakra-ui/icons';
+import { CheckCircleIcon, QuestionIcon, Search2Icon } from '@chakra-ui/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
 //@ts-ignore
@@ -54,7 +57,9 @@ Amplify.configure(awsmobile);
 interface QueryContext {
   searchQuery: SearchTherapistsQuery;
   setSearchQuery: React.Dispatch<React.SetStateAction<SearchTherapistsQuery>>;
-  setClientCoordinates: React.Dispatch<React.SetStateAction<GeolocationPosition | undefined>>;
+  setClientCoordinates: React.Dispatch<
+    React.SetStateAction<GeolocationPosition | undefined>
+  >;
   setDistanceFilterEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -65,46 +70,242 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
-const DeleteButton: React.FC<{ therapist: TherapistDisplayModel, accessToken: string, setReload?: (arg: boolean) => void }> = ({ therapist, accessToken, setReload }) => {
-  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
-  const key = {phoneNumber: therapist.phone, fullName: therapist.fullName};
+const DeleteButton: React.FC<{
+  therapist: TherapistDisplayModel;
+  accessToken: string;
+  setReload?: (arg: boolean) => void;
+}> = ({ therapist, accessToken, setReload }) => {
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const key = { phoneNumber: therapist.phone, fullName: therapist.fullName };
 
   return (
     <>
-      <Button onClick={onDeleteOpen} colorScheme='red' size='sm'>Remove</Button>
+      <Button onClick={onDeleteOpen} colorScheme="red" size="sm">
+        Remove
+      </Button>
 
-      <Modal isOpen={isDeleteOpen} onClose={() => {
+      <Modal
+        isOpen={isDeleteOpen}
+        onClose={() => {
           onDeleteClose();
-      }}>
-          <ModalOverlay />
-          <ModalContent>
-              <ModalHeader>Remove Practitioner</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                  Are you sure you want to remove this practitioner?                    
-              </ModalBody>
-              <ModalFooter>
-                  <Button onClick={() => {
-                      onDeleteClose();
-                  }} variant='ghost' mr={2}>Cancel</Button>
-                  <Button onClick={() => {
-                      onDeleteClose();
-                      controller.deleteTherapist(key, accessToken);
-                      if (setReload) {
-                        setReload(true);
-                      }
-                  }} colorScheme='teal'>Submit</Button>
-              </ModalFooter>
-          </ModalContent>
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Remove Practitioner</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Are you sure you want to remove this practitioner?
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              onClick={() => {
+                onDeleteClose();
+              }}
+              variant="ghost"
+              mr={2}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                onDeleteClose();
+                controller.deleteTherapist(key, accessToken);
+                if (setReload) {
+                  setReload(true);
+                }
+              }}
+              colorScheme="teal"
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </>
   );
-}
+};
 
-export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean, setReload?: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
+const EditButton: React.FC<{
+  therapist: TherapistDisplayModel;
+  accessToken: string;
+  setReload?: (arg: boolean) => void;
+}> = ({ therapist, accessToken, setReload }) => {
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
+  const key = { phoneNumber: therapist.phone, fullName: therapist.fullName }; // { uuid: therapist.uuid };
+
+  const [phone, setPhone] = useState<string>(therapist.phone);
+  const [fullName, setFullName] = useState<string>(therapist.fullName);
+  const [address, setAddress] = useState<string>(therapist.address);
+  const [email, setEmail] = useState<string>(therapist.email);
+  const [website, setWebsite] = useState<string | undefined>(therapist.website);
+  const [familiesHelped, setFamiliesHelped] = useState<number>(0);
+  const [dateJoined, setDateJoined] = useState<string>('2024-07-30');
+
+  const isFormValid = () => {
+    const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+    return (
+      phone.trim() !== '' &&
+      fullName.trim() !== '' &&
+      address.trim() !== '' &&
+      email.trim() !== '' &&
+      dateFormat.test(dateJoined)
+    );
+  };
+
+  const resetForm = () => {
+    setPhone(therapist.phone);
+    setFullName(therapist.fullName);
+    setAddress(therapist.address);
+    setEmail(therapist.email);
+    setWebsite(therapist.website);
+    setFamiliesHelped(0);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onEditClose();
+  };
+
+  const handleSave = () => {
+    if (isFormValid()) {
+      // TODO: save data in database
+      onEditClose();
+    }
+  };
+
+  return (
+    <>
+      <Button onClick={onEditOpen} colorScheme="teal" size="sm">
+        Edit
+      </Button>
+
+      <Modal isOpen={isEditOpen} onClose={onEditClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Practitioner Info</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Phone</FormLabel>
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Full Name</FormLabel>
+                <Input
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Address</FormLabel>
+                <Input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Date Joined</FormLabel>
+                <Input
+                  type="date"
+                  value={dateJoined}
+                  onChange={(e) => setDateJoined(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Families Helped</FormLabel>
+                <NumberInput
+                  value={familiesHelped}
+                  onChange={(valueString, valueNumber) =>
+                    setFamiliesHelped(valueNumber)
+                  }
+                  min={0}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Website</FormLabel>
+                <Input
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </FormControl>
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="teal"
+              mr={3}
+              onClick={handleSave}
+              isDisabled={!isFormValid()}
+            >
+              Save
+            </Button>
+            <Button variant="ghost" onClick={handleClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+const renderBadges = (therapist: TherapistDisplayModel) => {
+  const badgeList = [
+    ...therapist.languages.map((language) => ({
+      label: language,
+      colorScheme: 'orange',
+    })),
+    { label: 'New', colorScheme: 'teal' },
+    { label: 'Frequent Partner (10+ Children)', colorScheme: 'blue' },
+  ];
+
+  return badgeList.map((badge, index) => (
+    <Badge
+      key={index}
+      borderRadius="full"
+      px="2"
+      colorScheme={badge.colorScheme}
+    >
+      {badge.label}
+    </Badge>
+  ));
+};
+
+export const SearchTherapists: React.FC<{
+  accessToken: string;
+  reload?: boolean;
+  setReload?: (arg: boolean) => void;
+}> = ({ accessToken, reload, setReload }) => {
   const { coords } = useGeolocated();
   const [distanceFilterEnabled, setDistanceFilterEnabled] = useState(false);
-  const [clientCoordinates, setClientCoordinates] = useState<GeolocationPosition>();
+  const [clientCoordinates, setClientCoordinates] =
+    useState<GeolocationPosition>();
   const [searchQuery, setSearchQuery] = useState<SearchTherapistsQuery>({
     searchString: '',
     languages: [],
@@ -148,9 +349,10 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
   }
 
   const therapists = data?.filter((therapist) => {
-    // return true; 
+    // return true;
     return (
-      !distanceFilterEnabled || clientCoordinates === undefined ||
+      !distanceFilterEnabled ||
+      clientCoordinates === undefined ||
       dist(
         therapist.geocode.lat,
         therapist.geocode.long,
@@ -159,7 +361,7 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
       ) < searchQuery.maxDistance
     );
   });
-  
+
   if (searchQuery.searchString.length === 0) {
     therapists?.sort((a, b) => comparableDistance(a) - comparableDistance(b));
   }
@@ -182,150 +384,105 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
   };
 
   const parentStyles = {
-    display: 'flex'
+    display: 'flex',
   };
 
   const regularStyles = {
     paddingTop: '20px',
-    paddingRight: '30px'
-  }
+    paddingRight: '30px',
+  };
 
   const adminStyles = {
-    paddingRight: '30px'
-  }
+    paddingRight: '30px',
+  };
 
   return (
-    <span style={parentStyles}>   
-      
+    <span style={parentStyles}>
+      <div style={{ flex: 1 }}>
+        <div style={{ marginTop: 10 }}>
+          <HStack>
+            <InputGroup size="lg">
+              <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
+              <Input
+                type="search"
+                placeholder='Search practitioners by text (e.g. "Taekwondo", "Tracy", "Spanish")'
+                onChange={onInputChange}
+                value={searchQuery.searchString}
+                autoFocus
+              />
+            </InputGroup>
+            {location.pathname !== '/admin' && (
+              <div>
+                <Button colorScheme="teal" onClick={handleLogin}>
+                  Login
+                </Button>
+              </div>
+            )}
+            {location.pathname === '/admin' && (
+              <div>
+                <Button colorScheme="teal" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            )}
+          </HStack>
 
-    <div style={{flex: 1}}>
+          <QueryContext.Provider
+            value={{
+              searchQuery: searchQuery,
+              setSearchQuery: setSearchQuery,
+              setClientCoordinates: setClientCoordinates,
+              setDistanceFilterEnabled: setDistanceFilterEnabled,
+            }}
+          >
+            <SearchTherapistsFilter />
+          </QueryContext.Provider>
 
-      <div style={{ marginTop: 10 }}>
-      <HStack>
-        <InputGroup size="lg">
-            <InputLeftAddon children={<Search2Icon w={6} h={6} />} />
-            <Input
-              type="search"
-              placeholder='Search practitioners by text (e.g. "Taekwondo", "Tracy", "Spanish")'
-              onChange={onInputChange}
-              value={searchQuery.searchString}
-              autoFocus
-            />
-          </InputGroup>
-          {location.pathname !== '/admin' && (
-        <div>       
-          <Button colorScheme="teal" onClick={handleLogin}>
-            Login
-          </Button>
-        </div> 
-      )}
-      {location.pathname === '/admin' && (
-        <div>       
-          <Button colorScheme="teal" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div> 
-      )}
-      </HStack>
-        
-        <QueryContext.Provider value={{
-          searchQuery: searchQuery,
-          setSearchQuery: setSearchQuery,
-          setClientCoordinates: setClientCoordinates,
-          setDistanceFilterEnabled: setDistanceFilterEnabled,
-        }}>
-          <SearchTherapistsFilter />
-        </QueryContext.Provider>
-      
-        <div style={{ marginBlock: 12 }}>
-          <small>
-            {therapists != null &&
-              `Found ${therapists?.length} matching practitioners.`}
-          </small>
+          <div style={{ marginBlock: 12 }}>
+            <small>
+              {therapists != null &&
+                `Found ${therapists?.length} matching practitioners.`}
+            </small>
+          </div>
         </div>
-      </div>
 
-      {therapists != null && therapistsToRender != null && (
-        <InfiniteScroll
-          dataLength={therapistsToRender.length} // This is important field to render the next data
-          next={() => setNumTherapistsToRender(numTherapistsToRender + 10)}
-          hasMore={therapistsToRender?.length < therapists.length}
-          loader={
-            <Stack>
-              <Skeleton height="40px" />
-              <Skeleton height="40px" />
-              <Skeleton height="40px" />
-            </Stack>
-          }
-        >
-          <VStack spacing={5}>
-            {therapistsToRender.map((therapist) => (
-              <Box
-                w="full"
-                borderWidth="1px"
-                borderRadius="lg"
-                overflow="hidden"
-                paddingRight={5}
-                paddingLeft={5}
-                paddingTop={5}
-                paddingBottom={therapist.searchScore ? 5 : 0}
-                gap={20}
-              >
-                <Box marginBottom={5}>
-                  <Heading size="lg">{therapist.fullName}</Heading>
+        {therapists != null && therapistsToRender != null && (
+          <InfiniteScroll
+            dataLength={therapistsToRender.length} // This is important field to render the next data
+            next={() => setNumTherapistsToRender(numTherapistsToRender + 10)}
+            hasMore={therapistsToRender?.length < therapists.length}
+            loader={
+              <Stack>
+                <Skeleton height="40px" />
+                <Skeleton height="40px" />
+                <Skeleton height="40px" />
+              </Stack>
+            }
+          >
+            <VStack spacing={5}>
+              {therapistsToRender.map((therapist) => (
+                <Box
+                  w="full"
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  paddingRight={5}
+                  paddingLeft={5}
+                  paddingTop={5}
+                  paddingBottom={therapist.searchScore ? 5 : 0}
+                  gap={20}
+                >
+                  <Box marginBottom={5}>
+                    <Heading size="lg">{therapist.fullName}</Heading>
 
-                  <Heading size="md">
-                    {therapist.therapyType}, {therapist.title}
-                  </Heading>
-                  <HStack marginTop={3}>
-                    {therapist.languages.map((language: string) => {
-                      return (
-                        <Badge borderRadius="full" px="2" colorScheme="orange">
-                          {language}
-                        </Badge>
-                      );
-                    })}
-                    <Badge borderRadius="full" px="2" colorScheme="teal">
-                      New
-                    </Badge>
-                    <Badge borderRadius="full" px="2" colorScheme="blue">
-                      Frequent Partner (10+ Children)
-                    </Badge>
-                  </HStack>
-                </Box>
-                <Divider />
-                <Box marginBlock={5}>
-                  <Wrap spacingX={6} spacingY={3} align="center">
-                    <WrapItem>
-                      <Box>
-                        <Box
-                          color="gray.500"
-                          fontWeight="bold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                        >
-                          Location
-                        </Box>
-                        <Text>{therapist.address}</Text>
-                      </Box>
-                    </WrapItem>
-
-                    <WrapItem>
-                      <Box>
-                        <Box
-                          color="gray.500"
-                          fontWeight="bold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                        >
-                          Email
-                        </Box>
-                        <Text>{therapist.email}</Text>
-                      </Box>
-                    </WrapItem>
-                    {therapist.website && (
+                    <Heading size="md">
+                      {therapist.therapyType}, {therapist.title}
+                    </Heading>
+                    <HStack marginTop={3}>{renderBadges(therapist)}</HStack>
+                  </Box>
+                  <Divider />
+                  <Box marginBlock={5}>
+                    <Wrap spacingX={6} spacingY={3} align="center">
                       <WrapItem>
                         <Box>
                           <Box
@@ -335,87 +492,135 @@ export const SearchTherapists: React.FC<{ accessToken: string, reload?: boolean,
                             fontSize="xs"
                             textTransform="uppercase"
                           >
-                            Website
+                            Location
+                          </Box>
+                          <Text>{therapist.address}</Text>
+                        </Box>
+                      </WrapItem>
+
+                      <WrapItem>
+                        <Box>
+                          <Box
+                            color="gray.500"
+                            fontWeight="bold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                          >
+                            Email
+                          </Box>
+                          <Text>{therapist.email}</Text>
+                        </Box>
+                      </WrapItem>
+                      {therapist.website && (
+                        <WrapItem>
+                          <Box>
+                            <Box
+                              color="gray.500"
+                              fontWeight="bold"
+                              letterSpacing="wide"
+                              fontSize="xs"
+                              textTransform="uppercase"
+                            >
+                              Website
+                            </Box>
+                            <Text>
+                              <Link href={therapist.website} color="blue.600">
+                                {therapist.website}
+                              </Link>
+                            </Text>
+                          </Box>
+                        </WrapItem>
+                      )}
+                      <WrapItem>
+                        <Box>
+                          <Box
+                            color="gray.500"
+                            fontWeight="bold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                          >
+                            Phone
+                          </Box>
+                          <Text>{therapist.phone}</Text>
+                        </Box>
+                      </WrapItem>
+                      <WrapItem>
+                        <Box>
+                          <Box
+                            color="gray.500"
+                            fontWeight="bold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                          >
+                            Estimated Distance
                           </Box>
                           <Text>
-                            <Link href={therapist.website} color="blue.600">
-                              {therapist.website}
-                            </Link>
+                            {therapist.geocode != null &&
+                            clientCoordinates != null
+                              ? dist(
+                                  therapist.geocode?.lat,
+                                  therapist.geocode?.long,
+                                  clientCoordinates?.latitude,
+                                  clientCoordinates?.longitude
+                                ).toFixed(2) + ' miles away'
+                              : 'Unknown'}
                           </Text>
                         </Box>
                       </WrapItem>
-                    )}
-                    <WrapItem>
-                      <Box>
+                    </Wrap>
+                    <div style={{ paddingTop: '10px' }}>
+                      {accessToken.length > 0 && (
                         <Box
-                          color="gray.500"
-                          fontWeight="bold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
+                          width="150px"
+                          display="flex"
+                          dir="row"
+                          justifyContent="space-between"
                         >
-                          Phone
+                          <DeleteButton
+                            therapist={therapist}
+                            accessToken={accessToken}
+                            setReload={setReload}
+                          />
+                          <EditButton
+                            therapist={therapist}
+                            accessToken={accessToken}
+                            setReload={setReload}
+                          ></EditButton>
                         </Box>
-                        <Text>{therapist.phone}</Text>
-                      </Box>
-                    </WrapItem>
-                    <WrapItem>
-                      <Box>
-                        <Box
-                          color="gray.500"
-                          fontWeight="bold"
-                          letterSpacing="wide"
-                          fontSize="xs"
-                          textTransform="uppercase"
-                        >
-                          Estimated Distance
-                        </Box>
-                        <Text>
-                          {therapist.geocode != null && clientCoordinates != null
-                            ? dist(
-                                therapist.geocode?.lat,
-                                therapist.geocode?.long,
-                                clientCoordinates?.latitude,
-                                clientCoordinates?.longitude
-                              ).toFixed(2) + ' miles away'
-                            : 'Unknown'}
-                        </Text>
-                      </Box>
-                    </WrapItem>
-                  </Wrap>
-                  <div style={{ paddingTop: '10px' }}>
-                    {accessToken.length > 0 && (
-                      <DeleteButton therapist={therapist} accessToken={accessToken} setReload={setReload} />
-                    )}
-                  </div>
-                </Box>
-                {therapist.searchScore != null && (
-                  <Box gap={1} alignItems="end" display="flex" dir="row">
-                    {1.0 - therapist.searchScore >= 0.9 ? (
-                      <CheckCircleIcon w={5} h={5} color="green.400" />
-                    ) : (
-                      <QuestionIcon w={5} h={5} color="orange.300" />
-                    )}
-
-                    <Text size="sm">
-                      {(100 * (1.0 - therapist.searchScore)).toFixed(2)}% match
-                    </Text>
+                      )}
+                    </div>
                   </Box>
-                )}
-              </Box>
-            ))}
-          </VStack>
-        </InfiniteScroll>
-      )}
+                  {therapist.searchScore != null && (
+                    <Box gap={1} alignItems="end" display="flex" dir="row">
+                      {1.0 - therapist.searchScore >= 0.9 ? (
+                        <CheckCircleIcon w={5} h={5} color="green.400" />
+                      ) : (
+                        <QuestionIcon w={5} h={5} color="orange.300" />
+                      )}
 
-      {isLoading && (
-        <Stack spacing={5} marginTop="48px">
-          <Skeleton height="240px"/>
-          <Skeleton height="240px" />
-          <Skeleton height="240px" />
-        </Stack>
-      )}
-    </div>
+                      <Text size="sm">
+                        {(100 * (1.0 - therapist.searchScore)).toFixed(2)}%
+                        match
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </VStack>
+          </InfiniteScroll>
+        )}
+
+        {isLoading && (
+          <Stack spacing={5} marginTop="48px">
+            <Skeleton height="240px" />
+            <Skeleton height="240px" />
+            <Skeleton height="240px" />
+          </Stack>
+        )}
+      </div>
     </span>
   );
 };
