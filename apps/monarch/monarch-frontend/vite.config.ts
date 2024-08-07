@@ -10,7 +10,7 @@ export default defineConfig({
     port: 4200,
     host: 'localhost',
     fs: {
-      allow: ["/Users/james/2023/C4C/everything/apps/"]
+      allow: ["../"]
     }
   }, 
 
@@ -29,7 +29,7 @@ export default defineConfig({
 
   // define: {
   //   global: {}
-  // }
+  // },
   // https://github.com/vitejs/vite/discussions/5912
 
   // Uncomment this if you are using workers.

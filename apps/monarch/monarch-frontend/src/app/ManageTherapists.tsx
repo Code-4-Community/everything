@@ -24,12 +24,12 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { controller } from './actionsController';
-import { Practitioner } from '@c4c/monarch/common';
+import { PractitionerInfo } from '@c4c/monarch/common';
 Amplify.configure(awsmobile);
 
 const ManageTherapists: React.FC<{ accessToken: string, reload: boolean, setReload: (arg: boolean) => void }> = ({accessToken, reload, setReload}) => {
 
-  const [applicants, setApplicants] = useState<Practitioner[]>([]);
+  const [applicants, setApplicants] = useState<PractitionerInfo[]>([]);
 
   useEffect(() => {
     async function fetchData() {

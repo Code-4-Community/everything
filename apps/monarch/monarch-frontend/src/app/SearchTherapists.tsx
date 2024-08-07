@@ -80,7 +80,7 @@ const DeleteButton: React.FC<{
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
   } = useDisclosure();
-  const key = { phoneNumber: therapist.phone, fullName: therapist.fullName };
+  const key = { uuid: therapist.uuid};
 
   return (
     <>

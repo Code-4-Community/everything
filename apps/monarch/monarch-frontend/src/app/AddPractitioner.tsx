@@ -17,12 +17,12 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
     const { isOpen: isAcceptOpen, onOpen: onAcceptOpen, onClose: onAcceptClose } = useDisclosure();
     const { isOpen: isDenyOpen, onOpen: onDenyOpen, onClose: onDenyClose } = useDisclosure();
 
+    const { uuid } = practitioner;
+    const key = { uuid };
+
     const handleAcceptFormSubmission = async () => {
         controller.postTherapist(practitioner, accessToken);
         // Remove therapist from PendingPractitioners table
-        const phoneNumber = practitioner.phoneNumber;
-        const fullName = practitioner.fullName;
-        const key = { phoneNumber: phoneNumber, fullName: fullName };
         controller.deleteApplicant(key, accessToken);
         console.log('Successfully added new therapist');
         if (setReload) {
@@ -32,9 +32,6 @@ const AddPractitioner: React.FC<{ accessToken: string, practitioner: Practitione
 
     const handleDenyFormSubmission = async () => {
         // Remove therapist from PendingPractitioners table
-        const phoneNumber = practitioner.phoneNumber;
-        const fullName = practitioner.fullName;
-        const key = { phoneNumber, fullName };
         await controller.deleteApplicant(key, accessToken);
         console.log('Successfully denied new therapist');
         if (setReload) {
