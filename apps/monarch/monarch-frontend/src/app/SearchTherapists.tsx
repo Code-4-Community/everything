@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { controller, SearchTherapistsQuery } from './actionsController';
-import { GeolocationPosition } from '@c4c/monarch/common';
+import { Practitioner, GeolocationPosition } from '@c4c/monarch/common';
 import { useGeolocated } from 'react-geolocated';
 import { Therapist, TherapistDisplayModel } from './therapist';
 import {
@@ -47,6 +47,7 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, QuestionIcon, Search2Icon } from '@chakra-ui/icons';
+import CreatableSelect from 'react-select/creatable';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchTherapistsFilter from './SearchTherapistsFilter';
 //@ts-ignore
@@ -80,7 +81,7 @@ const DeleteButton: React.FC<{
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
   } = useDisclosure();
-  const key = { uuid: therapist.uuid};
+  const key = { uuid: therapist.uuid };
 
   return (
     <>
@@ -149,6 +150,17 @@ const EditButton: React.FC<{
   const [website, setWebsite] = useState<string | undefined>(therapist.website);
   const [familiesHelped, setFamiliesHelped] = useState<number>(0);
   const [dateJoined, setDateJoined] = useState<string>('2024-07-30');
+  const [therapyType, setTherapyType] = useState<string>(therapist.therapyType);
+  const [businessName, setBusinessName] = useState<string>(therapist.title);
+  const [languages, setLanguages] = useState<
+    readonly { value: string; label: string }[]
+  >(therapist.languages.map((lang) => ({ value: lang, label: lang })));
+
+  const handleLanguageChange = (
+    newValue: readonly { value: string; label: string }[]
+  ) => {
+    setLanguages(newValue);
+  };
 
   const isFormValid = () => {
     const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
@@ -168,6 +180,12 @@ const EditButton: React.FC<{
     setEmail(therapist.email);
     setWebsite(therapist.website);
     setFamiliesHelped(0);
+    setDateJoined('2024-07-30');
+    setTherapyType(therapist.therapyType);
+    setBusinessName(therapist.title);
+    setLanguages(
+      therapist.languages.map((lang) => ({ value: lang, label: lang }))
+    );
   };
 
   const handleClose = () => {
@@ -177,7 +195,22 @@ const EditButton: React.FC<{
 
   const handleSave = () => {
     if (isFormValid()) {
-      // TODO: save data in database
+      const updatedInfo: Practitioner = {
+        uuid: therapist.uuid,
+        phoneNumber: phone,
+        website: website || '',
+        modality: therapyType,
+        businessLocation: address,
+        businessName: businessName,
+        minAgeServed: therapist.minimumAgeServed,
+        email: email,
+        fullName: fullName,
+        languagesList: languages.map((lang) => lang.value),
+        geocode: therapist.geocode,
+        dateJoined: dateJoined,
+        familiesHelped: familiesHelped,
+      };
+      controller.updateTherapist(updatedInfo, accessToken);
       onEditClose();
     }
   };
@@ -195,6 +228,20 @@ const EditButton: React.FC<{
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={4}>
+              <FormControl isRequired>
+                <FormLabel>Therapy Type</FormLabel>
+                <Input
+                  value={therapyType}
+                  onChange={(e) => setTherapyType(e.target.value)}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Business Name</FormLabel>
+                <Input
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                />
+              </FormControl>
               <FormControl isRequired>
                 <FormLabel>Phone</FormLabel>
                 <Input
@@ -221,6 +268,15 @@ const EditButton: React.FC<{
                 <Input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Languages</FormLabel>
+                <CreatableSelect
+                  isMulti
+                  value={languages}
+                  onChange={handleLanguageChange}
+                  placeholder="Type and press enter to add languages"
                 />
               </FormControl>
               <FormControl isRequired>

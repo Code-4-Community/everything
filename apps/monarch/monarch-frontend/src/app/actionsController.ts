@@ -31,6 +31,7 @@ export interface ActionsController {
   postTherapist: (therapist: PractitionerInfo, accessToken: string) => Promise<Practitioner>;
   deleteTherapist: (key: Key, accessToken: string) => Promise<Key>;
   deleteApplicant: (key: Key, accessToken: string) => Promise<Key>;
+  updateTherapist: (therapist: Practitioner, accessToken: string) => Promise<Practitioner>;
 }
 
 export interface SearchTherapistsQuery {
@@ -213,7 +214,14 @@ export function makeActionsController(): ActionsController {
     },
     extractGeocodeFromZipcode: async (zipcode: string) => {
       return await extractGeocodeFromZipcode(zipcode);
-    }
+    },
+    updateTherapist: async (therapist: Practitioner, accessToken: string): Promise<Practitioner> => {
+      return await serverApiClient.updatePractitioner(therapist, {
+        headers: {
+          "accessToken": accessToken
+        },
+      });
+    },
   };
 }
 
