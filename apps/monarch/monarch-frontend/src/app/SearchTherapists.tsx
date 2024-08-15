@@ -148,8 +148,8 @@ const EditButton: React.FC<{
   const [address, setAddress] = useState<string>(therapist.address);
   const [email, setEmail] = useState<string>(therapist.email);
   const [website, setWebsite] = useState<string | undefined>(therapist.website);
-  const [familiesHelped, setFamiliesHelped] = useState<number>(0);
-  const [dateJoined, setDateJoined] = useState<string>('2024-07-30');
+  const [familiesHelped, setFamiliesHelped] = useState<number>(therapist.familiesHelped);
+  const [dateJoined, setDateJoined] = useState<string>(therapist.dateJoined);
   const [therapyType, setTherapyType] = useState<string>(therapist.therapyType);
   const [businessName, setBusinessName] = useState<string>(therapist.title);
   const [languages, setLanguages] = useState<
@@ -211,6 +211,9 @@ const EditButton: React.FC<{
         familiesHelped: familiesHelped,
       };
       controller.updateTherapist(updatedInfo, accessToken);
+      if (setReload) {
+        setReload(true);
+      }
       onEditClose();
     }
   };

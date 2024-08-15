@@ -78,6 +78,7 @@ async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const therapists: Therapist[] = data.map((d) => ({
+    uuid: d.uuid,
     fullName: d.fullName,
     address: d.businessLocation,
     city: '',
@@ -97,6 +98,8 @@ async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
       lat: d.geocode.lat,
       long: d.geocode.long,
     },
+    dateJoined: d.dateJoined,
+    familiesHelped: d.familiesHelped
   }));
   return therapists;
 }
