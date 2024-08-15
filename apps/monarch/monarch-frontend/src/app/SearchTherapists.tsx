@@ -148,7 +148,9 @@ const EditButton: React.FC<{
   const [address, setAddress] = useState<string>(therapist.address);
   const [email, setEmail] = useState<string>(therapist.email);
   const [website, setWebsite] = useState<string | undefined>(therapist.website);
-  const [familiesHelped, setFamiliesHelped] = useState<number>(therapist.familiesHelped);
+  const [familiesHelped, setFamiliesHelped] = useState<number>(
+    therapist.familiesHelped
+  );
   const [dateJoined, setDateJoined] = useState<string>(therapist.dateJoined);
   const [therapyType, setTherapyType] = useState<string>(therapist.therapyType);
   const [businessName, setBusinessName] = useState<string>(therapist.title);
@@ -179,8 +181,8 @@ const EditButton: React.FC<{
     setAddress(therapist.address);
     setEmail(therapist.email);
     setWebsite(therapist.website);
-    setFamiliesHelped(0);
-    setDateJoined('2024-07-30');
+    setFamiliesHelped(therapist.familiesHelped);
+    setDateJoined(therapist.dateJoined);
     setTherapyType(therapist.therapyType);
     setBusinessName(therapist.title);
     setLanguages(
