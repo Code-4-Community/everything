@@ -122,8 +122,6 @@ export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo
   const getCommand = new GetItemCommand(newItemParameters);
   const pendingPractitioner = await client.send(getCommand);
 
-  console.log(pendingPractitioner);
-
   return practitionerInfoSchema.parse(unmarshall(pendingPractitioner.Item));
 }
 

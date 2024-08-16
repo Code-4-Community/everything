@@ -131,7 +131,6 @@ const DeleteButton: React.FC<{
   );
 };
 
-
 const EditButton: React.FC<{
   therapist: TherapistDisplayModel;
   accessToken: string;
@@ -411,7 +410,6 @@ export const SearchTherapists: React.FC<{
     if (setReload) {
       setReload(false);
     }
-    console.log('here');
   }, [searchQuery, reload, setReload]);
 
   const data = searchResult;

@@ -20,7 +20,6 @@ export async function extractGeocode(address: string): Promise<GeolocationPositi
         MaxResults: 1,
     });
     const searchResult = await client.send(searchQuery);
-    console.log(searchResult.Results[0].Place);
     return {
         latitude: searchResult.Results[0].Place.Geometry.Point[1],
         longitude: searchResult.Results[0].Place.Geometry.Point[0],

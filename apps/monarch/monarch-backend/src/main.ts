@@ -64,6 +64,7 @@ const getGeocodeHandler = async (address: string) => {
   return getGeocode(address, extractGeocode);
 };
 
+// Allow parsing form-encoded data for JotForm webhook requests
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (_req: Request, res: Response) => {
@@ -75,8 +76,8 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
 	res.status(200).json(practitioners).end();
 });
 
+// multer middleware to parse form data
 app.post('/pendingPractitioners', multer().array("data"), async (req: Request, res: Response) => {
-	// console.log("received request");
 	const pendingPractitioner = await postPendingPractitionerHandler(req);
 	res.status(200).json({}).end();
 })
