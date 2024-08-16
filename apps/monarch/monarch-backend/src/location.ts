@@ -17,8 +17,10 @@ export async function extractGeocode(address: string): Promise<GeolocationPositi
     const searchQuery = new SearchPlaceIndexForTextCommand({
         IndexName: 'monarch-place-index',
         Text: address,
+        MaxResults: 1,
     });
     const searchResult = await client.send(searchQuery);
+    console.log(searchResult.Results[0].Place);
     return {
         latitude: searchResult.Results[0].Place.Geometry.Point[1],
         longitude: searchResult.Results[0].Place.Geometry.Point[0],

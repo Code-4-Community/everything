@@ -5,6 +5,8 @@
 
 import express from 'express';
 import cors from 'cors';
+import bodyParser, { BodyParser } from 'body-parser';
+import multer, { Multer } from 'multer';
 import getAllPractitioners from './workflows/getAllPractitioners';
 import getPendingPractitioners from './workflows/getPendingPractitioners';
 import postNewPractitioner from './workflows/postNewPractitioner';
@@ -13,7 +15,7 @@ import deletePractitionerWF from './workflows/deletePractitioner';
 import deletePendingPractitionerWF from './workflows/deletePendingPractitioner';
 import getGeocode from './workflows/getGeocode';
 // Import effectful dependencies (database connections, email clients, etc.)
-import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, updatePractitioner, deletePractitioner, deletePendingPractitioner } from './dynamodb';
+import { scanAllPractitioners, scanPendingPractitioners, postPractitioner, updatePractitioner, deletePractitioner, deletePendingPractitioner, postPendingPractitioner } from './dynamodb';
 import { extractGeocode } from './location';
 import { zodiosApp } from '@zodios/express';
 import { userApi, isValidZipcode } from '@c4c/monarch/common';
@@ -21,6 +23,7 @@ import serverlessExpress from '@vendia/serverless-express';
 
 import CognitoExpress from "cognito-express";
 import { Request, Response } from 'express';
+import postNewPendingPractitioner from './workflows/postPendingPractitioner';
 // Need to use base Express in order for compat with serverless-express
 // See: https://github.com/ecyrbe/zodios-express/issues/103
 export const baseApp = express();
@@ -41,6 +44,10 @@ const postPractitionerHandler = async (req: Request) => {
 	return postNewPractitioner(req, postPractitioner);
 }
 
+const postPendingPractitionerHandler = async (req: Request) => {
+	return postNewPendingPractitioner(req, postPendingPractitioner)
+}
+
 const updatePractitionerHandler = async(req: Request) => {
 	return updatePractitionerWF(req, updatePractitioner);
 }
@@ -57,6 +64,8 @@ const getGeocodeHandler = async (address: string) => {
   return getGeocode(address, extractGeocode);
 };
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/', (_req: Request, res: Response) => {
 	res.status(200).json({ ok: Date.now() });
 });
@@ -65,6 +74,12 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
 	const practitioners = await getAllPractitionersHandler();
 	res.status(200).json(practitioners).end();
 });
+
+app.post('/pendingPractitioners', multer().array("data"), async (req: Request, res: Response) => {
+	// console.log("received request");
+	const pendingPractitioner = await postPendingPractitionerHandler(req);
+	res.status(200).json({}).end();
+})
 
 app.get('/geocode', async (req, res) => {
 	if (!isValidZipcode(req.query.zipcode)) {

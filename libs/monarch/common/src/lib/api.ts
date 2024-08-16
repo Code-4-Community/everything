@@ -55,6 +55,20 @@ export const userApi = makeApi([
     ]
   },
   {
+    method: 'post',
+    path: '/pendingPractitioners',
+    alias: 'postPendingPractitioner',
+    description: 'Post Pending Practitioner',
+    response: PractitionerInfo,
+    parameters: [
+      {
+        name: 'practitionerFormData',
+        schema: z.any(),
+        type: 'Body',
+      },
+    ]
+  },
+  {
     method: "put",
     path: "/practitioners",
     alias: "updatePractitioner",

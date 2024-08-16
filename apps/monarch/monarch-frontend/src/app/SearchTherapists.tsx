@@ -131,6 +131,7 @@ const DeleteButton: React.FC<{
   );
 };
 
+
 const EditButton: React.FC<{
   therapist: TherapistDisplayModel;
   accessToken: string;
