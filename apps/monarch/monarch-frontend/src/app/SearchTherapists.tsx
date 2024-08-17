@@ -340,9 +340,38 @@ const renderBadges = (therapist: TherapistDisplayModel) => {
       label: language,
       colorScheme: 'orange',
     })),
-    { label: 'New', colorScheme: 'teal' },
-    { label: 'Frequent Partner (10+ Children)', colorScheme: 'blue' },
   ];
+
+  const now = new Date();
+  const joinedDate = new Date(therapist.dateJoined);
+  const monthsDiff =
+    (now.getFullYear() - joinedDate.getFullYear()) * 12 +
+    now.getMonth() -
+    joinedDate.getMonth();
+
+  if (monthsDiff <= 6) {
+    badgeList.push({ label: 'New', colorScheme: 'teal' });
+  } else {
+    const yearsDiff = Math.floor(monthsDiff / 12);
+    if (yearsDiff > 0) {
+      badgeList.push({
+        label: `${yearsDiff} Year${yearsDiff !== 1 ? 's' : ''}`,
+        colorScheme: 'purple',
+      });
+    }
+  }
+
+  if (therapist.familiesHelped >= 10) {
+    badgeList.push({
+      label: 'Frequent Partner (10+ Children)',
+      colorScheme: 'blue',
+    });
+  } else if (therapist.familiesHelped >= 5) {
+    badgeList.push({
+      label: 'Long Time Partner (5+ Children)',
+      colorScheme: 'green',
+    });
+  }
 
   return badgeList.map((badge, index) => (
     <Badge
