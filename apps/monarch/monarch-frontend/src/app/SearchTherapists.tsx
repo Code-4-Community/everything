@@ -141,8 +141,6 @@ const EditButton: React.FC<{
     onOpen: onEditOpen,
     onClose: onEditClose,
   } = useDisclosure();
-  const key = { phoneNumber: therapist.phone, fullName: therapist.fullName }; // { uuid: therapist.uuid };
-
   const [phone, setPhone] = useState<string>(therapist.phone);
   const [fullName, setFullName] = useState<string>(therapist.fullName);
   const [address, setAddress] = useState<string>(therapist.address);
