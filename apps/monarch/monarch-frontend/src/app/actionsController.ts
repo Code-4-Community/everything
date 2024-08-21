@@ -31,6 +31,7 @@ export interface ActionsController {
   postTherapist: (therapist: PractitionerInfo, accessToken: string) => Promise<Practitioner>;
   deleteTherapist: (key: Key, accessToken: string) => Promise<Key>;
   deleteApplicant: (key: Key, accessToken: string) => Promise<Key>;
+  updateTherapist: (therapist: Practitioner, accessToken: string) => Promise<Practitioner>;
 }
 
 export interface SearchTherapistsQuery {
@@ -77,6 +78,7 @@ async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const therapists: Therapist[] = data.map((d) => ({
+    uuid: d.uuid,
     fullName: d.fullName,
     address: d.businessLocation,
     city: '',
@@ -96,6 +98,8 @@ async function fetchAllPractitioners(useFake = false): Promise<Therapist[]> {
       lat: d.geocode.lat,
       long: d.geocode.long,
     },
+    dateJoined: d.dateJoined,
+    familiesHelped: d.familiesHelped
   }));
   return therapists;
 }
@@ -213,7 +217,14 @@ export function makeActionsController(): ActionsController {
     },
     extractGeocodeFromZipcode: async (zipcode: string) => {
       return await extractGeocodeFromZipcode(zipcode);
-    }
+    },
+    updateTherapist: async (therapist: Practitioner, accessToken: string): Promise<Practitioner> => {
+      return await serverApiClient.updatePractitioner(therapist, {
+        headers: {
+          "accessToken": accessToken
+        },
+      });
+    },
   };
 }
 

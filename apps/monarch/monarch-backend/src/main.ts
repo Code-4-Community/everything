@@ -58,7 +58,7 @@ const getGeocodeHandler = async (address: string) => {
 };
 
 app.get('/', (_req: Request, res: Response) => {
-  	res.status(200).json({ ok: Date.now() });
+	res.status(200).json({ ok: Date.now() });
 });
 
 app.get('/practitioners', async (_req: Request, res: Response) => {
@@ -68,8 +68,8 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
 
 app.get('/geocode', async (req, res) => {
 	if (!isValidZipcode(req.query.zipcode)) {
-	  res.status(400);
-	};
+		res.status(400);
+	}
 	const geocode = await getGeocodeHandler(req.query.zipcode);
 	res.status(200).json(geocode).end();
   });

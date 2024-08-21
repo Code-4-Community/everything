@@ -24,6 +24,9 @@ export interface Therapist {
 
   badges: Badge[];
   languages: string[];
+
+  dateJoined: string;
+  familiesHelped: number;
 }
 
 export interface Badge {
