@@ -7,7 +7,7 @@ export const PractitionerInfo = z.object({
   modality: z.string(),
   businessLocation: z.string(),
   businessName: z.string(),
-  minAgeServed: z.number(),
+  minAgeServed: z.number().optional(),
   email: z.string().email(),
   fullName: z.string(),
   languagesList: z.array(z.string()),

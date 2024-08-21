@@ -4,6 +4,8 @@ import { Practitioner as practitionerSchema, PractitionerInfo as practitionerInf
 import { Key, Practitioner } from '@c4c/monarch/common';
 import { Request } from 'express';
 import { ZodObject, ZodRawShape } from 'zod';
+import { extractGeocode } from './location';
+import { randomUUID } from 'crypto';
 
 if (process.env.AWS_ACCESS_KEY_ID == null) {
   throw new Error('AWS Access Key not configured');
@@ -89,6 +91,38 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
   const practitioner = await client.send(getCommand);
 
   return practitionerSchema.parse(unmarshall(practitioner.Item));
+}
+
+export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo, 'uuid'>): Promise<PractitionerInfo> {
+  const uuid = randomUUID();
+  const geocode = await extractGeocode(webhookData.businessLocation);
+
+  const parameters = {
+    TableName: 'PendingPractitionersV2',
+    Item: marshall({
+      ...webhookData,
+      uuid,
+      geocode: {
+        lat: geocode.latitude,
+        long: geocode.longitude,
+      }
+    })
+  };
+
+  const command = new PutItemCommand(parameters);
+  await client.send(command);
+
+  const newItemParameters = {
+    TableName: 'PendingPractitionersV2',
+    Key: {
+      uuid: { "S": uuid }
+    },
+  }
+
+  const getCommand = new GetItemCommand(newItemParameters);
+  const pendingPractitioner = await client.send(getCommand);
+
+  return practitionerInfoSchema.parse(unmarshall(pendingPractitioner.Item));
 }
 
 export async function updatePractitioner(req: Request): Promise<Practitioner> {
