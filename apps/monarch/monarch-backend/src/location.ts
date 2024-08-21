@@ -9,8 +9,12 @@ if (process.env.AWS_SECRET_ACCESS_KEY == null) {
     throw new Error('AWS Secret Access Key not configured');
 }
 
+if (process.env.REGION == null) {
+    throw new Error('AWS Region not configured');
+}
+
 const client = new LocationClient({
-    region: 'us-east-2'
+    region: process.env.REGION,
 })
 
 export async function extractGeocode(address: string): Promise<GeolocationPosition> {
