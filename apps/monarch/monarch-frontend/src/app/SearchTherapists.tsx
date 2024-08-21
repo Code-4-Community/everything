@@ -349,7 +349,7 @@ const renderBadges = (therapist: TherapistDisplayModel) => {
     now.getMonth() -
     joinedDate.getMonth();
 
-  if (monthsDiff <= 6) {
+  if (monthsDiff < 12) {
     badgeList.push({ label: 'New', colorScheme: 'teal' });
   } else {
     const yearsDiff = Math.floor(monthsDiff / 12);
