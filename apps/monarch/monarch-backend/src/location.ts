@@ -24,8 +24,13 @@ export async function extractGeocode(address: string): Promise<GeolocationPositi
         MaxResults: 1,
     });
     const searchResult = await client.send(searchQuery);
-    return {
-        latitude: searchResult.Results[0].Place.Geometry.Point[1],
-        longitude: searchResult.Results[0].Place.Geometry.Point[0],
-    };
+    
+    if (searchResult.Results.length == 0) {
+        return {};
+    } else {
+        return {
+            latitude: searchResult.Results[0].Place.Geometry.Point[1],
+            longitude: searchResult.Results[0].Place.Geometry.Point[0],
+        };
+    }
 }

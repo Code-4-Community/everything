@@ -131,8 +131,14 @@ export async function updatePractitioner(req: Request): Promise<Practitioner> {
   // Prefix with ':' to use as expression attribute values
   const practitionerData = practitionerDataFromBody(req, practitionerSchema.omit({ uuid: true }), ':');
 
-  const newGeocode = await extractGeocode(practitionerData.address);
-  practitionerData.geocode = newGeocode;
+  const newGeocode = await extractGeocode(practitionerData[':businessLocation']);
+
+  if (newGeocode.latitude && newGeocode.longitude) {
+    practitionerData[':geocode'] = {
+      lat: newGeocode.latitude,
+      long: newGeocode.longitude,
+    };
+  }
 
   // Map keys to expression e.g. "phoneNumber" => "phoneNumber=:phoneNumber"
   const updateExpression = `SET ${practitionerKeys.map(k => `${k} = :${k}`).join(', ')}`

@@ -15,8 +15,6 @@ if (baseUrl == null) {
 
 const serverApiClient = createApiClient(baseUrl);
 
-// TODO: uninstall faker
-
 export interface ActionsController {
   searchTherapists: (
     query: SearchTherapistsQuery
