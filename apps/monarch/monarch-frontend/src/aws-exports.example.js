@@ -3,8 +3,8 @@ const awsmobile = {
     "aws_project_region": "REGION"
     "aws_cognito_region": "REGION"
     "aws_user_pools_id": "COGNITO_USER_POOL_ID"
-    "aws_cognito_identity_pool_id": "us-east-2:bf437025-d7bb-4691-9217-6dfe652cde4d"
-    "aws_user_pools_web_client_id": "6346nfustdjk5fdlc7gspqscq3"
+    "aws_cognito_identity_pool_id": "COGNITO_IDENTITY_POOL_ID"
+    "aws_user_pools_web_client_id": "COGNITO_CLIENT_ID"
     "oauth": {},
     "aws_cognito_username_attributes": [],
     "aws_cognito_social_providers": [],
