@@ -32,8 +32,6 @@ const renderBadges = (therapist: PractitionerInfo) => {
     })),
   ];
 
-  badgeList.push({ label: 'New', colorScheme: 'teal' });
-
   return badgeList.map((badge, index) => (
     <Badge
       key={index}
