@@ -71,6 +71,57 @@ const debouncedSearchTherapists = debouncePromise(
   100
 );
 
+const renderBadges = (therapist: TherapistDisplayModel) => {
+  const badgeList = [
+    ...therapist.languages.map((language) => ({
+      label: language,
+      colorScheme: 'orange',
+    })),
+  ];
+
+  const now = new Date();
+  const joinedDate = new Date(therapist.dateJoined);
+  const monthsDiff =
+    (now.getFullYear() - joinedDate.getFullYear()) * 12 +
+    now.getMonth() -
+    joinedDate.getMonth();
+
+  if (monthsDiff < 12) {
+    badgeList.push({ label: 'New', colorScheme: 'teal' });
+  } else {
+    const yearsDiff = Math.floor(monthsDiff / 12);
+    if (yearsDiff > 0) {
+      badgeList.push({
+        label: `${yearsDiff} Year${yearsDiff !== 1 ? 's' : ''}`,
+        colorScheme: 'purple',
+      });
+    }
+  }
+
+  if (therapist.familiesHelped >= 10) {
+    badgeList.push({
+      label: 'Frequent Partner (10+ Children)',
+      colorScheme: 'blue',
+    });
+  } else if (therapist.familiesHelped >= 5) {
+    badgeList.push({
+      label: 'Long Time Partner (5+ Children)',
+      colorScheme: 'green',
+    });
+  }
+
+  return badgeList.map((badge, index) => (
+    <Badge
+      key={index}
+      borderRadius="full"
+      px="2"
+      colorScheme={badge.colorScheme}
+    >
+      {badge.label}
+    </Badge>
+  ));
+};
+
 const DeleteButton: React.FC<{
   therapist: TherapistDisplayModel;
   accessToken: string;
@@ -169,7 +220,8 @@ const EditButton: React.FC<{
       fullName.trim() !== '' &&
       address.trim() !== '' &&
       email.trim() !== '' &&
-      dateFormat.test(dateJoined)
+      dateFormat.test(dateJoined) &&
+      languages.length > 0
     );
   };
 
@@ -273,7 +325,7 @@ const EditButton: React.FC<{
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </FormControl>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>Languages</FormLabel>
                 <CreatableSelect
                   isMulti
@@ -332,57 +384,6 @@ const EditButton: React.FC<{
       </Modal>
     </>
   );
-};
-
-const renderBadges = (therapist: TherapistDisplayModel) => {
-  const badgeList = [
-    ...therapist.languages.map((language) => ({
-      label: language,
-      colorScheme: 'orange',
-    })),
-  ];
-
-  const now = new Date();
-  const joinedDate = new Date(therapist.dateJoined);
-  const monthsDiff =
-    (now.getFullYear() - joinedDate.getFullYear()) * 12 +
-    now.getMonth() -
-    joinedDate.getMonth();
-
-  if (monthsDiff < 12) {
-    badgeList.push({ label: 'New', colorScheme: 'teal' });
-  } else {
-    const yearsDiff = Math.floor(monthsDiff / 12);
-    if (yearsDiff > 0) {
-      badgeList.push({
-        label: `${yearsDiff} Year${yearsDiff !== 1 ? 's' : ''}`,
-        colorScheme: 'purple',
-      });
-    }
-  }
-
-  if (therapist.familiesHelped >= 10) {
-    badgeList.push({
-      label: 'Frequent Partner (10+ Children)',
-      colorScheme: 'blue',
-    });
-  } else if (therapist.familiesHelped >= 5) {
-    badgeList.push({
-      label: 'Long Time Partner (5+ Children)',
-      colorScheme: 'green',
-    });
-  }
-
-  return badgeList.map((badge, index) => (
-    <Badge
-      key={index}
-      borderRadius="full"
-      px="2"
-      colorScheme={badge.colorScheme}
-    >
-      {badge.label}
-    </Badge>
-  ));
 };
 
 export const SearchTherapists: React.FC<{
@@ -467,6 +468,11 @@ export const SearchTherapists: React.FC<{
   };
 
   const handleLogout = () => {
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('CognitoIdentityServiceProvider')) {
+        localStorage.removeItem(key);
+      }
+    });
     navigate('/');
   };
 
