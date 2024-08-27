@@ -121,6 +121,12 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
+          cognito_user_pool_id: ${{ secrets.MONARCH_COGNITO_USER_POOL_ID }}
+          cognito_identity_pool_id: ${{ secrets.MONARCH_COGNITO_IDENTITY_POOL_ID }}
+          cognito_client_id: ${{ secrets.MONARCH_COGNITO_CLIENT_ID }}
+          role_arn: ${{ secrets.MONARCH_ROLE_ARN }}
+          account_id: ${{ secrets.ACCOUNT_ID }}
+          table_prefix: ${{ secrets.MONARCH_DYNAMO_TABLE_PREFIX }}
           function_name: monarch-monolith-lambda
           source: dist/apps/monarch/monarch-backend/main.js
 

@@ -92,7 +92,7 @@ app.get('/geocode', async (req, res) => {
 
 //Initializing CognitoExpress constructor
 const cognitoExpress = new CognitoExpress({
-	region: process.env.REGION,
+	region: process.env.AWS_REGION,
 	cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
 	IdentityPoolId: process.env.COGNITO_IDENTITY_POOL_ID,
 	RoleArn: process.env.ROLE_ARN,
