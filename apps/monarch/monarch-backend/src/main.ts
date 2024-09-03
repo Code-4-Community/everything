@@ -68,7 +68,6 @@ const getGeocodeHandler = async (address: string) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (_req: Request, res: Response) => {
-	console.log(process.env);
 	res.status(200).json({ ok: Date.now() });
 });
 
@@ -92,7 +91,6 @@ app.get('/geocode', async (req, res) => {
   });
 
 //Initializing CognitoExpress constructor
-console.log(process.env);
 const cognitoExpress = new CognitoExpress({
 	region: process.env.AWS_REGION,
 	cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
