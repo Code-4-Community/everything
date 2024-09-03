@@ -101,7 +101,7 @@ jobs:
 
   deploy-monarch-backend:
     needs: pre-deploy
-    if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    # if: (contains(github.event.inputs.manual-deploy, 'monarch-backend') || contains(needs.pre-deploy.outputs.affected, 'monarch-backend')) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
