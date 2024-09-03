@@ -9,6 +9,38 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'Boston Alliance of LGBTQ+ Youth',
+    paragraph: `Code4Community is partnering with the Boston Alliance of LGBTQ+ Youth (BAGLY) to address LGBTQ+ youth homelessness in Boston. Project BAGLY aims to develop a user-friendly, map-based app that helps LGBTQ+ youth locate winter shelters. Users can input their ZIP code, city, or state to find the nearest shelter, with real-time updates and user-generated feedback. The project will prioritize a mobile-first design to enhance accessibility, supporting BAGLY's mission to create safe and inclusive spaces.`,
+    appDesc: 'Winter Shelter Locator',
+    path: 'https://images.squarespace-cdn.com/content/v1/5977811659cc6848f5a06520/1583166007228-B6G6LEW8WS8JAV68U6KJ/BAGLY+wide.png',
+    abbr: 'BAGLY',
+    learnMore: 'https://www.bagly.org/',
+  },
+  {
+    title: 'Green Infrastructure Boston',
+    paragraph: `The City of Boston has rolled out a volunteer program to help maintain publicly owned Green Infrastructure (G.I.). Code4Community has partnered with the City of Boston to create a web application to support the volunteer program similar to an adopt-a-tree site we partnered with Speak for the Trees to build.`,
+    appDesc: 'Infrastructure Stewardship System',
+    path: 'https://patterns.boston.gov/images/public/logo.svg?sj39nd',
+    abbr: 'G.I. Boston',
+    learnMore: 'https://www.boston.gov/departments/green-infrastructure',
+  },
+  {
+    title: 'Boston Climate Action Network',
+    paragraph: `The Boston Climate Action Network (BCAN)’s mission is to organize Boston residents and collaborate with other social justice allies to advocate for climate justice and urgent action on the climate emergency by the City of Boston and other policymakers. Code4Community has partnered with BCAN to create a grant tracking service. This service will streamline their current grant tracking process, allowing employees to view the status of grants and take actions accordingly.`,
+    appDesc: 'Grant Tracking System',
+    path: 'https://ci3.googleusercontent.com/mail-sig/AIorK4xSr0Uil8mz_voznz4_oQUZ_7IxY_S5FdwSpbGNjuxevhwjbyWZkxjlFUGhrg6lby3k362p4OE',
+    abbr: 'BCAN',
+    learnMore: 'https://bostoncan.org/about/',
+  },
+  {
+    title: 'Securing Safe Food',
+    paragraph: `Securing Safe Food is a nonprofit with a mission to fight food insecurity among individuals with food allergies and to improve access to allergen-free foods by connecting with food pantries serving local communities across the nation. Code4Community has partnered with SSF to create a portal that allows the food pantries and SSF to track delivery of food shipments, provide feedback, and track budgeting for the organization.`,
+    appDesc: 'Food Shipment Portal',
+    path: 'https://static.wixstatic.com/media/1e98f9_a705ae4b19004e778d31f8a31aae8d9a~mv2.png/v1/fill/w_85,h_85,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Untitled-1.png',
+    abbr: 'SSF',
+    learnMore: 'https://www.securingsafefood.org/',
+  },  
+  {
     title: 'Breaktime',
     paragraph: `Breaktime’s mission is to break the cycle of homelessness by equipping young adults with the job and financial security they need to establish housing security. A key part of the program is by providing meaningful employment. We are assisting Breaktime in building a bespoke system for their unique needs.`,
     appDesc: 'Time Tracking & Grants System',
@@ -24,7 +56,6 @@ export const projects: Project[] = [
     abbr: 'TSWGO',
     learnMore: 'https://www.tswgo.org/',
   },
-
   {
     title: 'J-PAL',
     paragraph: `The Abdul Latif Jameel Poverty Action Lab (J-PAL) is a global research center working to reduce poverty by ensuring that policy is informed by scientific evidence. J-PAL works with the New York City Department of Youth and Community Development, which runs the country's largest summer youth employment program, to evaluate the impact of recommendation letters on participants’ educational and employment outcomes after the program. C4C is building a system that simplifies the creation, dissemination and completion of surveys that will be used to create unique letters of recommendation for each youth. Each youth will be sent their unique letter(s) of recommendation, which we hope will improve their educational and employment opportunities.`,
@@ -54,7 +85,6 @@ export const projects: Project[] = [
     abbr: 'LLB',
     learnMore: 'https://www.lovebusprograms.org/',
   },
-
   {
     title: 'Speak For The Trees',
     paragraph: `Speak for the Trees Boston aims to improve the size and health
@@ -64,13 +94,5 @@ export const projects: Project[] = [
     path: 'https://c4cneu-public.s3.us-east-2.amazonaws.com/Site/sfft-project-page.png',
     abbr: 'SFFT',
     learnMore: 'https://treeboston.org/',
-  },
-  {
-    title: 'City of Cambridge',
-    paragraph: `After the success of the Speak for the Trees project, the City of Cambridge reached out for a similar project. We are developing an interactive tree map for all of Cambridge, empowering citizens to become steward of Cambridge's mighty urban forest.`,
-    appDesc: 'Tree Stewardship System',
-    path: 'https://www.cambridgema.gov/~/media/Images/sharedimages/cityseal/cityseal?mw=1920',
-    abbr: 'Cambridge',
-    learnMore: 'https://www.cambridgema.gov/',
   },
 ];
