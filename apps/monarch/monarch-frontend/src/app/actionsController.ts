@@ -4,6 +4,7 @@ import frequentPartner from '../assets/Badge_Partner.png';
 import { GeolocationPosition } from '@c4c/monarch/common';
 import { dist } from './SearchTherapists';
 import { Badge, Therapist, TherapistDisplayModel } from './therapist';
+import { faker } from '@faker-js/faker';
 import Fuse from 'fuse.js';
 import { Practitioner, PractitionerInfo, Key, createApiClient } from '@c4c/monarch/common';
 
@@ -14,6 +15,8 @@ if (baseUrl == null) {
 }
 
 const serverApiClient = createApiClient(baseUrl);
+
+faker.seed(123);
 
 export interface ActionsController {
   searchTherapists: (

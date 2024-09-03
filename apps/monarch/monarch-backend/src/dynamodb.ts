@@ -13,11 +13,8 @@ if (process.env.AWS_ACCESS_KEY_ID == null) {
 if (process.env.AWS_SECRET_ACCESS_KEY == null) {
   throw new Error('AWS Secret Access Key not configured');
 }
-if (process.env.AWS_REGION == null) {
-  throw new Error('AWS Region Key not configured');
-}
 
-const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const client = new DynamoDBClient({ region: 'us-east-2' });
 
 // TODO: Write persitence level test using local DB
 // This is kind of a pain, and a "slow" test so we elide it`
@@ -32,14 +29,9 @@ function practitionerDataFromBody(request: Request, schema, keyPrefix = '') {
   return Object.fromEntries(pairs);
 }
 
-// Appends an environment-specific prefix to differentiate between Dynamo tables in prod/dev/etc.
-function tableName(baseName: string) {
-  return (process.env.TABLE_PREFIX || '') + baseName;
-}
-
 export async function scanAllPractitioners(): Promise<Practitioner[]> {
   const command = new ScanCommand({
-    TableName: tableName('PractitionersV2'),
+    TableName: 'PractitionersV2',
   });
   const dynamoRawResult = await client.send(command);
   if (dynamoRawResult == null || dynamoRawResult.Items == null) {
@@ -55,7 +47,7 @@ export async function scanAllPractitioners(): Promise<Practitioner[]> {
 
 export async function scanPendingPractitioners(): Promise<Practitioner[]> {
   const command = new ScanCommand({
-    TableName: tableName('PendingPractitionersV2'),
+    TableName: 'PendingPractitionersV2',
   });
   const dynamoRawResult = await client.send(command);
   if (dynamoRawResult == null || dynamoRawResult.Items == null) {
@@ -77,7 +69,7 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
   const nowString = `${now.getFullYear()}-${monthString}-${dayString}`;
 
   const parameters = {
-    TableName: tableName('PractitionersV2'),
+    TableName: 'PractitionersV2',
     Item: marshall({ 
       ...practitionerDataFromBody(req, practitionerInfoSchema), 
       dateJoined: nowString,
@@ -89,7 +81,7 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
   await client.send(command);
 
   const newItemParameters = {
-    TableName: tableName('PractitionersV2'),
+    TableName: 'PractitionersV2',
     Key: {
       uuid: { "S": req.body.uuid }
     },
@@ -106,7 +98,7 @@ export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo
   const geocode = await extractGeocode(webhookData.businessLocation);
 
   const parameters = {
-    TableName: tableName('PendingPractitionersV2'),
+    TableName: 'PendingPractitionersV2',
     Item: marshall({
       ...webhookData,
       uuid,
@@ -121,7 +113,7 @@ export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo
   await client.send(command);
 
   const newItemParameters = {
-    TableName: tableName('PendingPractitionersV2'),
+    TableName: 'PendingPractitionersV2',
     Key: {
       uuid: { "S": uuid }
     },
@@ -139,19 +131,10 @@ export async function updatePractitioner(req: Request): Promise<Practitioner> {
   // Prefix with ':' to use as expression attribute values
   const practitionerData = practitionerDataFromBody(req, practitionerSchema.omit({ uuid: true }), ':');
 
-  const newGeocode = await extractGeocode(practitionerData[':businessLocation']);
-
-  if (newGeocode.latitude && newGeocode.longitude) {
-    practitionerData[':geocode'] = {
-      lat: newGeocode.latitude,
-      long: newGeocode.longitude,
-    };
-  }
-
   // Map keys to expression e.g. "phoneNumber" => "phoneNumber=:phoneNumber"
   const updateExpression = `SET ${practitionerKeys.map(k => `${k} = :${k}`).join(', ')}`
   const updateItemParameters = {
-    TableName: tableName('PractitionersV2'),
+    TableName: 'PractitionersV2',
     Key: {
       uuid: { "S": req.body.uuid }
     },
@@ -168,7 +151,7 @@ export async function updatePractitioner(req: Request): Promise<Practitioner> {
 
 export async function deletePractitioner(req: Request): Promise<Key> {
   const parameters = {
-    TableName: tableName('PractitionersV2'),
+    TableName: 'PractitionersV2',
     Key: {
       uuid: { S: req.body.uuid },
     },
@@ -182,7 +165,7 @@ export async function deletePractitioner(req: Request): Promise<Key> {
 
 export async function deletePendingPractitioner(req: Request): Promise<Key> {
   const parameters = {
-    TableName: tableName('PendingPractitionersV2'),
+    TableName: 'PendingPractitionersV2',
     Key: {
       uuid: { S: req.body.uuid },
     },
