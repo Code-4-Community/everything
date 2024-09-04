@@ -44,4 +44,4 @@ function AdminPage () {
     )
 }
 
-export default withAuthenticator(AdminPage);
+export default withAuthenticator(AdminPage, { hideSignUp: true });

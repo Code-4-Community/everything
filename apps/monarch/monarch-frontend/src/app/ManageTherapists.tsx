@@ -210,4 +210,4 @@ export function dist(lat1: number, lon1: number, lat2: number, lon2: number) {
   return miles;
 }
 
-export default withAuthenticator(ManageTherapists);
+export default withAuthenticator(ManageTherapists, { hideSignUp: true });
