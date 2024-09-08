@@ -679,6 +679,7 @@ export const SearchTherapists: React.FC<{
                             setReload={setReload}
                           />
                           <EditButton
+                            key={therapist.uuid}
                             therapist={therapist}
                             accessToken={accessToken}
                             setReload={setReload}
