@@ -262,10 +262,12 @@ const EditButton: React.FC<{
         dateJoined: dateJoined,
         familiesHelped: familiesHelped,
       };
-      controller.updateTherapist(updatedInfo, accessToken);
-      if (setReload) {
-        setReload(true);
-      }
+      controller.updateTherapist(updatedInfo, accessToken).then(() => {
+        if (setReload) {
+          setReload(true);
+        }
+      });
+
       onEditClose();
     }
   };
@@ -678,6 +680,7 @@ export const SearchTherapists: React.FC<{
                             setReload={setReload}
                           />
                           <EditButton
+                            key={therapist.uuid}
                             therapist={therapist}
                             accessToken={accessToken}
                             setReload={setReload}
