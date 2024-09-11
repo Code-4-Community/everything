@@ -11,12 +11,12 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 
-const AGE_MARKS = [2, 6, 10, 14]
+const AGE_MARKS = [2, 6, 10, 14, 18]
 
 const AgeFilter: React.FC = () => {
   const queryContext = useContext(QueryContext);
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
-  const [minAge, setMinAge] = useState<number>(0);
+  const [minAge, setMinAge] = useState<number>(queryContext?.searchQuery.minAge || 18);
 
   return (
     <Box
@@ -25,13 +25,14 @@ const AgeFilter: React.FC = () => {
       mb='6'
     >
       <Heading size="sm" mb="2">
-        Minimum Age
+        Ages Served
       </Heading>
       <Slider
         id='age-slider'
-        defaultValue={0}
+        defaultValue={18}
         min={0}
         max={18}
+        isReversed
         colorScheme='teal'
         onChange={(minAge: number) => setMinAge(minAge)}
         onChangeEnd={(minAge: number) => 
@@ -44,7 +45,7 @@ const AgeFilter: React.FC = () => {
       >
         {AGE_MARKS.map((mark: number) => (
           <SliderMark value={mark} mt="1" ml="-2.5" fontSize="sm">
-            {mark} years
+            {mark}+ years
           </SliderMark>
         ))}
         <SliderTrack>
@@ -56,7 +57,7 @@ const AgeFilter: React.FC = () => {
           color="white"
           placement="top"
           isOpen={showTooltip}
-          label={`${minAge} years`}
+          label={`${minAge}+ years`}
         >
           <SliderThumb />
         </Tooltip>

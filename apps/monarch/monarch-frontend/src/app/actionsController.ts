@@ -150,7 +150,7 @@ export function makeActionsController(): ActionsController {
       // Otherwise, filter therapists by any present criteria
       if (query.minAge > 0) {
         therapists = therapists.filter(
-          (practitioner: Therapist) => practitioner.minimumAgeServed >= query.minAge
+          (practitioner: Therapist) => practitioner.minimumAgeServed <= query.minAge
         );
       }
 
