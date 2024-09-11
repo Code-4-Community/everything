@@ -38,6 +38,7 @@ export interface SearchTherapistsQuery {
   searchString: string;
   languages: (string | number)[];
   maxDistance: number;
+  minAge: number;
 }
 
 const LB_CORP_MONTHLY_DONOR: Badge = {
@@ -136,53 +137,63 @@ async function fetchPendingPractitioners(useFake = false, accessToken: string): 
 export function makeActionsController(): ActionsController {
   // Mutable in-memory store of therapists
   // [] represents that the store has not been initialized yet
-  let allPractitioners: Therapist[] = [];
+  let therapists: Therapist[] = [];
 
   return {
     searchTherapists: async (query: SearchTherapistsQuery) => {
-      allPractitioners = await fetchAllPractitioners();
+      therapists = await fetchAllPractitioners();
 
-      let languageFilteredTherapists = allPractitioners.filter(
-        (practitioner: Therapist) => {
-          return practitioner.languages
-            .map((language: string) => {
-              return query.languages.includes(language);
-            })
-            .reduce((prev, cur) => {
-              return prev || cur;
-            });
-        }
-      );
+      // Return all therapists if no filters are given
+      if (query.searchString.length === 0 && query.languages.length === 0 && query.minAge === 0)
+        return therapists;
 
-      if (query.searchString.length === 0 && query.languages.length > 0)
-        return languageFilteredTherapists;
-      if (query.searchString.length === 0 && query.languages.length === 0)
-        return allPractitioners;
-      if (query.searchString.length > 0 && query.languages.length === 0)
-        languageFilteredTherapists = allPractitioners;
+      // Otherwise, filter therapists by any present criteria
+      if (query.minAge > 0) {
+        therapists = therapists.filter(
+          (practitioner: Therapist) => practitioner.minimumAgeServed >= query.minAge
+        );
+      }
 
-      const searchIndex = new Fuse(languageFilteredTherapists, {
-        keys: [
-          'fullName',
-          {
-            name: 'description',
-            weight: 1,
-          },
-          'therapyType',
-          'title',
-          {
-            name: 'languages',
-            weight: 2,
-          },
-        ],
-        threshold: 0.6,
-        useExtendedSearch: true,
-        ignoreLocation: true,
-        ignoreFieldNorm: true,
-        includeScore: true,
-      });
-      const result = searchIndex.search(query.searchString);
-      return result.map((r) => ({ ...r.item, searchScore: r.score ?? 0 }));
+      if (query.languages.length > 0) {
+        therapists = therapists.filter(
+          (practitioner: Therapist) => {
+            return practitioner.languages
+              .map((language: string) => {
+                return query.languages.includes(language);
+              })
+              .reduce((prev, cur) => {
+                return prev || cur;
+              });
+          }
+        );
+      }
+      
+      if (query.searchString.length === 0) {
+        return therapists;
+      } else {
+        const searchIndex = new Fuse(therapists, {
+          keys: [
+            'fullName',
+            {
+              name: 'description',
+              weight: 1,
+            },
+            'therapyType',
+            'title',
+            {
+              name: 'languages',
+              weight: 2,
+            },
+          ],
+          threshold: 0.6,
+          useExtendedSearch: true,
+          ignoreLocation: true,
+          ignoreFieldNorm: true,
+          includeScore: true,
+        });
+        const result = searchIndex.search(query.searchString);
+        return result.map((r) => ({ ...r.item, searchScore: r.score ?? 0 }));
+      }
     },
     getApplicants: async (accessToken: string) => {
       const applicants = await fetchPendingPractitioners(false, accessToken);

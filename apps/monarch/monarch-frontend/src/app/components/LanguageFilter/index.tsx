@@ -10,10 +10,10 @@ import { QueryContext } from '../../SearchTherapists';
 
 const LanguageFilter: React.FC = () => {
     const queryContext = useContext(QueryContext);
-    const availableLanguages = ['English', 'Spanish', 'Polish', 'Portuguese','Korean', 'French'];
+    const availableLanguages = ['English', 'Spanish', 'Polish', 'Portuguese','Korean', 'French', 'ASL', 'Chinese'];
 
     return (
-        <Box>
+        <Box mb='6'>
             <Heading size='sm' mb='2'>
             Languages
             </Heading>

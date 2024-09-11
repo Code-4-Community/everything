@@ -102,6 +102,7 @@ const DistanceFilter: React.FC = () => {
                 maxDistance: distance,
               })
             }
+            maxW={600}
           >
             <SliderMark value={50} mt="1" ml="-2.5" fontSize="sm">
               50 miles

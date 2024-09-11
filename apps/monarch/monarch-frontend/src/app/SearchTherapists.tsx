@@ -79,6 +79,9 @@ const renderBadges = (therapist: TherapistDisplayModel) => {
     })),
   ];
 
+  if (therapist.minimumAgeServed <= 2)
+    badgeList.push({ label: "Serves 2 & Below", colorScheme: 'yellow' })
+
   const now = new Date();
   const joinedDate = new Date(therapist.dateJoined);
   const monthsDiff =
@@ -401,6 +404,7 @@ export const SearchTherapists: React.FC<{
     searchString: '',
     languages: [],
     maxDistance: 100,
+    minAge: 0,
   });
 
   const [searchResult, setSearchResult] = useState<
@@ -663,6 +667,20 @@ export const SearchTherapists: React.FC<{
                                 ).toFixed(2) + ' miles away'
                               : 'Unknown'}
                           </Text>
+                        </Box>
+                      </WrapItem>
+                      <WrapItem>
+                        <Box>
+                          <Box
+                            color="gray.500"
+                            fontWeight="bold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                          >
+                            Min. Age Served
+                          </Box>
+                          <Text>{therapist.minimumAgeServed}</Text>
                         </Box>
                       </WrapItem>
                     </Wrap>
