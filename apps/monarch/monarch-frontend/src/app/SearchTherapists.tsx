@@ -271,9 +271,8 @@ const EditButton: React.FC<{
         if (setReload) {
           setReload(true);
         }
+        onEditClose();
       });
-
-      onEditClose();
     }
   };
 
