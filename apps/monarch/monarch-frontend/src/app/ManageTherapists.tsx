@@ -32,6 +32,9 @@ const renderBadges = (therapist: PractitionerInfo) => {
     })),
   ];
 
+  if (therapist.minAgeServed <= 2)
+    badgeList.push({ label: "Serves 2 & Below", colorScheme: 'yellow' })
+
   return badgeList.map((badge, index) => (
     <Badge
       key={index}
@@ -174,6 +177,20 @@ const ManageTherapists: React.FC<{
                             ).toFixed(2) + ' miles away'
                           : 'Unknown'}
                       </Text>
+                    </Box>
+                  </WrapItem>
+                  <WrapItem>
+                    <Box>
+                      <Box
+                        color="gray.500"
+                        fontWeight="bold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                      >
+                        Min. Age Served
+                      </Box>
+                      <Text>{therapist.minAgeServed}</Text>
                     </Box>
                   </WrapItem>
                 </Wrap>
