@@ -16,6 +16,7 @@ import NotFound from './pages/notfound/NotFound';
 import People from './pages/people/People';
 import Projects from './pages/projects/Projects';
 import theme from './theme';
+import Contact from './pages/contact/Contact';
 
 const App: React.FC = () => {
   return (
@@ -47,6 +48,7 @@ const App: React.FC = () => {
             />
             <Route path="/projects" Component={Projects} />
             <Route path="/people" Component={People} />
+            <Route path="/contact" Component={Contact} />
             <Route path="*" Component={NotFound} />
           </Routes>
           <Footer />
