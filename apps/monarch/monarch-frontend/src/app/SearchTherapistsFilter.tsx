@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import LanguageFilter from './components/LanguageFilter';
 import DistanceFilter from './components/DistanceFilter';
+import AgeFilter from './components/AgeFilter';
 
 const SearchTherapistsFilter: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const SearchTherapistsFilter: React.FC = () => {
         </h2>
         <AccordionPanel pb={4}>
           <LanguageFilter />
+          <AgeFilter />
           <DistanceFilter />
         </AccordionPanel>
       </AccordionItem>

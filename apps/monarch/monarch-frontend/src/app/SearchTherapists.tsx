@@ -79,6 +79,9 @@ const renderBadges = (therapist: TherapistDisplayModel) => {
     })),
   ];
 
+  if (therapist.minimumAgeServed <= 2)
+    badgeList.push({ label: "Serves 2 or Below", colorScheme: 'yellow' })
+
   const now = new Date();
   const joinedDate = new Date(therapist.dateJoined);
   const monthsDiff =
@@ -200,6 +203,7 @@ const EditButton: React.FC<{
   const [familiesHelped, setFamiliesHelped] = useState<number>(
     therapist.familiesHelped
   );
+  const [minAgeServed, setMinAgeServed] = useState<number>(therapist.minimumAgeServed);
   const [dateJoined, setDateJoined] = useState<string>(therapist.dateJoined);
   const [therapyType, setTherapyType] = useState<string>(therapist.therapyType);
   const [businessName, setBusinessName] = useState<string>(therapist.title);
@@ -232,6 +236,7 @@ const EditButton: React.FC<{
     setEmail(therapist.email);
     setWebsite(therapist.website);
     setFamiliesHelped(therapist.familiesHelped);
+    setMinAgeServed(therapist.minimumAgeServed);
     setDateJoined(therapist.dateJoined);
     setTherapyType(therapist.therapyType);
     setBusinessName(therapist.title);
@@ -254,7 +259,7 @@ const EditButton: React.FC<{
         modality: therapyType,
         businessLocation: address,
         businessName: businessName,
-        minAgeServed: therapist.minimumAgeServed,
+        minAgeServed: minAgeServed,
         email: email,
         fullName: fullName,
         languagesList: languages.map((lang) => lang.value),
@@ -266,9 +271,8 @@ const EditButton: React.FC<{
         if (setReload) {
           setReload(true);
         }
+        onEditClose();
       });
-
-      onEditClose();
     }
   };
 
@@ -328,6 +332,22 @@ const EditButton: React.FC<{
                 />
               </FormControl>
               <FormControl isRequired>
+                <FormLabel>Minimum Age Served</FormLabel>
+                <NumberInput
+                  value={minAgeServed}
+                  onChange={(valueString, valueNumber) =>
+                    setMinAgeServed(valueNumber || 0)
+                  }
+                  min={0}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
+              <FormControl isRequired>
                 <FormLabel>Languages</FormLabel>
                 <CreatableSelect
                   isMulti
@@ -349,7 +369,7 @@ const EditButton: React.FC<{
                 <NumberInput
                   value={familiesHelped}
                   onChange={(valueString, valueNumber) =>
-                    setFamiliesHelped(valueNumber)
+                    setFamiliesHelped(valueNumber || 0)
                   }
                   min={0}
                 >
@@ -401,6 +421,7 @@ export const SearchTherapists: React.FC<{
     searchString: '',
     languages: [],
     maxDistance: 100,
+    minAge: 18,
   });
 
   const [searchResult, setSearchResult] = useState<
@@ -663,6 +684,20 @@ export const SearchTherapists: React.FC<{
                                 ).toFixed(2) + ' miles away'
                               : 'Unknown'}
                           </Text>
+                        </Box>
+                      </WrapItem>
+                      <WrapItem>
+                        <Box>
+                          <Box
+                            color="gray.500"
+                            fontWeight="bold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                          >
+                            Min. Age Accepted
+                          </Box>
+                          <Text>{therapist.minimumAgeServed}</Text>
                         </Box>
                       </WrapItem>
                     </Wrap>
