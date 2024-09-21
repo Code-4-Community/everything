@@ -19,13 +19,9 @@ const AgeFilter: React.FC = () => {
   const [minAge, setMinAge] = useState<number>(queryContext?.searchQuery.minAge || 18);
 
   return (
-    <Box
-      onMouseEnter={() => setShowTooltip(true)}
-      onMouseLeave={() => setShowTooltip(false)}
-      mb='6'
-    >
+    <Box mb='6'>
       <Heading size="sm" mb="2">
-        Ages Served
+        Ages Accepted
       </Heading>
       <Slider
         id='age-slider'
@@ -41,6 +37,8 @@ const AgeFilter: React.FC = () => {
             minAge,
           }
         )}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
         maxW={600}
       >
         {AGE_MARKS.map((mark: number) => (

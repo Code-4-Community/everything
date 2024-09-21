@@ -33,7 +33,7 @@ const renderBadges = (therapist: PractitionerInfo) => {
   ];
 
   if (therapist.minAgeServed <= 2)
-    badgeList.push({ label: "Serves 2 & Below", colorScheme: 'yellow' })
+    badgeList.push({ label: "Serves 2 or Below", colorScheme: 'yellow' })
 
   return badgeList.map((badge, index) => (
     <Badge
@@ -188,7 +188,7 @@ const ManageTherapists: React.FC<{
                         fontSize="xs"
                         textTransform="uppercase"
                       >
-                        Min. Age Served
+                        Min. Age Accepted
                       </Box>
                       <Text>{therapist.minAgeServed}</Text>
                     </Box>

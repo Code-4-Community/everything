@@ -80,7 +80,7 @@ const renderBadges = (therapist: TherapistDisplayModel) => {
   ];
 
   if (therapist.minimumAgeServed <= 2)
-    badgeList.push({ label: "Serves 2 & Below", colorScheme: 'yellow' })
+    badgeList.push({ label: "Serves 2 or Below", colorScheme: 'yellow' })
 
   const now = new Date();
   const joinedDate = new Date(therapist.dateJoined);
@@ -695,7 +695,7 @@ export const SearchTherapists: React.FC<{
                             fontSize="xs"
                             textTransform="uppercase"
                           >
-                            Min. Age Served
+                            Min. Age Accepted
                           </Box>
                           <Text>{therapist.minimumAgeServed}</Text>
                         </Box>
