@@ -78,8 +78,14 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
 
 // multer middleware to parse form data
 app.post('/pendingPractitioners', multer().array("data"), async (req: Request, res: Response) => {
-	const pendingPractitioner = await postPendingPractitionerHandler(req);
-	res.status(200).json({}).end();
+	// This route should be secured, but JotForm doesn't allow us to specify
+	// request headers as part of their webhook, so pass a secret as a query param instead
+	if (req.query.auth !== process.env.JOTFORM_AUTH_KEY) {
+		res.status(404).json("Incorrect auth").end();
+	} else {
+		const pendingPractitioner = await postPendingPractitionerHandler(req);
+		res.status(200).json({}).end();
+	}
 })
 
 app.get('/geocode', async (req, res) => {
