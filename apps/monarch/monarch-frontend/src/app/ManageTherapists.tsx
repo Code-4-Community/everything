@@ -3,8 +3,7 @@
 import { Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-// @ts-ignore
-import awsmobile from '../aws-exports.js';
+import awsconfig from '../amplifyconfig.js';
 import AddPractitioner from './AddPractitioner';
 import React, { useEffect, useState } from 'react';
 import { useGeolocated } from 'react-geolocated';
@@ -22,7 +21,8 @@ import {
 } from '@chakra-ui/react';
 import { controller } from './actionsController';
 import { PractitionerInfo } from '@c4c/monarch/common';
-Amplify.configure(awsmobile);
+
+Amplify.configure(awsconfig)
 
 const renderBadges = (therapist: PractitionerInfo) => {
   const badgeList = [

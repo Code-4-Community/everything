@@ -99,10 +99,10 @@ app.get('/geocode', async (req, res) => {
 //Initializing CognitoExpress constructor
 const cognitoExpress = new CognitoExpress({
 	region: "us-east-2",
-	cognitoUserPoolId: "us-east-2_jlRWv5ExI",
-	IdentityPoolId: 'us-east-2:bf437025-d7bb-4691-9217-6dfe652cde4d',
-    RoleArn: 'arn:aws:cognito-identity:us-east-2:489881683177:identitypool/us-east-2:bf437025-d7bb-4691-9217-6dfe652cde4d',
-    AccountId: '489881683177', // your AWS account ID
+	cognitoUserPoolId: "us-east-2_1rcy5geWJ",
+	IdentityPoolId: 'us-east-2:fd79ce99-02f6-452c-817d-dda8073a543a',
+    RoleArn: 'arn:aws:cognito-identity:us-east-2:144397330194:identitypool/us-east-2:fd79ce99-02f6-452c-817d-dda8073a543a',
+    AccountId: '144397330194', // your AWS account ID
 	tokenUse: "access", //Possible Values: access | id
 	tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
 });
