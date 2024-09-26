@@ -94,8 +94,6 @@ export async function postPractitioner(req: Request): Promise<Practitioner> {
 }
 
 export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo, 'uuid'>): Promise<PractitionerInfo> {
-  console.log(`dynamo call`)
-
   const uuid = randomUUID();
   const geocode = await extractGeocode(webhookData.businessLocation);
 
@@ -114,8 +112,6 @@ export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo
   const command = new PutItemCommand(parameters);
   await client.send(command);
 
-  console.log(`dynamo: updated pending practitioners table`)
-
   const newItemParameters = {
     TableName: 'PendingPractitionersV2',
     Key: {
@@ -125,8 +121,6 @@ export async function postPendingPractitioner(webhookData: Omit<PractitionerInfo
 
   const getCommand = new GetItemCommand(newItemParameters);
   const pendingPractitioner = await client.send(getCommand);
-
-  console.log(`dynamo: pending practitioner: ${pendingPractitioner}`);
 
   return practitionerInfoSchema.parse(unmarshall(pendingPractitioner.Item));
 }

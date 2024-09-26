@@ -80,11 +80,9 @@ app.get('/practitioners', async (_req: Request, res: Response) => {
 app.post('/pendingPractitioners', multer().array("data"), async (req: Request, res: Response) => {
 	// This route should be secured, but JotForm doesn't allow us to specify
 	// request headers as part of their webhook, so pass a secret as a query param instead
-	console.log(req.query, process.env);
 	if (req.query.auth !== process.env.JOTFORM_AUTH_KEY) {
 		res.status(404).json("Incorrect auth").end();
 	} else {
-		console.log('enter POST /pendingPractitioners');
 		const pendingPractitioner = await postPendingPractitionerHandler(req);
 		res.status(200).json({}).end();
 	}
