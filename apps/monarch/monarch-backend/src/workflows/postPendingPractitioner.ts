@@ -3,7 +3,9 @@ import { Request } from "express";
 
 async function postNewPendingPractitioner(req: Request, postPendingPractitioner: (webhookData: Omit<PractitionerInfo, 'uuid'>) => Promise<Practitioner>) {
     try {
+        console.log('entering postNewPendingPractitioner handler')
         const extractedPractitionerInfo = getPractitionerInfo(JSON.parse(req.body.rawRequest));
+        console.log(`practitioenr info: ${extractedPractitionerInfo}`)
         return postPendingPractitioner(extractedPractitionerInfo);
     } catch (e) {
         console.log(e);
