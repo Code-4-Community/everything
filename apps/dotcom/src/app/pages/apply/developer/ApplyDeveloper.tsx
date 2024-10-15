@@ -85,6 +85,12 @@ const ApplyDeveloper: React.FC = () => {
         <Grid item sm={7}>
           <Fade>
             <Box mb={5}>
+              <Typography variant="h6" gutterBottom>
+                <b>Our application process for Spring 2025 is now open!</b>
+                <br />
+                The application form will close on <u>10/28</u>.
+              </Typography>
+              <br />
               <Typography variant="h5" gutterBottom>
                 What you'll be doing
               </Typography>
@@ -127,10 +133,6 @@ const ApplyDeveloper: React.FC = () => {
                 around them.
               </Typography>
               <Typography variant="body1" gutterBottom className={classes.text}>
-                Our application process for Fall 2023 is pending. Stay tuned for
-                an update this Summer!
-              </Typography>
-              <Typography variant="body1" gutterBottom className={classes.text}>
                 <i>
                   Due to limitations imposed by Khoury college, we can only
                   accept applications from undergraduate students.
@@ -154,6 +156,10 @@ const ApplyDeveloper: React.FC = () => {
                     engineer
                   </li>
                   <li>Passionate about helping the Boston community</li>
+                  <li>
+                    Takes initiative to identify opportunities for improvement
+                    and drives projects forward
+                  </li>
                   <li>A strong communicator who facilitates collaboration</li>
                   <li>
                     Interested in being a part of the entire product life cycle
@@ -189,7 +195,7 @@ const ApplyDeveloper: React.FC = () => {
           <Fade>
             <CTA
               disabled={false}
-              onClick="https://forms.gle/mXw4WQY2ZGWVn6W77"
+              onClick="https://forms.gle/gPsBQ8hVtEit9eMm7"
             />
           </Fade>
         </Grid>
