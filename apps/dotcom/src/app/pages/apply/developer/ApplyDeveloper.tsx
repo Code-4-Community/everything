@@ -88,7 +88,7 @@ const ApplyDeveloper: React.FC = () => {
               <Typography variant="h6" gutterBottom>
                 <b>Our application process for Spring 2025 is now open!</b>
                 <br />
-                The application form will close on <u>10/28</u>.
+                The developer application form will close on <u>10/28</u>.
               </Typography>
               <br />
               <Typography variant="h5" gutterBottom>
