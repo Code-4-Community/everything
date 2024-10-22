@@ -85,12 +85,12 @@ const ApplyProductManager: React.FC = () => {
         <Grid item sm={7}>
           <Fade>
             <Box mb={5}>
-{/*             <Typography variant="h6" gutterBottom>
+             <Typography variant="h6" gutterBottom>
                 <b>Our application process for Spring 2025 is now open!</b>
                 <br />
-                The product manager application form will close on <u>11/1</u>.
-            </Typography>
-              <br /> */}
+                The PM application form will close on <u>11/1</u>.
+              </Typography>
+              <br />
               <Typography variant="h5" gutterBottom>
                 What you'll be doing
               </Typography>
@@ -136,7 +136,7 @@ const ApplyProductManager: React.FC = () => {
                   </li>
                   <li>Organized and forward thinking</li>
                   <li>
-                    Experienced in working within an Agile development process
+                    Interested in working within an Agile development process
                   </li>
                   <li>
                     A strong communicator who facilitates collaboration amongst
