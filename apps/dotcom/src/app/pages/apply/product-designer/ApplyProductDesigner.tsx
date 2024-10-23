@@ -84,6 +84,12 @@ const ApplyProductDesigner: React.FC = () => {
         <Grid item sm={7}>
           <Fade>
             <Box mb={5}>
+              <Typography variant="h6" gutterBottom>
+                <b>Our application process for Spring 2025 is now open!</b>
+                <br />
+                The designer application form will close on <u>11/1</u>.
+              </Typography>
+              <br />
               <Typography variant="h5" gutterBottom>
                 What you'll be doing
               </Typography>
@@ -150,7 +156,7 @@ const ApplyProductDesigner: React.FC = () => {
           <Fade>
             <CTA
               disabled={false}
-              onClick="https://forms.gle/uZAWkn3sTvztaM2n7"
+              onClick="https://forms.gle/rCSgsPVCEAacZNqe6"
             />
           </Fade>
         </Grid>
