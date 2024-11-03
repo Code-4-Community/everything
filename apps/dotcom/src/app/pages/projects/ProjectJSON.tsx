@@ -8,14 +8,14 @@ export interface Project {
 }
 
 export const projects: Project[] = [
-  {
-    title: 'Boston Alliance of LGBTQ+ Youth',
-    paragraph: `Code4Community is partnering with the Boston Alliance of LGBTQ+ Youth (BAGLY) to address LGBTQ+ youth homelessness in Boston. Project BAGLY aims to develop a user-friendly, map-based app that helps LGBTQ+ youth locate winter shelters. Users can input their ZIP code, city, or state to find the nearest shelter, with real-time updates and user-generated feedback. The project will prioritize a mobile-first design to enhance accessibility, supporting BAGLY's mission to create safe and inclusive spaces.`,
-    appDesc: 'Winter Shelter Locator',
-    path: 'https://images.squarespace-cdn.com/content/v1/5977811659cc6848f5a06520/1583166007228-B6G6LEW8WS8JAV68U6KJ/BAGLY+wide.png',
-    abbr: 'BAGLY',
-    learnMore: 'https://www.bagly.org/',
-  },
+  // {
+  //   title: 'Boston Alliance of LGBTQ+ Youth',
+  //   paragraph: `Code4Community is partnering with the Boston Alliance of LGBTQ+ Youth (BAGLY) to address LGBTQ+ youth homelessness in Boston. Project BAGLY aims to develop a user-friendly, map-based app that helps LGBTQ+ youth locate winter shelters. Users can input their ZIP code, city, or state to find the nearest shelter, with real-time updates and user-generated feedback. The project will prioritize a mobile-first design to enhance accessibility, supporting BAGLY's mission to create safe and inclusive spaces.`,
+  //   appDesc: 'Winter Shelter Locator',
+  //   path: 'https://images.squarespace-cdn.com/content/v1/5977811659cc6848f5a06520/1583166007228-B6G6LEW8WS8JAV68U6KJ/BAGLY+wide.png',
+  //   abbr: 'BAGLY',
+  //   learnMore: 'https://www.bagly.org/',
+  // },
   {
     title: 'Green Infrastructure Boston',
     paragraph: `The City of Boston has rolled out a volunteer program to help maintain publicly owned Green Infrastructure (G.I.). Code4Community has partnered with the City of Boston to create a web application to support the volunteer program similar to an adopt-a-tree site we partnered with Speak for the Trees to build.`,
