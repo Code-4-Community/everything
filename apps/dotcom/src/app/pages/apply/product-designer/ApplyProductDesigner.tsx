@@ -85,9 +85,9 @@ const ApplyProductDesigner: React.FC = () => {
           <Fade>
             <Box mb={5}>
               <Typography variant="h6" gutterBottom>
-                <b>Our application process for Spring 2025 is now open!</b>
+                <b>Our application process for Spring 2025 has closed.</b>
                 <br />
-                The designer application form will close on <u>11/1</u>.
+                Stay in touch for updates about applications for the Fall 2025 semester!
               </Typography>
               <br />
               <Typography variant="h5" gutterBottom>
