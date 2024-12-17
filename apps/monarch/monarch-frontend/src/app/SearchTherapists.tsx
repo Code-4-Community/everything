@@ -641,7 +641,13 @@ export const SearchTherapists: React.FC<{
                               Website
                             </Box>
                             <Text>
-                              <Link href={therapist.website} color="blue.600">
+                              {/* 
+                              If the given website value doesn't have a protocol (http:// or https://), prefix with //
+                              which tells the browser to open the link as a root address (i.e. not prefixed by the page URL).
+                              This way, if the given URL looks like 'www.site.com`, we open that actual URL instead of as a relative path.
+                              Do this here so we don't display a weird link like '//www.site.com' to the user.
+                              */}
+                              <Link href={therapist.website.indexOf('//') === -1 ? `//${therapist.website}` : therapist.website} color="blue.600" target="_blank" rel="noopener">
                                 {therapist.website}
                               </Link>
                             </Text>
