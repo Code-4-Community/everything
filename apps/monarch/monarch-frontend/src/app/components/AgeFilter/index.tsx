@@ -42,7 +42,7 @@ const AgeFilter: React.FC = () => {
         maxW={600}
       >
         {AGE_MARKS.map((mark: number) => (
-          <SliderMark value={mark} mt="1" ml="-2.5" fontSize="sm">
+          <SliderMark key={mark} value={mark} mt="1" ml="-2.5" fontSize="sm">
             {mark}+ years
           </SliderMark>
         ))}
