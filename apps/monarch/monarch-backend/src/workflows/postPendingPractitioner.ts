@@ -49,12 +49,11 @@ function getPractitionerInfo(webhookRequest): Omit<PractitionerInfo, 'uuid'> {
   practitionerInfo.fullName = `${webhookRequest[FIELD_NAMES.FULL_NAME].first} ${webhookRequest[FIELD_NAMES.FULL_NAME].last}`;
   practitionerInfo.languagesList = ['English'].concat(webhookRequest[FIELD_NAMES.LANGUAGES].split('\r\n'));
 
-  const modalities = webhookRequest[FIELD_NAMES.MODALITY].split('\r\n')
-  practitionerInfo.modality = modalities.join(', ');
-
+  practitionerInfo.modality = webhookRequest[FIELD_NAMES.MODALITY].join(', ');
+  
   const rawAddress = webhookRequest[FIELD_NAMES.BUSINESS_LOCATION];
   // e.g. 123 Main Street, Boston, MA 123456
-  practitionerInfo.businessLocation = `${rawAddress['addr_line1']} ${rawAddress['city']}, ${rawAddress['state']} ${rawAddress['postal']}}`;
+  practitionerInfo.businessLocation = `${rawAddress['addr_line1']} ${rawAddress['city']}, ${rawAddress['state']} ${rawAddress['postal']}`;
 
   return practitionerInfo;
 }

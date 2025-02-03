@@ -27,7 +27,7 @@ const LanguageFilter: React.FC = () => {
                 }}
             >
                 {availableLanguages.map((language) => {
-                return <Checkbox value={language}>{language}</Checkbox>;
+                return <Checkbox key={language} value={language}>{language}</Checkbox>;
                 })}
             </CheckboxGroup>
             </HStack>
